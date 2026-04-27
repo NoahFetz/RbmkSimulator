@@ -163,6 +163,9 @@
       </Constraints>
     </Component>
     <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchPVFill1">
+      <Properties>
+        <Property name="component" type="java.lang.String" value="ECCS#1PvFillValve"/>
+      </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="50" y="46" width="-1" height="-1"/>
@@ -170,6 +173,9 @@
       </Constraints>
     </Component>
     <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchPVFill2">
+      <Properties>
+        <Property name="component" type="java.lang.String" value="ECCS#2PvFillValve"/>
+      </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="152" y="44" width="-1" height="-1"/>
@@ -178,8 +184,7 @@
     </Component>
     <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchPSP1Feed11">
       <Properties>
-        <Property name="component" type="java.lang.String" value="AuxCond1#SteamValve"/>
-        <Property name="controlledValve" type="boolean" value="true"/>
+        <Property name="component" type="java.lang.String" value="ECCS11#PspPumpValve"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
       <Constraints>
@@ -223,8 +228,7 @@
     </Container>
     <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchPSP1Feed21">
       <Properties>
-        <Property name="component" type="java.lang.String" value="AuxCond1#SteamValve"/>
-        <Property name="controlledValve" type="boolean" value="true"/>
+        <Property name="component" type="java.lang.String" value="ECCS21#PspPumpValve"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
       <Constraints>
@@ -707,8 +711,7 @@
     </Component>
     <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchPV1Feed11">
       <Properties>
-        <Property name="component" type="java.lang.String" value="AuxCond1#SteamValve"/>
-        <Property name="controlledValve" type="boolean" value="true"/>
+        <Property name="component" type="java.lang.String" value="ECCS11#PvValve"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
       <Constraints>
@@ -752,8 +755,7 @@
     </Container>
     <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchPV1Feed21">
       <Properties>
-        <Property name="component" type="java.lang.String" value="AuxCond1#SteamValve"/>
-        <Property name="controlledValve" type="boolean" value="true"/>
+        <Property name="component" type="java.lang.String" value="ECCS21#PvValve"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
       <Constraints>
@@ -847,8 +849,7 @@
     </Component>
     <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchPV2Feed22">
       <Properties>
-        <Property name="component" type="java.lang.String" value="AuxCond1#SteamValve"/>
-        <Property name="controlledValve" type="boolean" value="true"/>
+        <Property name="component" type="java.lang.String" value="ECCS22#PvValve"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
       <Constraints>
@@ -964,8 +965,7 @@
     </Component>
     <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchPV2Feed12">
       <Properties>
-        <Property name="component" type="java.lang.String" value="AuxCond1#SteamValve"/>
-        <Property name="controlledValve" type="boolean" value="true"/>
+        <Property name="component" type="java.lang.String" value="ECCS12#PvValve"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
       <Constraints>
@@ -1335,8 +1335,7 @@
     </Component>
     <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchPSP2Feed12">
       <Properties>
-        <Property name="component" type="java.lang.String" value="AuxCond1#SteamValve"/>
-        <Property name="controlledValve" type="boolean" value="true"/>
+        <Property name="component" type="java.lang.String" value="ECCS12#PspPumpValve"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
       <Constraints>
@@ -1380,8 +1379,7 @@
     </Container>
     <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchPSP2Feed22">
       <Properties>
-        <Property name="component" type="java.lang.String" value="AuxCond1#SteamValve"/>
-        <Property name="controlledValve" type="boolean" value="true"/>
+        <Property name="component" type="java.lang.String" value="ECCS22#PspPumpValve"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
       <Constraints>
@@ -1563,8 +1561,7 @@
     </Component>
     <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchPSP3Feed13">
       <Properties>
-        <Property name="component" type="java.lang.String" value="AuxCond1#SteamValve"/>
-        <Property name="controlledValve" type="boolean" value="true"/>
+        <Property name="component" type="java.lang.String" value="ECCS13#PspPumpValve"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
       <Constraints>
@@ -1608,8 +1605,7 @@
     </Container>
     <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchPSP3Feed23">
       <Properties>
-        <Property name="component" type="java.lang.String" value="AuxCond1#SteamValve"/>
-        <Property name="controlledValve" type="boolean" value="true"/>
+        <Property name="component" type="java.lang.String" value="ECCS23#PspPumpValve"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
       <Constraints>
@@ -1800,7 +1796,7 @@
     </Component>
     <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchP3Feed13">
       <Properties>
-        <Property name="component" type="java.lang.String" value="AuxCond1#SteamValve"/>
+        <Property name="component" type="java.lang.String" value="ECCS1#FPFillValve"/>
         <Property name="controlledValve" type="boolean" value="true"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
@@ -1845,7 +1841,7 @@
     </Container>
     <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchP3Feed23">
       <Properties>
-        <Property name="component" type="java.lang.String" value="AuxCond1#SteamValve"/>
+        <Property name="component" type="java.lang.String" value="ECCS2#FPFillValve"/>
         <Property name="controlledValve" type="boolean" value="true"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
@@ -2358,8 +2354,7 @@
     </Component>
     <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchCCSP1Feed11">
       <Properties>
-        <Property name="component" type="java.lang.String" value="AuxCond1#SteamValve"/>
-        <Property name="controlledValve" type="boolean" value="true"/>
+        <Property name="component" type="java.lang.String" value="ECCS11#CcsPumpValve"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
       <Constraints>
@@ -2403,8 +2398,7 @@
     </Container>
     <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchCCSP1Feed21">
       <Properties>
-        <Property name="component" type="java.lang.String" value="AuxCond1#SteamValve"/>
-        <Property name="controlledValve" type="boolean" value="true"/>
+        <Property name="component" type="java.lang.String" value="ECCS21#CcsPumpValve"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
       <Constraints>
@@ -2521,8 +2515,7 @@
     </Component>
     <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchCCSP2Feed12">
       <Properties>
-        <Property name="component" type="java.lang.String" value="AuxCond1#SteamValve"/>
-        <Property name="controlledValve" type="boolean" value="true"/>
+        <Property name="component" type="java.lang.String" value="ECCS12#CcsPumpValve"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
       <Constraints>
@@ -2566,8 +2559,7 @@
     </Container>
     <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchCCSP2Feed22">
       <Properties>
-        <Property name="component" type="java.lang.String" value="AuxCond1#SteamValve"/>
-        <Property name="controlledValve" type="boolean" value="true"/>
+        <Property name="component" type="java.lang.String" value="ECCS22#CcsPumpValve"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
       <Constraints>
@@ -2684,8 +2676,7 @@
     </Component>
     <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchCCSP3Feed13">
       <Properties>
-        <Property name="component" type="java.lang.String" value="AuxCond1#SteamValve"/>
-        <Property name="controlledValve" type="boolean" value="true"/>
+        <Property name="component" type="java.lang.String" value="ECCS13#CcsPumpValve"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
       <Constraints>
@@ -2729,8 +2720,7 @@
     </Container>
     <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchCCSP3Feed23">
       <Properties>
-        <Property name="component" type="java.lang.String" value="AuxCond1#SteamValve"/>
-        <Property name="controlledValve" type="boolean" value="true"/>
+        <Property name="component" type="java.lang.String" value="ECCS23#CcsPumpValve"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
       <Constraints>
@@ -3160,6 +3150,32 @@
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="236" y="32" width="-1" height="-1"/>
+        </Constraint>
+      </Constraints>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel1">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="sansserif" size="18" style="0"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Warning! ECCS is currently not"/>
+      </Properties>
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+          <AbsoluteConstraints x="582" y="396" width="290" height="40"/>
+        </Constraint>
+      </Constraints>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel2">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="sansserif" size="18" style="0"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="available due to maintenance!"/>
+      </Properties>
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+          <AbsoluteConstraints x="582" y="428" width="290" height="40"/>
         </Constraint>
       </Constraints>
     </Component>

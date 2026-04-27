@@ -18,6 +18,7 @@ package com.hartrusion.rbmksim.gui.panels;
 
 import com.hartrusion.control.ControlCommand;
 import com.hartrusion.mvc.ActionCommand;
+import com.hartrusion.mvc.ActionReceiver;
 import com.hartrusion.mvc.UpdateReceiver;
 import com.hartrusion.rbmksim.gui.widgets.AbstractPanelWidget;
 import java.beans.PropertyChangeEvent;
@@ -37,6 +38,36 @@ public class PanelEccs extends AbstractPanelWidget
      */
     public PanelEccs() {
         initComponents();
+    }
+
+    @Override
+    public void registerActionReceiver(ActionReceiver controller) {
+        super.registerActionReceiver(controller);
+
+        integralSwitchCCSP1Feed11.registerActionReceiver(controller);
+        integralSwitchCCSP1Feed21.registerActionReceiver(controller);
+        integralSwitchCCSP2Feed12.registerActionReceiver(controller);
+        integralSwitchCCSP2Feed22.registerActionReceiver(controller);
+        integralSwitchCCSP3Feed13.registerActionReceiver(controller);
+        integralSwitchCCSP3Feed23.registerActionReceiver(controller);
+        integralSwitchDrainDrum1.registerActionReceiver(controller);
+        integralSwitchDrainDrum2.registerActionReceiver(controller);
+        integralSwitchDrum1SteamToPool.registerActionReceiver(controller);
+        integralSwitchDrum2SteamToPool.registerActionReceiver(controller);
+        integralSwitchP3Feed13.registerActionReceiver(controller);
+        integralSwitchP3Feed23.registerActionReceiver(controller);
+        integralSwitchPSP1Feed11.registerActionReceiver(controller);
+        integralSwitchPSP1Feed21.registerActionReceiver(controller);
+        integralSwitchPSP2Feed12.registerActionReceiver(controller);
+        integralSwitchPSP2Feed22.registerActionReceiver(controller);
+        integralSwitchPSP3Feed13.registerActionReceiver(controller);
+        integralSwitchPSP3Feed23.registerActionReceiver(controller);
+        integralSwitchPV1Feed11.registerActionReceiver(controller);
+        integralSwitchPV1Feed21.registerActionReceiver(controller);
+        integralSwitchPV2Feed12.registerActionReceiver(controller);
+        integralSwitchPV2Feed22.registerActionReceiver(controller);
+        integralSwitchPVFill1.registerActionReceiver(controller);
+        integralSwitchPVFill2.registerActionReceiver(controller);
     }
 
     /**
@@ -221,6 +252,8 @@ public class PanelEccs extends AbstractPanelWidget
         ammeterDrum2Level = new com.hartrusion.rbmksim.gui.elements.Ammeter();
         jLabelCaptionDrum2Level = new javax.swing.JLabel();
         panelWidgetFillPump = new com.hartrusion.rbmksim.gui.widgets.PanelWidgetSmallPump();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setMaximumSize(new java.awt.Dimension(910, 550));
         setMinimumSize(new java.awt.Dimension(910, 550));
@@ -266,11 +299,14 @@ public class PanelEccs extends AbstractPanelWidget
         ammeterVessel2Pressure.setRightLabel("90 bar");
         add(ammeterVessel2Pressure, new org.netbeans.lib.awtextra.AbsoluteConstraints(122, 76, 92, 58));
         add(panelWidgetSprinklerPump1, new org.netbeans.lib.awtextra.AbsoluteConstraints(582, 256, -1, -1));
+
+        integralSwitchPVFill1.setComponent("ECCS#1PvFillValve");
         add(integralSwitchPVFill1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 46, -1, -1));
+
+        integralSwitchPVFill2.setComponent("ECCS#2PvFillValve");
         add(integralSwitchPVFill2, new org.netbeans.lib.awtextra.AbsoluteConstraints(152, 44, -1, -1));
 
-        integralSwitchPSP1Feed11.setComponent("AuxCond1#SteamValve");
-        integralSwitchPSP1Feed11.setControlledValve(true);
+        integralSwitchPSP1Feed11.setComponent("ECCS11#PspPumpValve");
         integralSwitchPSP1Feed11.setToolTipText("");
         add(integralSwitchPSP1Feed11, new org.netbeans.lib.awtextra.AbsoluteConstraints(48, 318, -1, -1));
 
@@ -282,8 +318,7 @@ public class PanelEccs extends AbstractPanelWidget
         add(jToggleButtonPSP1Feed11Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 322, 20, 20));
         add(lightBulbPSP1Feed11Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(36, 328, -1, -1));
 
-        integralSwitchPSP1Feed21.setComponent("AuxCond1#SteamValve");
-        integralSwitchPSP1Feed21.setControlledValve(true);
+        integralSwitchPSP1Feed21.setComponent("ECCS21#PspPumpValve");
         integralSwitchPSP1Feed21.setToolTipText("");
         add(integralSwitchPSP1Feed21, new org.netbeans.lib.awtextra.AbsoluteConstraints(48, 366, -1, -1));
 
@@ -436,8 +471,7 @@ public class PanelEccs extends AbstractPanelWidget
         jLabelCaptionPSPP1F15.setPreferredSize(new java.awt.Dimension(52, 14));
         add(jLabelCaptionPSPP1F15, new org.netbeans.lib.awtextra.AbsoluteConstraints(34, 30, 72, 14));
 
-        integralSwitchPV1Feed11.setComponent("AuxCond1#SteamValve");
-        integralSwitchPV1Feed11.setControlledValve(true);
+        integralSwitchPV1Feed11.setComponent("ECCS11#PvValve");
         integralSwitchPV1Feed11.setToolTipText("");
         add(integralSwitchPV1Feed11, new org.netbeans.lib.awtextra.AbsoluteConstraints(66, 176, -1, -1));
 
@@ -449,8 +483,7 @@ public class PanelEccs extends AbstractPanelWidget
         add(jToggleButtonPV1Feed11Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, 20, 20));
         add(lightBulbPV1Feed11Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 186, -1, -1));
 
-        integralSwitchPV1Feed21.setComponent("AuxCond1#SteamValve");
-        integralSwitchPV1Feed21.setControlledValve(true);
+        integralSwitchPV1Feed21.setComponent("ECCS21#PvValve");
         integralSwitchPV1Feed21.setToolTipText("");
         add(integralSwitchPV1Feed21, new org.netbeans.lib.awtextra.AbsoluteConstraints(66, 224, -1, -1));
 
@@ -478,8 +511,7 @@ public class PanelEccs extends AbstractPanelWidget
         jLabelCaptionPV1F11.setPreferredSize(new java.awt.Dimension(52, 14));
         add(jLabelCaptionPV1F11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 72, 14));
 
-        integralSwitchPV2Feed22.setComponent("AuxCond1#SteamValve");
-        integralSwitchPV2Feed22.setControlledValve(true);
+        integralSwitchPV2Feed22.setComponent("ECCS22#PvValve");
         integralSwitchPV2Feed22.setToolTipText("");
         add(integralSwitchPV2Feed22, new org.netbeans.lib.awtextra.AbsoluteConstraints(168, 224, -1, -1));
 
@@ -514,8 +546,7 @@ public class PanelEccs extends AbstractPanelWidget
         jToggleButtonPV2Feed12Auto.addActionListener(this::jToggleButtonPV2Feed12AutoActionPerformed);
         add(jToggleButtonPV2Feed12Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(132, 180, 20, 20));
 
-        integralSwitchPV2Feed12.setComponent("AuxCond1#SteamValve");
-        integralSwitchPV2Feed12.setControlledValve(true);
+        integralSwitchPV2Feed12.setComponent("ECCS12#PvValve");
         integralSwitchPV2Feed12.setToolTipText("");
         add(integralSwitchPV2Feed12, new org.netbeans.lib.awtextra.AbsoluteConstraints(168, 176, -1, -1));
         add(lightBulbPV2Feed12Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(156, 186, -1, -1));
@@ -636,8 +667,7 @@ public class PanelEccs extends AbstractPanelWidget
         add(jLabelCaptionToMcp23, new org.netbeans.lib.awtextra.AbsoluteConstraints(836, 336, 52, 14));
         add(panelWidgetPumpPSP2, new org.netbeans.lib.awtextra.AbsoluteConstraints(106, 398, -1, -1));
 
-        integralSwitchPSP2Feed12.setComponent("AuxCond1#SteamValve");
-        integralSwitchPSP2Feed12.setControlledValve(true);
+        integralSwitchPSP2Feed12.setComponent("ECCS12#PspPumpValve");
         integralSwitchPSP2Feed12.setToolTipText("");
         add(integralSwitchPSP2Feed12, new org.netbeans.lib.awtextra.AbsoluteConstraints(134, 318, -1, -1));
 
@@ -649,8 +679,7 @@ public class PanelEccs extends AbstractPanelWidget
         add(jToggleButtonPSP2Feed12Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(98, 322, 20, 20));
         add(lightBulbPSP2Feed12Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(122, 328, -1, -1));
 
-        integralSwitchPSP2Feed22.setComponent("AuxCond1#SteamValve");
-        integralSwitchPSP2Feed22.setControlledValve(true);
+        integralSwitchPSP2Feed22.setComponent("ECCS22#PspPumpValve");
         integralSwitchPSP2Feed22.setToolTipText("");
         add(integralSwitchPSP2Feed22, new org.netbeans.lib.awtextra.AbsoluteConstraints(134, 366, -1, -1));
 
@@ -706,8 +735,7 @@ public class PanelEccs extends AbstractPanelWidget
         add(jLabelCaptionPSPPCoolant2, new org.netbeans.lib.awtextra.AbsoluteConstraints(106, 508, 52, 14));
         add(panelWidgetPumpPSP3, new org.netbeans.lib.awtextra.AbsoluteConstraints(192, 398, -1, -1));
 
-        integralSwitchPSP3Feed13.setComponent("AuxCond1#SteamValve");
-        integralSwitchPSP3Feed13.setControlledValve(true);
+        integralSwitchPSP3Feed13.setComponent("ECCS13#PspPumpValve");
         integralSwitchPSP3Feed13.setToolTipText("");
         add(integralSwitchPSP3Feed13, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 318, -1, -1));
 
@@ -719,8 +747,7 @@ public class PanelEccs extends AbstractPanelWidget
         add(jToggleButtonPSP3Feed13Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(184, 322, 20, 20));
         add(lightBulbPSP3Feed13Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(208, 328, -1, -1));
 
-        integralSwitchPSP3Feed23.setComponent("AuxCond1#SteamValve");
-        integralSwitchPSP3Feed23.setControlledValve(true);
+        integralSwitchPSP3Feed23.setComponent("ECCS23#PspPumpValve");
         integralSwitchPSP3Feed23.setToolTipText("");
         add(integralSwitchPSP3Feed23, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 366, -1, -1));
 
@@ -780,7 +807,7 @@ public class PanelEccs extends AbstractPanelWidget
         jLabelCaptionDrumDrain6.setText("From Cold Condensate Storage");
         add(jLabelCaptionDrumDrain6, new org.netbeans.lib.awtextra.AbsoluteConstraints(282, 300, 258, 14));
 
-        integralSwitchP3Feed13.setComponent("AuxCond1#SteamValve");
+        integralSwitchP3Feed13.setComponent("ECCS1#FPFillValve");
         integralSwitchP3Feed13.setControlledValve(true);
         integralSwitchP3Feed13.setToolTipText("");
         add(integralSwitchP3Feed13, new org.netbeans.lib.awtextra.AbsoluteConstraints(266, 176, -1, -1));
@@ -793,7 +820,7 @@ public class PanelEccs extends AbstractPanelWidget
         add(jToggleButtonP3Feed13Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 180, 20, 20));
         add(lightBulbP3Feed13Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(254, 186, -1, -1));
 
-        integralSwitchP3Feed23.setComponent("AuxCond1#SteamValve");
+        integralSwitchP3Feed23.setComponent("ECCS2#FPFillValve");
         integralSwitchP3Feed23.setControlledValve(true);
         integralSwitchP3Feed23.setToolTipText("");
         add(integralSwitchP3Feed23, new org.netbeans.lib.awtextra.AbsoluteConstraints(266, 224, -1, -1));
@@ -947,8 +974,7 @@ public class PanelEccs extends AbstractPanelWidget
         add(jLabelCaptionPSPLevel, new org.netbeans.lib.awtextra.AbsoluteConstraints(594, 90, 92, 14));
         add(panelWidgetPumpCCSP1, new org.netbeans.lib.awtextra.AbsoluteConstraints(298, 434, -1, -1));
 
-        integralSwitchCCSP1Feed11.setComponent("AuxCond1#SteamValve");
-        integralSwitchCCSP1Feed11.setControlledValve(true);
+        integralSwitchCCSP1Feed11.setComponent("ECCS11#CcsPumpValve");
         integralSwitchCCSP1Feed11.setToolTipText("");
         add(integralSwitchCCSP1Feed11, new org.netbeans.lib.awtextra.AbsoluteConstraints(326, 354, -1, -1));
 
@@ -960,8 +986,7 @@ public class PanelEccs extends AbstractPanelWidget
         add(jToggleButtonCCSP1Feed11Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 358, 20, 20));
         add(lightBulbCCSP1Feed11Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(314, 364, -1, -1));
 
-        integralSwitchCCSP1Feed21.setComponent("AuxCond1#SteamValve");
-        integralSwitchCCSP1Feed21.setControlledValve(true);
+        integralSwitchCCSP1Feed21.setComponent("ECCS21#CcsPumpValve");
         integralSwitchCCSP1Feed21.setToolTipText("");
         add(integralSwitchCCSP1Feed21, new org.netbeans.lib.awtextra.AbsoluteConstraints(326, 402, -1, -1));
 
@@ -995,8 +1020,7 @@ public class PanelEccs extends AbstractPanelWidget
         add(jLabelCaptionCCSP1F11, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 338, 72, 14));
         add(panelWidgetPumpCCSP2, new org.netbeans.lib.awtextra.AbsoluteConstraints(384, 434, -1, -1));
 
-        integralSwitchCCSP2Feed12.setComponent("AuxCond1#SteamValve");
-        integralSwitchCCSP2Feed12.setControlledValve(true);
+        integralSwitchCCSP2Feed12.setComponent("ECCS12#CcsPumpValve");
         integralSwitchCCSP2Feed12.setToolTipText("");
         add(integralSwitchCCSP2Feed12, new org.netbeans.lib.awtextra.AbsoluteConstraints(412, 354, -1, -1));
 
@@ -1008,8 +1032,7 @@ public class PanelEccs extends AbstractPanelWidget
         add(jToggleButtonCCSP2Feed12Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(376, 358, 20, 20));
         add(lightBulbCCSP2Feed12Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 364, -1, -1));
 
-        integralSwitchCCSP2Feed22.setComponent("AuxCond1#SteamValve");
-        integralSwitchCCSP2Feed22.setControlledValve(true);
+        integralSwitchCCSP2Feed22.setComponent("ECCS22#CcsPumpValve");
         integralSwitchCCSP2Feed22.setToolTipText("");
         add(integralSwitchCCSP2Feed22, new org.netbeans.lib.awtextra.AbsoluteConstraints(412, 402, -1, -1));
 
@@ -1043,8 +1066,7 @@ public class PanelEccs extends AbstractPanelWidget
         add(jLabelCaptionCCSP2F12, new org.netbeans.lib.awtextra.AbsoluteConstraints(376, 338, 72, 14));
         add(panelWidgetPumpCCSP3, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 434, -1, -1));
 
-        integralSwitchCCSP3Feed13.setComponent("AuxCond1#SteamValve");
-        integralSwitchCCSP3Feed13.setControlledValve(true);
+        integralSwitchCCSP3Feed13.setComponent("ECCS13#CcsPumpValve");
         integralSwitchCCSP3Feed13.setToolTipText("");
         add(integralSwitchCCSP3Feed13, new org.netbeans.lib.awtextra.AbsoluteConstraints(498, 354, -1, -1));
 
@@ -1056,8 +1078,7 @@ public class PanelEccs extends AbstractPanelWidget
         add(jToggleButtonCCSP3Feed13Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(462, 358, 20, 20));
         add(lightBulbCCSP3Feed13Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(486, 364, -1, -1));
 
-        integralSwitchCCSP3Feed23.setComponent("AuxCond1#SteamValve");
-        integralSwitchCCSP3Feed23.setControlledValve(true);
+        integralSwitchCCSP3Feed23.setComponent("ECCS23#CcsPumpValve");
         integralSwitchCCSP3Feed23.setToolTipText("");
         add(integralSwitchCCSP3Feed23, new org.netbeans.lib.awtextra.AbsoluteConstraints(498, 402, -1, -1));
 
@@ -1184,6 +1205,14 @@ public class PanelEccs extends AbstractPanelWidget
         jLabelCaptionDrum2Level.setText("Level");
         add(jLabelCaptionDrum2Level, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 196, 92, 14));
         add(panelWidgetFillPump, new org.netbeans.lib.awtextra.AbsoluteConstraints(236, 32, -1, -1));
+
+        jLabel1.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+        jLabel1.setText("Warning! ECCS is currently not");
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(582, 396, 290, 40));
+
+        jLabel2.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+        jLabel2.setText("available due to maintenance!");
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(582, 428, 290, 40));
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonToMcpHeader11CloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonToMcpHeader11CloseActionPerformed
@@ -1424,6 +1453,8 @@ public class PanelEccs extends AbstractPanelWidget
     private javax.swing.JButton jButtonToMcpHeader22Open;
     private javax.swing.JButton jButtonToMcpHeader23Close;
     private javax.swing.JButton jButtonToMcpHeader23Open;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabelCaptionBypass4;
     private javax.swing.JLabel jLabelCaptionBypass5;
     private javax.swing.JLabel jLabelCaptionCCSLevel;
@@ -1541,6 +1572,32 @@ public class PanelEccs extends AbstractPanelWidget
 
     @Override
     public void updateComponent(PropertyChangeEvent evt) {
+        integralSwitchCCSP1Feed11.updateComponent(evt);
+        integralSwitchCCSP1Feed21.updateComponent(evt);
+        integralSwitchCCSP2Feed12.updateComponent(evt);
+        integralSwitchCCSP2Feed22.updateComponent(evt);
+        integralSwitchCCSP3Feed13.updateComponent(evt);
+        integralSwitchCCSP3Feed23.updateComponent(evt);
+        integralSwitchDrainDrum1.updateComponent(evt);
+        integralSwitchDrainDrum2.updateComponent(evt);
+        integralSwitchDrum1SteamToPool.updateComponent(evt);
+        integralSwitchDrum2SteamToPool.updateComponent(evt);
+        integralSwitchP3Feed13.updateComponent(evt);
+        integralSwitchP3Feed23.updateComponent(evt);
+        integralSwitchPSP1Feed11.updateComponent(evt);
+        integralSwitchPSP1Feed21.updateComponent(evt);
+        integralSwitchPSP2Feed12.updateComponent(evt);
+        integralSwitchPSP2Feed22.updateComponent(evt);
+        integralSwitchPSP3Feed13.updateComponent(evt);
+        integralSwitchPSP3Feed23.updateComponent(evt);
+        integralSwitchPV1Feed11.updateComponent(evt);
+        integralSwitchPV1Feed21.updateComponent(evt);
+        integralSwitchPV2Feed12.updateComponent(evt);
+        integralSwitchPV2Feed22.updateComponent(evt);
+        integralSwitchPVFill1.updateComponent(evt);
+        integralSwitchPVFill2.updateComponent(evt);
+        
+        
         switch (evt.getPropertyName()) {
             case "ECCS11#FeedValve_Pos":
                 setValveButtons(jButtonToMcpHeader11Close,

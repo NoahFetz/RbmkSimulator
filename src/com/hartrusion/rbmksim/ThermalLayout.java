@@ -433,13 +433,13 @@ public class ThermalLayout extends Subsystem implements Runnable {
     private final HeatValve[][] eccsCcsPumpValve = new HeatValve[2][3];
     private final HeatNode[] eccsCcsPumpOut = new HeatNode[3];
     private final HeatFluidPump[] eccsCcsPump = new HeatFluidPump[3];
-    // private final HeatFluidPumpSimple eccsPvFillPump;
+    private final HeatFluidPumpSimple eccsPvFillPump;
+    private final HeatNode eccsPvFillPumpOut;
     private final HeatValve[] eccsPvFillValve = new HeatValve[2];
     private final HeatFluidTank[] eccsPressureVessel = new HeatFluidTank[2];
-    private final HeatNode[] eccsPvNode = new HeatNode[3];
+    private final HeatNode[] eccsPvNode = new HeatNode[2];
     private final HeatValve[][] eccsPvValve = new HeatValve[2][2];
-    
-    
+    private final HeatValve[] eccsFPFillValve = new HeatValve[2]; // Feed pump   
 
     // </editor-fold>
     private final Setpoint[] setpointDrumLevel = new Setpoint[2];
@@ -1228,7 +1228,71 @@ public class ThermalLayout extends Subsystem implements Runnable {
                 eccsFeedValve[idx][jdx] = new HeatValve();
                 eccsFeedValve[idx][jdx].initName("ECCS"
                         + (10 * (idx + 1) + jdx + 1) + "#FeedValve");
+                eccsFeedIn[idx][jdx] = new HeatNode();
+                eccsFeedIn[idx][jdx].setName("ECCS"
+                        + (10 * (idx + 1) + jdx + 1) + "#FeedIn");
+                eccsFeedLine[idx][jdx] = new HeatVolumizedFlowResistance();
+                eccsFeedLine[idx][jdx].setName("ECCS"
+                        + (10 * (idx + 1) + jdx + 1) + "#FeedLine");
+                eccsFeedLineIn[idx][jdx] = new HeatNode();
+                eccsFeedLineIn[idx][jdx].setName("ECCS"
+                        + (10 * (idx + 1) + jdx + 1) + "#FeedIn");
+                eccsPspPumpValve[idx][jdx] = new HeatValve();
+                eccsPspPumpValve[idx][jdx].initName("ECCS"
+                        + (10 * (idx + 1) + jdx + 1) + "#PspPumpValve");
             }
+        }
+        for (int idx = 0; idx < 3; idx++) {
+            eccsPspPumpOut[idx] = new HeatNode();
+            eccsPspPumpOut[idx].setName("ECCS"
+                    + (idx + 1) + "#PspPumpOut");
+            eccsPspPump[idx] = new HeatFluidPump();
+            eccsPspPump[idx].initName("ECCS"
+                    + (idx + 1) + "#PspPump");
+            eccsPspCooler[idx] = new HeatExchangerNoMass();
+            eccsPspCooler[idx].initName("ECCS"
+                    + (idx + 1) + "#PspCooler");
+            eccsPspCoolantValve[idx] = new HeatValve();
+            eccsPspCoolantValve[idx].initName("ECCS"
+                    + (idx + 1) + "#PspCoolantValve");
+        }
+        for (int idx = 0; idx < 2; idx++) {
+            for (int jdx = 0; jdx < 3; jdx++) {
+                eccsCcsPumpValve[idx][jdx] = new HeatValve();
+                eccsCcsPumpValve[idx][jdx].initName("ECCS"
+                        + (10 * (idx + 1) + jdx + 1) + "#CcsPumpValve");
+            }
+        }
+        for (int idx = 0; idx < 3; idx++) {
+            eccsCcsPumpOut[idx] = new HeatNode();
+            eccsCcsPumpOut[idx].setName("ECCS"
+                    + (idx + 1) + "#CcsPumpOut");
+            eccsCcsPump[idx] = new HeatFluidPump();
+            eccsCcsPump[idx].initName("ECCS"
+                    + (idx + 1) + "#CcsPump");
+        }
+        eccsPvFillPump = new HeatFluidPumpSimple();
+        eccsPvFillPump.initName("ECCS#PvFillPum");
+        eccsPvFillPumpOut = new HeatNode();
+        eccsPvFillPumpOut.setName("ECCS#PvFillPumpOut");
+        for (int idx = 0; idx < 2; idx++) {
+            eccsPvFillValve[idx] = new HeatValve();
+            eccsPvFillValve[idx].initName("ECCS"
+                    + (idx + 1) + "#PvFillValve");
+            eccsPressureVessel[idx] = new HeatFluidTank();
+            eccsPressureVessel[idx].setName("ECCS"
+                    + (idx + 1) + "#PressureVessel");
+            eccsPvNode[idx] = new HeatNode();
+            eccsPvNode[idx].setName("ECCS"
+                    + (idx + 1) + "#PvNode");
+            for (int jdx = 0; jdx < 2; jdx++) {
+                eccsPvValve[idx][jdx] = new HeatValve();
+                eccsPvValve[idx][jdx].initName("ECCS"
+                        + (10 * (idx + 1) + jdx + 1) + "#PvValve");
+            }
+            eccsFPFillValve[idx] = new HeatValve();
+            eccsFPFillValve[idx].initName("ECCS"
+                    + (idx + 1) + "#FPFillValve");
         }
 
         //</editor-fold>      
@@ -2546,7 +2610,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
         blowdownValveTreatmentBypass.initOpening(100);
         // Set the initial flow through the aftercooler to 600 kg/s
         blowdownValveCoolant.initOpening(100);
-        
+
         // Natural Circulation without MCP and cooldown active
         for (int idx = 0; idx <= 1; idx++) {
             // first value is the mass, it is the base area time 1000
@@ -2743,7 +2807,28 @@ public class ThermalLayout extends Subsystem implements Runnable {
         for (int idx = 0; idx < 2; idx++) {
             for (int jdx = 0; jdx < 3; jdx++) {
                 runner.submit(eccsFeedValve[idx][jdx]);
+                runner.submit(eccsPspPumpValve[idx][jdx]);
             }
+        }
+        for (int idx = 0; idx < 3; idx++) {
+            runner.submit(eccsPspPump[idx]);
+            runner.submit(eccsPspCoolantValve[idx]);
+        }
+        for (int idx = 0; idx < 2; idx++) {
+            for (int jdx = 0; jdx < 3; jdx++) {
+                runner.submit(eccsCcsPumpValve[idx][jdx]);
+            }
+        }
+        for (int idx = 0; idx < 3; idx++) {
+            runner.submit(eccsCcsPump[idx]);
+        }
+        runner.submit(eccsPvFillPump);
+        for (int idx = 0; idx < 2; idx++) {
+            runner.submit(eccsPvFillValve[idx]);
+            for (int jdx = 0; jdx < 2; jdx++) {
+                runner.submit(eccsPvValve[idx][jdx]);
+            }
+            runner.submit(eccsFPFillValve[idx]);
         }
 
         // Add Solo control loops

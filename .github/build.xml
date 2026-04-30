@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="RbmkSimulator" default="fatjar" basedir="..">
-  <!-- Pfade und Einstellungen -->
-  <property name="src.dir"     value="src"/>
-  <property name="build.dir"   value="build"/>
+  <!-- Paths -->
+  <property name="src.dir" value="src"/>
+  <property name="build.dir" value="build"/>
   <property name="classes.dir" value="${build.dir}/classes"/>
-  <property name="jar.dir"     value="${build.dir}/jar"/>
+  <property name="jar.dir" value="${build.dir}/jar"/>
 
-  <!-- Hauptklasse für das Manifest -->
-  <property name="main.class"  value="com.hartrusion.rbmksim.RbmkSimulator"/>
+  <!-- Main classes -->
+  <property name="main.class.simulator" value="com.hartrusion.rbmksim.RbmkSimulator"/>
+  <property name="main.class.client" value="com.hartrusion.rbmksim.RbmkSimulatorClient"/>
 
-  <!-- Ausgabe-JAR-Name -->
-  <property name="jar.name.fat"  value="RbmkSimulator-SNAPSHOT.jar"/>
+  <!-- Output JAR names -->
+  <property name="jar.name.simulator" value="RbmkSimulator-SNAPSHOT.jar"/>
+  <property name="jar.name.client" value="RbmkSimulatorClient-SNAPSHOT.jar"/>
 
   <target name="init">
     <mkdir dir="${classes.dir}"/>
     <mkdir dir="${jar.dir}"/>
   </target>
 
-  <!-- Klassen- und Bibliothekspfad für Kompilierung -->
   <path id="project.classpath">
     <fileset dir="${basedir}/lib" includes="**/*.jar"/>
   </path>
@@ -26,7 +27,6 @@
     <echo message="Copying non-Java resources from ${src.dir} -> ${classes.dir}"/>
     <copy todir="${classes.dir}" overwrite="true">
       <fileset dir="${src.dir}">
-        <!-- alle .java ausschließen, damit Paketstruktur erhalten bleibt -->
         <exclude name="**/*.java"/>
       </fileset>
     </copy>
@@ -40,48 +40,70 @@
            debug="true" />
   </target>
 
-  <!-- Prüfe, ob libs vorhanden sind (außer der Ziel-JAR) -->
   <target name="check-libs">
     <condition property="has.libs">
       <resourcecount when="greater" count="0">
-        <fileset dir="${basedir}/lib" includes="**/*.jar" excludes="${jar.name.fat}"/>
+        <fileset dir="${basedir}/lib" includes="**/*.jar"/>
       </resourcecount>
     </condition>
     <echo message="check-libs: has.libs=${has.libs}"/>
   </target>
 
-  <!-- Haupt-Target: stellt sicher, dass check-libs und compile vorher ausgeführt werden.
-       fatjar hängt von beiden Varianten ab; nur eine Variante läuft wegen if/unless. -->
-  <target name="fatjar" depends="check-libs,compile,fatjar-with-libs,fatjar-no-libs">
-    <echo message="fatjar finished (see above for created artifact)"/>
+  <target name="fatjar" depends="check-libs,compile,build-simulator,build-client">
+    <echo message="fatjar finished."/>
   </target>
 
-  <target name="fatjar-with-libs" if="has.libs" depends="compile">
-    <echo message="Creating fat JAR (including lib/*.jar) ..."/>
-    <jar destfile="${jar.dir}/${jar.name.fat}">
-      <!-- eigene kompilierten Klassen -->
+  <target name="build-simulator" depends="compile,build-simulator-with-libs,build-simulator-no-libs"/>
+  <target name="build-client" depends="compile,build-client-with-libs,build-client-no-libs"/>
+
+  <target name="build-simulator-with-libs" if="has.libs" depends="compile">
+    <echo message="Creating fat JAR for simulator (including lib/*.jar) ..."/>
+    <jar destfile="${jar.dir}/${jar.name.simulator}">
       <fileset dir="${classes.dir}"/>
-      <!-- Inhalte aller Abhängigkeits-JARs zusammenführen.
-           Exkludiere die Zieldatei, Manifest- und Signaturdateien, um Probleme zu vermeiden. -->
       <zipgroupfileset dir="${basedir}/lib"
-                        includes="**/*.jar"
-                        excludes="${jar.name.fat},META-INF/*.SF,META-INF/*.DSA,META-INF/*.RSA,META-INF/INDEX.LIST,META-INF/MANIFEST.MF"/>
+                       includes="**/*.jar"
+                       excludes="META-INF/*.SF,META-INF/*.DSA,META-INF/*.RSA,META-INF/INDEX.LIST,META-INF/MANIFEST.MF"/>
       <manifest>
-        <attribute name="Main-Class" value="${main.class}"/>
+        <attribute name="Main-Class" value="${main.class.simulator}"/>
       </manifest>
     </jar>
-    <echo message="Fat JAR created: ${jar.dir}/${jar.name.fat}"/>
+    <echo message="Created ${jar.dir}/${jar.name.simulator}"/>
   </target>
 
-  <target name="fatjar-no-libs" unless="has.libs" depends="compile">
-    <echo message="No dependency JARs found in ${basedir}/lib — creating JAR with project classes only."/>
-    <jar destfile="${jar.dir}/${jar.name.fat}">
+  <target name="build-simulator-no-libs" unless="has.libs" depends="compile">
+    <echo message="No dependency JARs found - creating simulator JAR without merged libs."/>
+    <jar destfile="${jar.dir}/${jar.name.simulator}">
       <fileset dir="${classes.dir}"/>
       <manifest>
-        <attribute name="Main-Class" value="${main.class}"/>
+        <attribute name="Main-Class" value="${main.class.simulator}"/>
       </manifest>
     </jar>
-    <echo message="JAR created: ${jar.dir}/${jar.name.fat}"/>
+    <echo message="Created ${jar.dir}/${jar.name.simulator}"/>
+  </target>
+
+  <target name="build-client-with-libs" if="has.libs" depends="compile">
+    <echo message="Creating fat JAR for client (including lib/*.jar) ..."/>
+    <jar destfile="${jar.dir}/${jar.name.client}">
+      <fileset dir="${classes.dir}"/>
+      <zipgroupfileset dir="${basedir}/lib"
+                       includes="**/*.jar"
+                       excludes="META-INF/*.SF,META-INF/*.DSA,META-INF/*.RSA,META-INF/INDEX.LIST,META-INF/MANIFEST.MF"/>
+      <manifest>
+        <attribute name="Main-Class" value="${main.class.client}"/>
+      </manifest>
+    </jar>
+    <echo message="Created ${jar.dir}/${jar.name.client}"/>
+  </target>
+
+  <target name="build-client-no-libs" unless="has.libs" depends="compile">
+    <echo message="No dependency JARs found - creating client JAR without merged libs."/>
+    <jar destfile="${jar.dir}/${jar.name.client}">
+      <fileset dir="${classes.dir}"/>
+      <manifest>
+        <attribute name="Main-Class" value="${main.class.client}"/>
+      </manifest>
+    </jar>
+    <echo message="Created ${jar.dir}/${jar.name.client}"/>
   </target>
 
   <target name="clean">

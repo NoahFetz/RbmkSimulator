@@ -7,8 +7,8 @@ on:
   push:
     branches: [ "main" ]
     paths-ignore:
-      - '**/*.md' # ignore docs
-      - '**/*.yml' # ignore this
+      - '**/*.md'
+      - '**/*.yml'
       - '**/*.png'
       - '**/*.svg'
       - '**/*.xml'
@@ -20,7 +20,7 @@ permissions:
   contents: write
 
 env:
-  TARGET_REPO: ${{ github.repository }} # this repo
+  TARGET_REPO: ${{ github.repository }}
   NIGHTLY_TAG: "github-ci-snapshot"
 
 jobs:
@@ -29,10 +29,12 @@ jobs:
     # List of all my repositories where a NIGHTLY_TAG as "owner/repo" where a release is expected.
     env:
       REPOS: "hartrusion/utils,hartrusion/PhxNetMod,hartrusion/PhxNetModExt,hartrusion/JMPLot"
-      
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 50
 
       - name: Set up JDK 17
         uses: actions/setup-java@v5
@@ -59,7 +61,7 @@ jobs:
             [ -n "$repo" ] || continue
             echo "==> Processing repository: $repo"
 
-            # Get release by tag (github-ci-nightly)
+            # Get release by tag (github-ci-snapshot)
             API="https://api.github.com/repos/${repo}/releases/tags/${TAG}"
             rel_json=$(curl -sS -H "Authorization: token ${TOKEN}" -H "Accept: application/vnd.github+json" "$API" || true)
 
@@ -76,9 +78,6 @@ jobs:
               continue
             fi
 
-            echo "  Found ${#urls[@]} asset(s)."
-            downloaded_any=false
-
             for url in "${urls[@]}"; do
               [ -n "$url" ] || continue
               asset_name=$(basename "${url%%\?*}")
@@ -89,57 +88,32 @@ jobs:
               # - others -> ignore
               case "$asset_name" in
                 *.jar)
-                  echo "    Downloading JAR asset: $asset_name"
                   curl -fSL -H "Authorization: token ${TOKEN}" -o "lib/${asset_name}" "$url"
-                  downloaded_any=true
                   ;;
                 *.zip)
-                  echo "    Downloading ZIP asset: $asset_name"
                   tmpzip="$(mktemp -u)/${asset_name}"
                   mkdir -p "$(dirname "$tmpzip")"
                   curl -fSL -H "Authorization: token ${TOKEN}" -o "$tmpzip" "$url"
                   tmpdir=$(mktemp -d)
-                  unzip -q "$tmpzip" -d "$tmpdir" || (echo "    unzip failed for $asset_name"; rm -rf "$tmpdir" "$tmpzip"; continue)
+                  unzip -q "$tmpzip" -d "$tmpdir" || (echo "unzip failed for $asset_name"; rm -rf "$tmpdir" "$tmpzip"; continue)
 
-                  found=false
                   while IFS= read -r -d '' jar; do
-                    found=true
                     bn=$(basename "$jar")
-                    dest="lib/${bn}"
-                    echo "      Copying $jar -> $dest"
-                    cp -f "$jar" "$dest"
+                    cp -f "$jar" "lib/${bn}"
                   done < <(find "$tmpdir" -type f -name '*.jar' -print0)
-
-                  if [ "$found" = false ]; then
-                    echo "    No JAR files found inside ZIP asset $asset_name"
-                  else
-                    downloaded_any=true
-                  fi
 
                   rm -rf "$tmpdir" "$tmpzip"
                   ;;
-                *)
-                  echo "    Ignoring non-jar/non-zip asset: $asset_name"
-                  ;;
               esac
             done
-
-            if [ "$downloaded_any" = false ]; then
-              echo "  No usable JARs downloaded from release '${TAG}' in ${repo}."
-            fi
           done
-
-          echo "Contents of lib/:"
-          ls -la lib || true
 
       - name: Download AbsoluteLayout from Maven Central
         run: |
           set -euo pipefail
           mkdir -p lib
           METADATA_URL="https://repo1.maven.org/maven2/org/netbeans/external/AbsoluteLayout/maven-metadata.xml"
-          echo "Fetching maven-metadata.xml from $METADATA_URL"
-          meta=$(curl -sSL "$METADATA_URL") || (echo "Failed to fetch metadata" && exit 1)
-          # Try release, then latest, then fallback to last <version> entry
+          meta=$(curl -sSL "$METADATA_URL")
           VERSION=$(printf '%s' "$meta" | sed -n 's:.*<release>\(.*\)</release>.*:\1:p' || true)
           if [ -z "$VERSION" ]; then
             VERSION=$(printf '%s' "$meta" | sed -n 's:.*<latest>\(.*\)</latest>.*:\1:p' || true)
@@ -147,19 +121,20 @@ jobs:
           if [ -z "$VERSION" ]; then
             VERSION=$(printf '%s' "$meta" | sed -n 's:.*<version>\(.*\)</version>.*:\1:p' | tail -n1 || true)
           fi
-          if [ -z "$VERSION" ]; then
-            echo "Could not detect AbsoluteLayout version from $METADATA_URL"
-            exit 1
-          fi
-          echo "Detected AbsoluteLayout version: $VERSION"
           JAR_URL="https://repo1.maven.org/maven2/org/netbeans/external/AbsoluteLayout/${VERSION}/AbsoluteLayout-${VERSION}.jar"
-          echo "Downloading $JAR_URL -> lib/AbsoluteLayout-${VERSION}.jar"
           curl -fSL -o "lib/AbsoluteLayout-${VERSION}.jar" "$JAR_URL"
-          echo "Downloaded lib/AbsoluteLayout-${VERSION}.jar"
-          ls -la lib || true
 
       - name: Run Ant build
         run: ant -buildfile .github/build.xml fatjar
+
+      - name: Build snapshot changelog
+        run: |
+          {
+            echo "## Changes"
+            echo
+            git log -10 --pretty=format:"- %s (%h)"
+            echo
+          } > SNAPSHOT_NOTES.md
 
       - name: Upload JAR Artifact
         uses: actions/upload-artifact@v5
@@ -167,11 +142,17 @@ jobs:
           name: Package
           path: build/jar/*.jar
 
+      - name: Upload snapshot notes artifact
+        uses: actions/upload-artifact@v5
+        with:
+          name: SnapshotNotes
+          path: SNAPSHOT_NOTES.md
+
   release:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout (shallow false needed only if we want git info locally)
+      - name: Checkout
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
@@ -182,12 +163,11 @@ jobs:
           name: Package
           path: artifacts
 
-      - name: Show downloaded artifacts
-        run: |
-          echo "Artifacts content:"
-          ls -la artifacts || true
-          # If the artifact is a zip produced by upload step, it will be extracted; otherwise it will be the jar file(s).
-          find artifacts -maxdepth 2 -type f -print || true
+      - name: Download snapshot notes
+        uses: actions/download-artifact@v5
+        with:
+          name: SnapshotNotes
+          path: artifacts
 
       - name: Delete existing release and tag if present
         env:
@@ -196,34 +176,16 @@ jobs:
           TAG: ${{ env.NIGHTLY_TAG }}
         run: |
           set -euo pipefail
-          echo "Target repo: $API_URL"
           release_resp=$(curl -sS -H "Authorization: token $TOKEN" -H "Accept: application/vnd.github+json" "$API_URL/releases/tags/$TAG" || true)
           release_id=$(printf '%s' "$release_resp" | jq -r '.id // empty')
 
           if [ -n "$release_id" ]; then
-            echo "Found existing release id=$release_id — deleting it..."
-            del_status=$(curl -s -o /dev/null -w "%{http_code}" -X DELETE -H "Authorization: token $TOKEN" -H "Accept: application/vnd.github+json" "$API_URL/releases/$release_id" || true)
-            if [ "$del_status" -ge 200 ] && [ "$del_status" -lt 300 ]; then
-              echo "Deleted release id=$release_id (status $del_status)."
-            else
-              echo "Failed deleting release id=$release_id (status $del_status) — continuing."
-            fi
-          else
-            echo "No existing release with tag $TAG."
+            curl -s -o /dev/null -w "%{http_code}" -X DELETE -H "Authorization: token $TOKEN" -H "Accept: application/vnd.github+json" "$API_URL/releases/$release_id" || true
           fi
 
-          echo "Checking for existing tag ref refs/tags/$TAG ..."
           ref_status=$(curl -sS -H "Authorization: token $TOKEN" -H "Accept: application/vnd.github+json" -o /dev/null -w "%{http_code}" "$API_URL/git/ref/tags/$TAG" || true)
           if [ "$ref_status" -ge 200 ] && [ "$ref_status" -lt 300 ]; then
-            echo "Tag refs/tags/$TAG exists — deleting..."
-            del_ref_status=$(curl -s -o /dev/null -w "%{http_code}" -X DELETE -H "Authorization: token $TOKEN" -H "Accept: application/vnd.github+json" "$API_URL/git/refs/tags/$TAG" || true)
-            if [ "$del_ref_status" -ge 200 ] && [ "$del_ref_status" -lt 300 ]; then
-              echo "Deleted tag refs/tags/$TAG."
-            else
-              echo "Failed deleting tag refs/tags/$TAG (status $del_ref_status) — continuing."
-            fi
-          else
-            echo "No tag refs/tags/$TAG present (status $ref_status)."
+            curl -s -o /dev/null -w "%{http_code}" -X DELETE -H "Authorization: token $TOKEN" -H "Accept: application/vnd.github+json" "$API_URL/git/refs/tags/$TAG" || true
           fi
 
       - name: Create tag on main branch
@@ -233,26 +195,16 @@ jobs:
           TAG: ${{ env.NIGHTLY_TAG }}
         run: |
           set -euo pipefail
-          echo "Creating tag $TAG on ${API_URL} main branch..."
-          # Get commit SHA of main branch
           sha_resp=$(curl -sS -H "Authorization: token $TOKEN" -H "Accept: application/vnd.github+json" "$API_URL/git/ref/heads/main")
           commit_sha=$(printf '%s' "$sha_resp" | jq -r '.object.sha // empty')
-          if [ -z "$commit_sha" ]; then
-            echo "Failed to get commit SHA of main branch in ${API_URL}. Response:"
-            printf '%s\n' "$sha_resp"
-            exit 1
-          fi
-          echo "main branch SHA: $commit_sha"
           create_resp=$(curl -sS -X POST -H "Authorization: token $TOKEN" -H "Accept: application/vnd.github+json" \
             -d "{\"ref\":\"refs/tags/$TAG\",\"sha\":\"$commit_sha\"}" \
             "$API_URL/git/refs")
           tag_ref=$(printf '%s' "$create_resp" | jq -r '.ref // empty')
           if [ -z "$tag_ref" ]; then
-            echo "Creating tag failed. Response:"
             printf '%s\n' "$create_resp"
             exit 1
           fi
-          echo "Created tag: $tag_ref"
 
       - name: Create release (github-ci-snapshot)
         id: create_release
@@ -262,53 +214,47 @@ jobs:
           TAG: ${{ env.NIGHTLY_TAG }}
         run: |
           set -euo pipefail
-          echo "Creating release for tag $TAG..."
+          body=$(python3 - <<'PY'
+from pathlib import Path
+print(Path("artifacts/SNAPSHOT_NOTES.md").read_text())
+PY
+)
           create_resp=$(curl -sS -X POST -H "Authorization: token $TOKEN" -H "Accept: application/vnd.github+json" \
-            -d "{\"tag_name\":\"$TAG\",\"name\":\"$TAG\",\"body\":\"Automated nightly build from ${GITHUB_REPOSITORY}@${GITHUB_SHA}\",\"draft\":false,\"prerelease\":true}" \
+            -d "$(jq -n --arg tag "$TAG" --arg name "$TAG" --arg body "$body" '{tag_name:$tag,name:$name,body:$body,draft:false,prerelease:true}')" \
             "$API_URL/releases")
           upload_url=$(printf '%s' "$create_resp" | jq -r '.upload_url // empty')
           release_id=$(printf '%s' "$create_resp" | jq -r '.id // empty')
           if [ -z "$upload_url" ] || [ -z "$release_id" ]; then
-            echo "Failed to create release. Response:"
             printf '%s\n' "$create_resp"
             exit 1
           fi
           upload_url="${upload_url%\{*}"
-          echo "Created release id=$release_id, upload_url=$upload_url"
           echo "upload_url=$upload_url" >> $GITHUB_OUTPUT
-          echo "release_id=$release_id" >> $GITHUB_OUTPUT
 
-      - name: Extract jar from downloaded Package artifact and upload as release asset
+      - name: Upload all jar assets
         env:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
           UPLOAD_URL: ${{ steps.create_release.outputs.upload_url }}
         run: |
           set -euo pipefail
-          echo "Looking for JAR to upload in artifacts/ ..."
-          # The download-artifact step places artifact contents under artifacts/
-          # find first file matching RbmkSimulator*.jar or any jar
-          jarfile=$(find artifacts -type f -name 'RbmkSimulator*.jar' | head -n1)
-          if [ -z "$jarfile" ]; then
-            jarfile=$(find artifacts -type f -name '*.jar' | head -n1)
-          fi
-          if [ -z "$jarfile" ]; then
-            echo "No jar file found in downloaded artifact (artifacts/). Aborting."
-            exit 1
-          fi
-          echo "Found jar: $jarfile"
-          filename=$(basename "$jarfile")
-          echo "Uploading asset: $filename to $UPLOAD_URL"
-          http_status=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
-            -H "Authorization: token $TOKEN" \
-            -H "Content-Type: application/java-archive" \
-            --data-binary @"$jarfile" \
-            "$UPLOAD_URL?name=$filename")
-          if [ "$http_status" -ge 200 ] && [ "$http_status" -lt 300 ]; then
-            echo "Upload successful (status $http_status)."
-          else
-            echo "Upload failed with status $http_status"
-            echo "Server response (for debugging):"
-            curl -sS -X POST -H "Authorization: token $TOKEN" -H "Content-Type: application/java-archive" --data-binary @"$jarfile" "$UPLOAD_URL?name=$filename" || true
+          found_any=false
+          while IFS= read -r -d '' jarfile; do
+            found_any=true
+            filename=$(basename "$jarfile")
+            echo "Uploading $filename"
+            http_status=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
+              -H "Authorization: token $TOKEN" \
+              -H "Content-Type: application/java-archive" \
+              --data-binary @"$jarfile" \
+              "$UPLOAD_URL?name=$filename")
+            if [ "$http_status" -lt 200 ] || [ "$http_status" -ge 300 ]; then
+              echo "Upload failed for $filename with status $http_status"
+              exit 1
+            fi
+          done < <(find artifacts -type f -name '*.jar' -print0)
+
+          if [ "$found_any" = false ]; then
+            echo "No jar files found in artifacts/"
             exit 1
           fi
 
@@ -332,13 +278,11 @@ jobs:
           resp=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "$API_URL/actions/artifacts?per_page=100")
           count=$(echo "$resp" | jq -r '.artifacts[] | select(.name == env.ARTIFACT_NAME) | .id' | wc -l)
           if [ "$count" -gt 0 ]; then
-            echo "Found $count artifact(s) named '$ARTIFACT_NAME'."
             echo "has_artifacts=true" >> $GITHUB_OUTPUT
           else
-            echo "No artifacts named '$ARTIFACT_NAME' found."
             echo "has_artifacts=false" >> $GITHUB_OUTPUT
           fi
-          
+
   cleanup:
     needs: probe-artifacts
     if: needs.probe-artifacts.outputs.has_artifacts == 'true'
@@ -351,24 +295,15 @@ jobs:
           ARTIFACT_NAME: Package
         run: |
           set -euo pipefail
-          echo "Listing artifacts..."
           resp=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "$API_URL/actions/artifacts?per_page=100")
           artifacts=$(echo "$resp" | jq -r '.artifacts[] | select(.name == env.ARTIFACT_NAME) | "\(.created_at) \(.id)"' | sort -r)
-          echo "Matched artifacts (newest first):"
-          echo "$artifacts"
           ids_to_delete=$(echo "$artifacts" | tail -n +2 | awk '{print $2}')
           if [ -z "$ids_to_delete" ]; then
-            echo "Only newest artifact exists — nothing to delete."
             exit 0
           fi
           for id in $ids_to_delete; do
-            echo "Deleting artifact id=$id ..."
             http_status=$(curl -s -o /dev/null -w "%{http_code}" -X DELETE -H "Authorization: token $GITHUB_TOKEN" "$API_URL/actions/artifacts/$id")
-            if [ "$http_status" -ge 200 ] && [ "$http_status" -lt 300 ]; then
-              echo "Deleted artifact id=$id (status $http_status)"
-            else
-              echo "Failed to delete artifact id=$id (status $http_status)"
+            if [ "$http_status" -lt 200 ] || [ "$http_status" -ge 300 ]; then
               exit 1
             fi
           done
-          echo "Old artifacts removed."

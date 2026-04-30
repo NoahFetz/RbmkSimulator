@@ -1,6 +1,18 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * Copyright (C) 2026 Viktor Alexander Hartung
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.hartrusion.rbmksim;
 
@@ -12,7 +24,6 @@ import com.hartrusion.util.SimpleLogOut;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.plaf.metal.MetalLookAndFeel;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.hartrusion.rbmksim.gui.elements.ChornobylMetalTheme;
@@ -28,7 +39,7 @@ public class RbmkSimulatorClient {
     private static final Logger LOGGER
             = Logger.getLogger(RbmkSimulatorClient.class.getName());
 
-    private static final String DEFAULT_ADDRESS = "127.0.0.1:26486";
+    private static final String DEFAULT_ADDRESS = "192.168.1.105:26486";
 
     private static final class HostPort {
         final String host;
@@ -98,7 +109,7 @@ public class RbmkSimulatorClient {
         while (true) {
             String input = JOptionPane.showInputDialog(
                     null,
-                    "Enter server address (host:port)",
+                    "Connect to RBMK Server:",
                     DEFAULT_ADDRESS);
 
             if (input == null) {

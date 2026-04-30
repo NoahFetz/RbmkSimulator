@@ -11,8 +11,8 @@
   <property name="main.class.client" value="com.hartrusion.rbmksim.RbmkSimulatorClient"/>
 
   <!-- Output JAR names -->
-  <property name="jar.name.simulator" value="RbmkSimulator-SNAPSHOT.jar"/>
-  <property name="jar.name.client" value="RbmkSimulatorClient-SNAPSHOT.jar"/>
+  <property name="jar.name.simulator" value="RbmkSimulator.jar"/>
+  <property name="jar.name.client" value="RbmkSimulatorClient.jar"/>
 
   <target name="init">
     <mkdir dir="${classes.dir}"/>

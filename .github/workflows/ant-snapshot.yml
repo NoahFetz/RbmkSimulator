@@ -203,22 +203,37 @@ jobs:
           TAG: ${{ env.NIGHTLY_TAG }}
         run: |
           set -euo pipefail
-          body=$(python3 - <<'PY'
-from pathlib import Path
-print(Path("artifacts/SNAPSHOT_NOTES.md").read_text())
-PY
-)
-          create_resp=$(curl -sS -X POST -H "Authorization: token $TOKEN" -H "Accept: application/vnd.github+json" \
-            -d "$(jq -n --arg tag "$TAG" --arg name "$TAG" --arg body "$body" '{tag_name:$tag,name:$name,body:$body,draft:false,prerelease:true}')" \
+
+          body=$(cat artifacts/SNAPSHOT_NOTES.md)
+
+          payload=$(jq -n \
+            --arg tag "$TAG" \
+            --arg name "$TAG" \
+            --arg body "$body" \
+            '{
+              tag_name: $tag,
+              name: $name,
+              body: $body,
+              draft: false,
+              prerelease: true
+            }')
+
+          create_resp=$(curl -sS -X POST \
+            -H "Authorization: token $TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -d "$payload" \
             "$API_URL/releases")
+
           upload_url=$(printf '%s' "$create_resp" | jq -r '.upload_url // empty')
           release_id=$(printf '%s' "$create_resp" | jq -r '.id // empty')
+
           if [ -z "$upload_url" ] || [ -z "$release_id" ]; then
             printf '%s\n' "$create_resp"
             exit 1
           fi
+
           upload_url="${upload_url%\{*}"
-          echo "upload_url=$upload_url" >> $GITHUB_OUTPUT
+          echo "upload_url=$upload_url" >> "$GITHUB_OUTPUT"
 
       - name: Upload all jar assets
         env:

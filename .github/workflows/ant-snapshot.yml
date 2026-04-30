@@ -1,14 +1,14 @@
 name: Java Ant Snapshot build
 
 on:
-  push:
-    branches: [ "main" ]
-    paths-ignore:
-      - '**/*.md'
-      - '**/*.yml'
-      - '**/*.png'
-      - '**/*.svg'
-      - '**/*.xml'
+  # push:
+  # branches: [ "main" ]
+  #  paths-ignore:
+  #    - '**/*.md'
+  #    - '**/*.yml'
+  #    - '**/*.png'
+  #    - '**/*.svg'
+  #    - '**/*.xml'
   workflow_dispatch:
 
 permissions:

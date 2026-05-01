@@ -56,12 +56,12 @@ public class PanelEccs extends AbstractPanelWidget
         integralSwitchDrum2SteamToPool.registerActionReceiver(controller);
         integralSwitchP3Feed13.registerActionReceiver(controller);
         integralSwitchP3Feed23.registerActionReceiver(controller);
-        integralSwitchPSP1Feed11.registerActionReceiver(controller);
-        integralSwitchPSP1Feed21.registerActionReceiver(controller);
-        integralSwitchPSP2Feed12.registerActionReceiver(controller);
-        integralSwitchPSP2Feed22.registerActionReceiver(controller);
-        integralSwitchPSP3Feed13.registerActionReceiver(controller);
-        integralSwitchPSP3Feed23.registerActionReceiver(controller);
+        integralSwitchPSPFeed11.registerActionReceiver(controller);
+        integralSwitchPSPFeed21.registerActionReceiver(controller);
+        integralSwitchPSPFeed12.registerActionReceiver(controller);
+        integralSwitchPSPFeed22.registerActionReceiver(controller);
+        integralSwitchPSPFeed13.registerActionReceiver(controller);
+        integralSwitchPSPFeed23.registerActionReceiver(controller);
         integralSwitchPV1Feed11.registerActionReceiver(controller);
         integralSwitchPV1Feed21.registerActionReceiver(controller);
         integralSwitchPV2Feed12.registerActionReceiver(controller);
@@ -99,12 +99,12 @@ public class PanelEccs extends AbstractPanelWidget
         panelWidgetSprinklerPump1 = new com.hartrusion.rbmksim.gui.widgets.PanelWidgetSmallPump();
         integralSwitchPVFill1 = new com.hartrusion.rbmksim.gui.elements.IntegralSwitch();
         integralSwitchPVFill2 = new com.hartrusion.rbmksim.gui.elements.IntegralSwitch();
-        integralSwitchPSP1Feed11 = new com.hartrusion.rbmksim.gui.elements.IntegralSwitch();
-        jToggleButtonPSP1Feed11Auto = new javax.swing.JToggleButton();
-        lightBulbPSP1Feed11Auto = new com.hartrusion.rbmksim.gui.elements.LightBulb();
-        integralSwitchPSP1Feed21 = new com.hartrusion.rbmksim.gui.elements.IntegralSwitch();
-        jToggleButtonPSP1Feed21Auto = new javax.swing.JToggleButton();
-        lightBulbPSP1Feed21Auto = new com.hartrusion.rbmksim.gui.elements.LightBulb();
+        integralSwitchPSPFeed11 = new com.hartrusion.rbmksim.gui.elements.IntegralSwitch();
+        jToggleButtonPSPFeed11Auto = new javax.swing.JToggleButton();
+        lightBulbPSPFeed11Auto = new com.hartrusion.rbmksim.gui.elements.LightBulb();
+        integralSwitchPSPFeed21 = new com.hartrusion.rbmksim.gui.elements.IntegralSwitch();
+        jToggleButtonPSPFeed21Auto = new javax.swing.JToggleButton();
+        lightBulbPSPFeed21Auto = new com.hartrusion.rbmksim.gui.elements.LightBulb();
         jLabelCaptionPSPP1 = new javax.swing.JLabel();
         jLabelCaptionPSPP1F21 = new javax.swing.JLabel();
         jLabelCaptionPSPP1F11 = new javax.swing.JLabel();
@@ -160,12 +160,12 @@ public class PanelEccs extends AbstractPanelWidget
         jButtonToMcpHeader23Open = new javax.swing.JButton();
         jLabelCaptionToMcp23 = new javax.swing.JLabel();
         panelWidgetPumpPSP2 = new com.hartrusion.rbmksim.gui.widgets.PanelWidgetPump();
-        integralSwitchPSP2Feed12 = new com.hartrusion.rbmksim.gui.elements.IntegralSwitch();
-        jToggleButtonPSP2Feed12Auto = new javax.swing.JToggleButton();
-        lightBulbPSP2Feed12Auto = new com.hartrusion.rbmksim.gui.elements.LightBulb();
-        integralSwitchPSP2Feed22 = new com.hartrusion.rbmksim.gui.elements.IntegralSwitch();
-        jToggleButtonControl1Enable13 = new javax.swing.JToggleButton();
-        lightBulbPSP2Feed22Auto = new com.hartrusion.rbmksim.gui.elements.LightBulb();
+        integralSwitchPSPFeed12 = new com.hartrusion.rbmksim.gui.elements.IntegralSwitch();
+        jToggleButtonPSPFeed12Auto = new javax.swing.JToggleButton();
+        lightBulbPSPFeed12Auto = new com.hartrusion.rbmksim.gui.elements.LightBulb();
+        integralSwitchPSPFeed22 = new com.hartrusion.rbmksim.gui.elements.IntegralSwitch();
+        jToggleButtonPSPFeed22Auto = new javax.swing.JToggleButton();
+        lightBulbPSPFeed22Auto = new com.hartrusion.rbmksim.gui.elements.LightBulb();
         jLabelCaptionPSPP2 = new javax.swing.JLabel();
         jLabelCaptionPSPP2F22 = new javax.swing.JLabel();
         jLabelCaptionPSPP2F12 = new javax.swing.JLabel();
@@ -173,12 +173,12 @@ public class PanelEccs extends AbstractPanelWidget
         jButtonCoolantPSPP2Open = new javax.swing.JButton();
         jLabelCaptionPSPPCoolant2 = new javax.swing.JLabel();
         panelWidgetPumpPSP3 = new com.hartrusion.rbmksim.gui.widgets.PanelWidgetPump();
-        integralSwitchPSP3Feed13 = new com.hartrusion.rbmksim.gui.elements.IntegralSwitch();
-        jToggleButtonPSP3Feed13Auto = new javax.swing.JToggleButton();
-        lightBulbPSP3Feed13Auto = new com.hartrusion.rbmksim.gui.elements.LightBulb();
-        integralSwitchPSP3Feed23 = new com.hartrusion.rbmksim.gui.elements.IntegralSwitch();
-        jToggleButtonPSP3Feed23Auto = new javax.swing.JToggleButton();
-        lightBulbPSP3Feed23Auto = new com.hartrusion.rbmksim.gui.elements.LightBulb();
+        integralSwitchPSPFeed13 = new com.hartrusion.rbmksim.gui.elements.IntegralSwitch();
+        jToggleButtonPSPFeed13Auto = new javax.swing.JToggleButton();
+        lightBulbPSPFeed13Auto = new com.hartrusion.rbmksim.gui.elements.LightBulb();
+        integralSwitchPSPFeed23 = new com.hartrusion.rbmksim.gui.elements.IntegralSwitch();
+        jToggleButtonPSPFeed23Auto = new javax.swing.JToggleButton();
+        lightBulbPSPFeed23Auto = new com.hartrusion.rbmksim.gui.elements.LightBulb();
         jLabelCaptionPSPP3 = new javax.swing.JLabel();
         jLabelCaptionPSPP3F23 = new javax.swing.JLabel();
         jLabelCaptionPSPP3F13 = new javax.swing.JLabel();
@@ -323,31 +323,31 @@ public class PanelEccs extends AbstractPanelWidget
         integralSwitchPVFill2.setComponent("ECCS2#PvFillValve");
         add(integralSwitchPVFill2, new org.netbeans.lib.awtextra.AbsoluteConstraints(152, 44, -1, -1));
 
-        integralSwitchPSP1Feed11.setComponent("ECCS11#PspPumpValve");
-        integralSwitchPSP1Feed11.setControlledValve(true);
-        integralSwitchPSP1Feed11.setToolTipText("");
-        add(integralSwitchPSP1Feed11, new org.netbeans.lib.awtextra.AbsoluteConstraints(48, 318, -1, -1));
+        integralSwitchPSPFeed11.setComponent("ECCS11#PspPumpValve");
+        integralSwitchPSPFeed11.setControlledValve(true);
+        integralSwitchPSPFeed11.setToolTipText("");
+        add(integralSwitchPSPFeed11, new org.netbeans.lib.awtextra.AbsoluteConstraints(48, 318, -1, -1));
 
-        jToggleButtonPSP1Feed11Auto.setFont(jToggleButtonPSP1Feed11Auto.getFont().deriveFont(jToggleButtonPSP1Feed11Auto.getFont().getStyle() & ~java.awt.Font.BOLD));
-        jToggleButtonPSP1Feed11Auto.setText("←");
-        jToggleButtonPSP1Feed11Auto.setToolTipText("Auto Mode");
-        jToggleButtonPSP1Feed11Auto.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        jToggleButtonPSP1Feed11Auto.addActionListener(this::jToggleButtonPSP1Feed11AutoActionPerformed);
-        add(jToggleButtonPSP1Feed11Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 322, 20, 20));
-        add(lightBulbPSP1Feed11Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(36, 328, -1, -1));
+        jToggleButtonPSPFeed11Auto.setFont(jToggleButtonPSPFeed11Auto.getFont().deriveFont(jToggleButtonPSPFeed11Auto.getFont().getStyle() & ~java.awt.Font.BOLD));
+        jToggleButtonPSPFeed11Auto.setText("←");
+        jToggleButtonPSPFeed11Auto.setToolTipText("Auto Mode");
+        jToggleButtonPSPFeed11Auto.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        jToggleButtonPSPFeed11Auto.addActionListener(this::jToggleButtonPSPFeed11AutoActionPerformed);
+        add(jToggleButtonPSPFeed11Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 322, 20, 20));
+        add(lightBulbPSPFeed11Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(36, 328, -1, -1));
 
-        integralSwitchPSP1Feed21.setComponent("ECCS21#PspPumpValve");
-        integralSwitchPSP1Feed21.setControlledValve(true);
-        integralSwitchPSP1Feed21.setToolTipText("");
-        add(integralSwitchPSP1Feed21, new org.netbeans.lib.awtextra.AbsoluteConstraints(48, 366, -1, -1));
+        integralSwitchPSPFeed21.setComponent("ECCS21#PspPumpValve");
+        integralSwitchPSPFeed21.setControlledValve(true);
+        integralSwitchPSPFeed21.setToolTipText("");
+        add(integralSwitchPSPFeed21, new org.netbeans.lib.awtextra.AbsoluteConstraints(48, 366, -1, -1));
 
-        jToggleButtonPSP1Feed21Auto.setFont(jToggleButtonPSP1Feed21Auto.getFont().deriveFont(jToggleButtonPSP1Feed21Auto.getFont().getStyle() & ~java.awt.Font.BOLD));
-        jToggleButtonPSP1Feed21Auto.setText("←");
-        jToggleButtonPSP1Feed21Auto.setToolTipText("Auto Mode");
-        jToggleButtonPSP1Feed21Auto.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        jToggleButtonPSP1Feed21Auto.addActionListener(this::jToggleButtonPSP1Feed21AutoActionPerformed);
-        add(jToggleButtonPSP1Feed21Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 370, 20, 20));
-        add(lightBulbPSP1Feed21Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(36, 376, -1, -1));
+        jToggleButtonPSPFeed21Auto.setFont(jToggleButtonPSPFeed21Auto.getFont().deriveFont(jToggleButtonPSPFeed21Auto.getFont().getStyle() & ~java.awt.Font.BOLD));
+        jToggleButtonPSPFeed21Auto.setText("←");
+        jToggleButtonPSPFeed21Auto.setToolTipText("Auto Mode");
+        jToggleButtonPSPFeed21Auto.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        jToggleButtonPSPFeed21Auto.addActionListener(this::jToggleButtonPSPFeed21AutoActionPerformed);
+        add(jToggleButtonPSPFeed21Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 370, 20, 20));
+        add(lightBulbPSPFeed21Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(36, 376, -1, -1));
 
         jLabelCaptionPSPP1.setFont(jLabelCaptionPSPP1.getFont().deriveFont(jLabelCaptionPSPP1.getFont().getStyle() | java.awt.Font.BOLD, jLabelCaptionPSPP1.getFont().getSize()-2));
         jLabelCaptionPSPP1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -692,31 +692,31 @@ public class PanelEccs extends AbstractPanelWidget
         panelWidgetPumpPSP2.setChornobylPrefix("ECCS2#PspPump");
         add(panelWidgetPumpPSP2, new org.netbeans.lib.awtextra.AbsoluteConstraints(106, 398, -1, -1));
 
-        integralSwitchPSP2Feed12.setComponent("ECCS12#PspPumpValve");
-        integralSwitchPSP2Feed12.setControlledValve(true);
-        integralSwitchPSP2Feed12.setToolTipText("");
-        add(integralSwitchPSP2Feed12, new org.netbeans.lib.awtextra.AbsoluteConstraints(134, 318, -1, -1));
+        integralSwitchPSPFeed12.setComponent("ECCS12#PspPumpValve");
+        integralSwitchPSPFeed12.setControlledValve(true);
+        integralSwitchPSPFeed12.setToolTipText("");
+        add(integralSwitchPSPFeed12, new org.netbeans.lib.awtextra.AbsoluteConstraints(134, 318, -1, -1));
 
-        jToggleButtonPSP2Feed12Auto.setFont(jToggleButtonPSP2Feed12Auto.getFont().deriveFont(jToggleButtonPSP2Feed12Auto.getFont().getStyle() & ~java.awt.Font.BOLD));
-        jToggleButtonPSP2Feed12Auto.setText("←");
-        jToggleButtonPSP2Feed12Auto.setToolTipText("Auto Mode");
-        jToggleButtonPSP2Feed12Auto.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        jToggleButtonPSP2Feed12Auto.addActionListener(this::jToggleButtonPSP2Feed12AutoActionPerformed);
-        add(jToggleButtonPSP2Feed12Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(98, 322, 20, 20));
-        add(lightBulbPSP2Feed12Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(122, 328, -1, -1));
+        jToggleButtonPSPFeed12Auto.setFont(jToggleButtonPSPFeed12Auto.getFont().deriveFont(jToggleButtonPSPFeed12Auto.getFont().getStyle() & ~java.awt.Font.BOLD));
+        jToggleButtonPSPFeed12Auto.setText("←");
+        jToggleButtonPSPFeed12Auto.setToolTipText("Auto Mode");
+        jToggleButtonPSPFeed12Auto.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        jToggleButtonPSPFeed12Auto.addActionListener(this::jToggleButtonPSPFeed12AutoActionPerformed);
+        add(jToggleButtonPSPFeed12Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(98, 322, 20, 20));
+        add(lightBulbPSPFeed12Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(122, 328, -1, -1));
 
-        integralSwitchPSP2Feed22.setComponent("ECCS22#PspPumpValve");
-        integralSwitchPSP2Feed22.setControlledValve(true);
-        integralSwitchPSP2Feed22.setToolTipText("");
-        add(integralSwitchPSP2Feed22, new org.netbeans.lib.awtextra.AbsoluteConstraints(134, 366, -1, -1));
+        integralSwitchPSPFeed22.setComponent("ECCS22#PspPumpValve");
+        integralSwitchPSPFeed22.setControlledValve(true);
+        integralSwitchPSPFeed22.setToolTipText("");
+        add(integralSwitchPSPFeed22, new org.netbeans.lib.awtextra.AbsoluteConstraints(134, 366, -1, -1));
 
-        jToggleButtonControl1Enable13.setFont(jToggleButtonControl1Enable13.getFont().deriveFont(jToggleButtonControl1Enable13.getFont().getStyle() & ~java.awt.Font.BOLD));
-        jToggleButtonControl1Enable13.setText("←");
-        jToggleButtonControl1Enable13.setToolTipText("Auto Mode");
-        jToggleButtonControl1Enable13.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        jToggleButtonControl1Enable13.addActionListener(this::jToggleButtonControl1Enable13ActionPerformed);
-        add(jToggleButtonControl1Enable13, new org.netbeans.lib.awtextra.AbsoluteConstraints(98, 370, 20, 20));
-        add(lightBulbPSP2Feed22Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(122, 376, -1, -1));
+        jToggleButtonPSPFeed22Auto.setFont(jToggleButtonPSPFeed22Auto.getFont().deriveFont(jToggleButtonPSPFeed22Auto.getFont().getStyle() & ~java.awt.Font.BOLD));
+        jToggleButtonPSPFeed22Auto.setText("←");
+        jToggleButtonPSPFeed22Auto.setToolTipText("Auto Mode");
+        jToggleButtonPSPFeed22Auto.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        jToggleButtonPSPFeed22Auto.addActionListener(this::jToggleButtonPSPFeed22AutoActionPerformed);
+        add(jToggleButtonPSPFeed22Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(98, 370, 20, 20));
+        add(lightBulbPSPFeed22Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(122, 376, -1, -1));
 
         jLabelCaptionPSPP2.setFont(jLabelCaptionPSPP2.getFont().deriveFont(jLabelCaptionPSPP2.getFont().getStyle() | java.awt.Font.BOLD, jLabelCaptionPSPP2.getFont().getSize()-2));
         jLabelCaptionPSPP2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -764,31 +764,31 @@ public class PanelEccs extends AbstractPanelWidget
         panelWidgetPumpPSP3.setChornobylPrefix("ECCS3#PspPump");
         add(panelWidgetPumpPSP3, new org.netbeans.lib.awtextra.AbsoluteConstraints(192, 398, -1, -1));
 
-        integralSwitchPSP3Feed13.setComponent("ECCS13#PspPumpValve");
-        integralSwitchPSP3Feed13.setControlledValve(true);
-        integralSwitchPSP3Feed13.setToolTipText("");
-        add(integralSwitchPSP3Feed13, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 318, -1, -1));
+        integralSwitchPSPFeed13.setComponent("ECCS13#PspPumpValve");
+        integralSwitchPSPFeed13.setControlledValve(true);
+        integralSwitchPSPFeed13.setToolTipText("");
+        add(integralSwitchPSPFeed13, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 318, -1, -1));
 
-        jToggleButtonPSP3Feed13Auto.setFont(jToggleButtonPSP3Feed13Auto.getFont().deriveFont(jToggleButtonPSP3Feed13Auto.getFont().getStyle() & ~java.awt.Font.BOLD));
-        jToggleButtonPSP3Feed13Auto.setText("←");
-        jToggleButtonPSP3Feed13Auto.setToolTipText("Auto Mode");
-        jToggleButtonPSP3Feed13Auto.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        jToggleButtonPSP3Feed13Auto.addActionListener(this::jToggleButtonPSP3Feed13AutoActionPerformed);
-        add(jToggleButtonPSP3Feed13Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(184, 322, 20, 20));
-        add(lightBulbPSP3Feed13Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(208, 328, -1, -1));
+        jToggleButtonPSPFeed13Auto.setFont(jToggleButtonPSPFeed13Auto.getFont().deriveFont(jToggleButtonPSPFeed13Auto.getFont().getStyle() & ~java.awt.Font.BOLD));
+        jToggleButtonPSPFeed13Auto.setText("←");
+        jToggleButtonPSPFeed13Auto.setToolTipText("Auto Mode");
+        jToggleButtonPSPFeed13Auto.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        jToggleButtonPSPFeed13Auto.addActionListener(this::jToggleButtonPSPFeed13AutoActionPerformed);
+        add(jToggleButtonPSPFeed13Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(184, 322, 20, 20));
+        add(lightBulbPSPFeed13Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(208, 328, -1, -1));
 
-        integralSwitchPSP3Feed23.setComponent("ECCS23#PspPumpValve");
-        integralSwitchPSP3Feed23.setControlledValve(true);
-        integralSwitchPSP3Feed23.setToolTipText("");
-        add(integralSwitchPSP3Feed23, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 366, -1, -1));
+        integralSwitchPSPFeed23.setComponent("ECCS23#PspPumpValve");
+        integralSwitchPSPFeed23.setControlledValve(true);
+        integralSwitchPSPFeed23.setToolTipText("");
+        add(integralSwitchPSPFeed23, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 366, -1, -1));
 
-        jToggleButtonPSP3Feed23Auto.setFont(jToggleButtonPSP3Feed23Auto.getFont().deriveFont(jToggleButtonPSP3Feed23Auto.getFont().getStyle() & ~java.awt.Font.BOLD));
-        jToggleButtonPSP3Feed23Auto.setText("←");
-        jToggleButtonPSP3Feed23Auto.setToolTipText("Auto Mode");
-        jToggleButtonPSP3Feed23Auto.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        jToggleButtonPSP3Feed23Auto.addActionListener(this::jToggleButtonPSP3Feed23AutoActionPerformed);
-        add(jToggleButtonPSP3Feed23Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(184, 370, 20, 20));
-        add(lightBulbPSP3Feed23Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(208, 376, -1, -1));
+        jToggleButtonPSPFeed23Auto.setFont(jToggleButtonPSPFeed23Auto.getFont().deriveFont(jToggleButtonPSPFeed23Auto.getFont().getStyle() & ~java.awt.Font.BOLD));
+        jToggleButtonPSPFeed23Auto.setText("←");
+        jToggleButtonPSPFeed23Auto.setToolTipText("Auto Mode");
+        jToggleButtonPSPFeed23Auto.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        jToggleButtonPSPFeed23Auto.addActionListener(this::jToggleButtonPSPFeed23AutoActionPerformed);
+        add(jToggleButtonPSPFeed23Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(184, 370, 20, 20));
+        add(lightBulbPSPFeed23Auto, new org.netbeans.lib.awtextra.AbsoluteConstraints(208, 376, -1, -1));
 
         jLabelCaptionPSPP3.setFont(jLabelCaptionPSPP3.getFont().deriveFont(jLabelCaptionPSPP3.getFont().getStyle() | java.awt.Font.BOLD, jLabelCaptionPSPP3.getFont().getSize()-2));
         jLabelCaptionPSPP3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1280,13 +1280,25 @@ public class PanelEccs extends AbstractPanelWidget
         controller.userAction(new ActionCommand("ECCS11#FeedValve", true));
     }//GEN-LAST:event_jButtonToMcpHeader11OpenActionPerformed
 
-    private void jToggleButtonPSP1Feed11AutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonPSP1Feed11AutoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jToggleButtonPSP1Feed11AutoActionPerformed
+    private void jToggleButtonPSPFeed11AutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonPSPFeed11AutoActionPerformed
+        if (jToggleButtonPSPFeed11Auto.isSelected()) {
+            jToggleButtonPSPFeed11Auto.setText("↑");
+            controller.userAction(new ActionCommand("ECCS11#PspPumpValveControlCommand", ControlCommand.AUTOMATIC));
+        } else {
+            jToggleButtonPSPFeed11Auto.setText("←");
+            controller.userAction(new ActionCommand("ECCS11#PspPumpValveControlCommand", ControlCommand.MANUAL_OPERATION));
+        }
+    }//GEN-LAST:event_jToggleButtonPSPFeed11AutoActionPerformed
 
-    private void jToggleButtonPSP1Feed21AutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonPSP1Feed21AutoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jToggleButtonPSP1Feed21AutoActionPerformed
+    private void jToggleButtonPSPFeed21AutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonPSPFeed21AutoActionPerformed
+        if (jToggleButtonPSPFeed21Auto.isSelected()) {
+            jToggleButtonPSPFeed21Auto.setText("↑");
+            controller.userAction(new ActionCommand("ECCS21#PspPumpValveControlCommand", ControlCommand.AUTOMATIC));
+        } else {
+            jToggleButtonPSPFeed21Auto.setText("←");
+            controller.userAction(new ActionCommand("ECCS21#PspPumpValveControlCommand", ControlCommand.MANUAL_OPERATION));
+        }
+    }//GEN-LAST:event_jToggleButtonPSPFeed21AutoActionPerformed
 
     private void jButtonDrumDrain1CoolantCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDrumDrain1CoolantCloseActionPerformed
         // TODO add your handling code here:
@@ -1368,13 +1380,25 @@ public class PanelEccs extends AbstractPanelWidget
         controller.userAction(new ActionCommand("ECCS23#FeedValve", true));
     }//GEN-LAST:event_jButtonToMcpHeader23OpenActionPerformed
 
-    private void jToggleButtonPSP2Feed12AutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonPSP2Feed12AutoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jToggleButtonPSP2Feed12AutoActionPerformed
+    private void jToggleButtonPSPFeed12AutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonPSPFeed12AutoActionPerformed
+        if (jToggleButtonPSPFeed12Auto.isSelected()) {
+            jToggleButtonPSPFeed12Auto.setText("↑");
+            controller.userAction(new ActionCommand("ECCS12#PspPumpValveControlCommand", ControlCommand.AUTOMATIC));
+        } else {
+            jToggleButtonPSPFeed12Auto.setText("←");
+            controller.userAction(new ActionCommand("ECCS12#PspPumpValveControlCommand", ControlCommand.MANUAL_OPERATION));
+        }
+    }//GEN-LAST:event_jToggleButtonPSPFeed12AutoActionPerformed
 
-    private void jToggleButtonControl1Enable13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonControl1Enable13ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jToggleButtonControl1Enable13ActionPerformed
+    private void jToggleButtonPSPFeed22AutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonPSPFeed22AutoActionPerformed
+        if (jToggleButtonPSPFeed22Auto.isSelected()) {
+            jToggleButtonPSPFeed22Auto.setText("↑");
+            controller.userAction(new ActionCommand("ECCS22#PspPumpValveControlCommand", ControlCommand.AUTOMATIC));
+        } else {
+            jToggleButtonPSPFeed22Auto.setText("←");
+            controller.userAction(new ActionCommand("ECCS22#PspPumpValveControlCommand", ControlCommand.MANUAL_OPERATION));
+        }
+    }//GEN-LAST:event_jToggleButtonPSPFeed22AutoActionPerformed
 
     private void jButtonCoolantPSPP2CloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCoolantPSPP2CloseActionPerformed
         controller.userAction(new ActionCommand("ECCS2#PspCoolantValve", false));
@@ -1384,13 +1408,25 @@ public class PanelEccs extends AbstractPanelWidget
         controller.userAction(new ActionCommand("ECCS2#PspCoolantValve", true));
     }//GEN-LAST:event_jButtonCoolantPSPP2OpenActionPerformed
 
-    private void jToggleButtonPSP3Feed13AutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonPSP3Feed13AutoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jToggleButtonPSP3Feed13AutoActionPerformed
+    private void jToggleButtonPSPFeed13AutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonPSPFeed13AutoActionPerformed
+        if (jToggleButtonPSPFeed13Auto.isSelected()) {
+            jToggleButtonPSPFeed13Auto.setText("↑");
+            controller.userAction(new ActionCommand("ECCS13#PspPumpValveControlCommand", ControlCommand.AUTOMATIC));
+        } else {
+            jToggleButtonPSPFeed13Auto.setText("←");
+            controller.userAction(new ActionCommand("ECCS13#PspPumpValveControlCommand", ControlCommand.MANUAL_OPERATION));
+        }
+    }//GEN-LAST:event_jToggleButtonPSPFeed13AutoActionPerformed
 
-    private void jToggleButtonPSP3Feed23AutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonPSP3Feed23AutoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jToggleButtonPSP3Feed23AutoActionPerformed
+    private void jToggleButtonPSPFeed23AutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonPSPFeed23AutoActionPerformed
+        if (jToggleButtonPSPFeed23Auto.isSelected()) {
+            jToggleButtonPSPFeed23Auto.setText("↑");
+            controller.userAction(new ActionCommand("ECCS23#PspPumpValveControlCommand", ControlCommand.AUTOMATIC));
+        } else {
+            jToggleButtonPSPFeed23Auto.setText("←");
+            controller.userAction(new ActionCommand("ECCS23#PspPumpValveControlCommand", ControlCommand.MANUAL_OPERATION));
+        }
+    }//GEN-LAST:event_jToggleButtonPSPFeed23AutoActionPerformed
 
     private void jButtonCoolantPSPP3CloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCoolantPSPP3CloseActionPerformed
         controller.userAction(new ActionCommand("ECCS3#PspCoolantValve", false));
@@ -1472,12 +1508,12 @@ public class PanelEccs extends AbstractPanelWidget
     private com.hartrusion.rbmksim.gui.elements.IntegralSwitch integralSwitchDrum2SteamToPool;
     private com.hartrusion.rbmksim.gui.elements.IntegralSwitch integralSwitchP3Feed13;
     private com.hartrusion.rbmksim.gui.elements.IntegralSwitch integralSwitchP3Feed23;
-    private com.hartrusion.rbmksim.gui.elements.IntegralSwitch integralSwitchPSP1Feed11;
-    private com.hartrusion.rbmksim.gui.elements.IntegralSwitch integralSwitchPSP1Feed21;
-    private com.hartrusion.rbmksim.gui.elements.IntegralSwitch integralSwitchPSP2Feed12;
-    private com.hartrusion.rbmksim.gui.elements.IntegralSwitch integralSwitchPSP2Feed22;
-    private com.hartrusion.rbmksim.gui.elements.IntegralSwitch integralSwitchPSP3Feed13;
-    private com.hartrusion.rbmksim.gui.elements.IntegralSwitch integralSwitchPSP3Feed23;
+    private com.hartrusion.rbmksim.gui.elements.IntegralSwitch integralSwitchPSPFeed11;
+    private com.hartrusion.rbmksim.gui.elements.IntegralSwitch integralSwitchPSPFeed12;
+    private com.hartrusion.rbmksim.gui.elements.IntegralSwitch integralSwitchPSPFeed13;
+    private com.hartrusion.rbmksim.gui.elements.IntegralSwitch integralSwitchPSPFeed21;
+    private com.hartrusion.rbmksim.gui.elements.IntegralSwitch integralSwitchPSPFeed22;
+    private com.hartrusion.rbmksim.gui.elements.IntegralSwitch integralSwitchPSPFeed23;
     private com.hartrusion.rbmksim.gui.elements.IntegralSwitch integralSwitchPV1Feed11;
     private com.hartrusion.rbmksim.gui.elements.IntegralSwitch integralSwitchPV1Feed21;
     private com.hartrusion.rbmksim.gui.elements.IntegralSwitch integralSwitchPV2Feed12;
@@ -1587,14 +1623,14 @@ public class PanelEccs extends AbstractPanelWidget
     private javax.swing.JToggleButton jToggleButtonCCSP2Feed22Auto;
     private javax.swing.JToggleButton jToggleButtonCCSP3Feed13Auto;
     private javax.swing.JToggleButton jToggleButtonCCSP3Feed23Auto;
-    private javax.swing.JToggleButton jToggleButtonControl1Enable13;
     private javax.swing.JToggleButton jToggleButtonP3Feed13Auto;
     private javax.swing.JToggleButton jToggleButtonP3Feed23Auto;
-    private javax.swing.JToggleButton jToggleButtonPSP1Feed11Auto;
-    private javax.swing.JToggleButton jToggleButtonPSP1Feed21Auto;
-    private javax.swing.JToggleButton jToggleButtonPSP2Feed12Auto;
-    private javax.swing.JToggleButton jToggleButtonPSP3Feed13Auto;
-    private javax.swing.JToggleButton jToggleButtonPSP3Feed23Auto;
+    private javax.swing.JToggleButton jToggleButtonPSPFeed11Auto;
+    private javax.swing.JToggleButton jToggleButtonPSPFeed12Auto;
+    private javax.swing.JToggleButton jToggleButtonPSPFeed13Auto;
+    private javax.swing.JToggleButton jToggleButtonPSPFeed21Auto;
+    private javax.swing.JToggleButton jToggleButtonPSPFeed22Auto;
+    private javax.swing.JToggleButton jToggleButtonPSPFeed23Auto;
     private javax.swing.JToggleButton jToggleButtonPV1Feed11Auto;
     private javax.swing.JToggleButton jToggleButtonPV1Feed21Auto;
     private javax.swing.JToggleButton jToggleButtonPV2Feed12Auto;
@@ -1607,12 +1643,12 @@ public class PanelEccs extends AbstractPanelWidget
     private com.hartrusion.rbmksim.gui.elements.LightBulb lightBulbCCSP3Feed23Auto;
     private com.hartrusion.rbmksim.gui.elements.LightBulb lightBulbP3Feed13Auto;
     private com.hartrusion.rbmksim.gui.elements.LightBulb lightBulbP3Feed23Auto;
-    private com.hartrusion.rbmksim.gui.elements.LightBulb lightBulbPSP1Feed11Auto;
-    private com.hartrusion.rbmksim.gui.elements.LightBulb lightBulbPSP1Feed21Auto;
-    private com.hartrusion.rbmksim.gui.elements.LightBulb lightBulbPSP2Feed12Auto;
-    private com.hartrusion.rbmksim.gui.elements.LightBulb lightBulbPSP2Feed22Auto;
-    private com.hartrusion.rbmksim.gui.elements.LightBulb lightBulbPSP3Feed13Auto;
-    private com.hartrusion.rbmksim.gui.elements.LightBulb lightBulbPSP3Feed23Auto;
+    private com.hartrusion.rbmksim.gui.elements.LightBulb lightBulbPSPFeed11Auto;
+    private com.hartrusion.rbmksim.gui.elements.LightBulb lightBulbPSPFeed12Auto;
+    private com.hartrusion.rbmksim.gui.elements.LightBulb lightBulbPSPFeed13Auto;
+    private com.hartrusion.rbmksim.gui.elements.LightBulb lightBulbPSPFeed21Auto;
+    private com.hartrusion.rbmksim.gui.elements.LightBulb lightBulbPSPFeed22Auto;
+    private com.hartrusion.rbmksim.gui.elements.LightBulb lightBulbPSPFeed23Auto;
     private com.hartrusion.rbmksim.gui.elements.LightBulb lightBulbPV1Feed11Auto;
     private com.hartrusion.rbmksim.gui.elements.LightBulb lightBulbPV1Feed21Auto;
     private com.hartrusion.rbmksim.gui.elements.LightBulb lightBulbPV2Feed12Auto;
@@ -1642,12 +1678,12 @@ public class PanelEccs extends AbstractPanelWidget
         integralSwitchDrum2SteamToPool.updateComponent(evt);
         integralSwitchP3Feed13.updateComponent(evt);
         integralSwitchP3Feed23.updateComponent(evt);
-        integralSwitchPSP1Feed11.updateComponent(evt);
-        integralSwitchPSP1Feed21.updateComponent(evt);
-        integralSwitchPSP2Feed12.updateComponent(evt);
-        integralSwitchPSP2Feed22.updateComponent(evt);
-        integralSwitchPSP3Feed13.updateComponent(evt);
-        integralSwitchPSP3Feed23.updateComponent(evt);
+        integralSwitchPSPFeed11.updateComponent(evt);
+        integralSwitchPSPFeed21.updateComponent(evt);
+        integralSwitchPSPFeed12.updateComponent(evt);
+        integralSwitchPSPFeed22.updateComponent(evt);
+        integralSwitchPSPFeed13.updateComponent(evt);
+        integralSwitchPSPFeed23.updateComponent(evt);
         integralSwitchPV1Feed11.updateComponent(evt);
         integralSwitchPV1Feed21.updateComponent(evt);
         integralSwitchPV2Feed12.updateComponent(evt);
@@ -1666,50 +1702,135 @@ public class PanelEccs extends AbstractPanelWidget
         panelWidgetSprinklerPump2.updateComponent(evt);
 
         switch (evt.getPropertyName()) {
-            case "ECCS11#FeedValve_Pos":
+            case "ECCS11#FeedValve_Pos" ->
                 setValveButtons(jButtonToMcpHeader11Close,
                         jButtonToMcpHeader11Open, evt.getNewValue());
-                break;
-            case "ECCS12#FeedValve_Pos":
+            case "ECCS12#FeedValve_Pos" ->
                 setValveButtons(jButtonToMcpHeader12Close,
                         jButtonToMcpHeader12Open, evt.getNewValue());
-                break;
-            case "ECCS13#FeedValve_Pos":
+            case "ECCS13#FeedValve_Pos" ->
                 setValveButtons(jButtonToMcpHeader13Close,
                         jButtonToMcpHeader13Open, evt.getNewValue());
-                break;
-            case "ECCS21#FeedValve_Pos":
+            case "ECCS21#FeedValve_Pos" ->
                 setValveButtons(jButtonToMcpHeader21Close,
                         jButtonToMcpHeader21Open, evt.getNewValue());
-                break;
-            case "ECCS22#FeedValve_Pos":
+            case "ECCS22#FeedValve_Pos" ->
                 setValveButtons(jButtonToMcpHeader22Close,
                         jButtonToMcpHeader22Open, evt.getNewValue());
-                break;
-            case "ECCS23#FeedValve_Pos":
+            case "ECCS23#FeedValve_Pos" ->
                 setValveButtons(jButtonToMcpHeader23Close,
                         jButtonToMcpHeader23Open, evt.getNewValue());
-                break;
-            case "Bubbler1#SprinklerCoolerValve_Pos":
+            case "Bubbler1#SprinklerCoolerValve_Pos" ->
                 setValveButtons(jButtonSprinklerCoolant1Close,
                         jButtonSprinklerCoolant1Open, evt.getNewValue());
-                break;
-            case "Bubbler2#SprinklerCoolerValve_Pos":
+            case "Bubbler2#SprinklerCoolerValve_Pos" ->
                 setValveButtons(jButtonSprinklerCoolant2Close,
                         jButtonSprinklerCoolant2Open, evt.getNewValue());
-                break;
-            case "ECCS1#PspCoolantValve_Pos":
+            case "ECCS1#PspCoolantValve_Pos" ->
                 setValveButtons(jButtonCoolantPSPP1Close,
                         jButtonCoolantPSPP1Open, evt.getNewValue());
-                break;
-            case "ECCS2#PspCoolantValve_Pos":
+            case "ECCS2#PspCoolantValve_Pos" ->
                 setValveButtons(jButtonCoolantPSPP2Close,
                         jButtonCoolantPSPP2Open, evt.getNewValue());
-                break;
-            case "ECCS3#PspCoolantValve_Pos":
+            case "ECCS3#PspCoolantValve_Pos" ->
                 setValveButtons(jButtonCoolantPSPP3Close,
                         jButtonCoolantPSPP3Open, evt.getNewValue());
-                break;
+            case "ECCS11#PspPumpValveControlState" -> {
+                // Set the initial position of the switch button
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()
+                        && !jToggleButtonPSPFeed11Auto.isSelected()) {
+                    jToggleButtonPSPFeed11Auto.setSelected(true);
+                    jToggleButtonPSPFeed11Auto.setText("↑");
+                }
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbPSPFeed11Auto.setActive(true);
+                } else if (ControlCommand.MANUAL_OPERATION
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbPSPFeed11Auto.setActive(false);
+                }
+            }
+            case "ECCS12#PspPumpValveControlState" -> {
+                // Set the initial position of the switch button
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()
+                        && !jToggleButtonPSPFeed12Auto.isSelected()) {
+                    jToggleButtonPSPFeed12Auto.setSelected(true);
+                    jToggleButtonPSPFeed12Auto.setText("↑");
+                }
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbPSPFeed12Auto.setActive(true);
+                } else if (ControlCommand.MANUAL_OPERATION
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbPSPFeed12Auto.setActive(false);
+                }
+            }
+            case "ECCS13#PspPumpValveControlState" -> {
+                // Set the initial position of the switch button
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()
+                        && !jToggleButtonPSPFeed13Auto.isSelected()) {
+                    jToggleButtonPSPFeed13Auto.setSelected(true);
+                    jToggleButtonPSPFeed13Auto.setText("↑");
+                }
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbPSPFeed13Auto.setActive(true);
+                } else if (ControlCommand.MANUAL_OPERATION
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbPSPFeed13Auto.setActive(false);
+                }
+            }
+            case "ECCS21#PspPumpValveControlState" -> {
+                // Set the initial position of the switch button
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()
+                        && !jToggleButtonPSPFeed21Auto.isSelected()) {
+                    jToggleButtonPSPFeed21Auto.setSelected(true);
+                    jToggleButtonPSPFeed21Auto.setText("↑");
+                }
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbPSPFeed21Auto.setActive(true);
+                } else if (ControlCommand.MANUAL_OPERATION
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbPSPFeed21Auto.setActive(false);
+                }
+            }
+            case "ECCS22#PspPumpValveControlState" -> {
+                // Set the initial position of the switch button
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()
+                        && !jToggleButtonPSPFeed22Auto.isSelected()) {
+                    jToggleButtonPSPFeed22Auto.setSelected(true);
+                    jToggleButtonPSPFeed22Auto.setText("↑");
+                }
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbPSPFeed22Auto.setActive(true);
+                } else if (ControlCommand.MANUAL_OPERATION
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbPSPFeed22Auto.setActive(false);
+                }
+            }
+            case "ECCS23#PspPumpValveControlState" -> {
+                // Set the initial position of the switch button
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()
+                        && !jToggleButtonPSPFeed23Auto.isSelected()) {
+                    jToggleButtonPSPFeed23Auto.setSelected(true);
+                    jToggleButtonPSPFeed23Auto.setText("↑");
+                }
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbPSPFeed23Auto.setActive(true);
+                } else if (ControlCommand.MANUAL_OPERATION
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbPSPFeed23Auto.setActive(false);
+                }
+            }
         }
     }
 

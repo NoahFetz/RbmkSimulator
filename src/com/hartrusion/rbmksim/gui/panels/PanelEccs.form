@@ -195,7 +195,7 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchPSP1Feed11">
+    <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchPSPFeed11">
       <Properties>
         <Property name="component" type="java.lang.String" value="ECCS11#PspPumpValve"/>
         <Property name="controlledValve" type="boolean" value="true"/>
@@ -207,11 +207,11 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JToggleButton" name="jToggleButtonPSP1Feed11Auto">
+    <Component class="javax.swing.JToggleButton" name="jToggleButtonPSPFeed11Auto">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
           <FontInfo relative="true">
-            <Font bold="false" component="jToggleButtonPSP1Feed11Auto" property="font" relativeSize="true" size="0"/>
+            <Font bold="false" component="jToggleButtonPSPFeed11Auto" property="font" relativeSize="true" size="0"/>
           </FontInfo>
         </Property>
         <Property name="text" type="java.lang.String" value="&#x2190;"/>
@@ -221,7 +221,7 @@
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jToggleButtonPSP1Feed11AutoActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jToggleButtonPSPFeed11AutoActionPerformed"/>
       </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -229,7 +229,7 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Container class="com.hartrusion.rbmksim.gui.elements.LightBulb" name="lightBulbPSP1Feed11Auto">
+    <Container class="com.hartrusion.rbmksim.gui.elements.LightBulb" name="lightBulbPSPFeed11Auto">
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="36" y="328" width="-1" height="-1"/>
@@ -240,7 +240,7 @@
         <Property name="useNullLayout" type="boolean" value="true"/>
       </Layout>
     </Container>
-    <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchPSP1Feed21">
+    <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchPSPFeed21">
       <Properties>
         <Property name="component" type="java.lang.String" value="ECCS21#PspPumpValve"/>
         <Property name="controlledValve" type="boolean" value="true"/>
@@ -252,11 +252,11 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JToggleButton" name="jToggleButtonPSP1Feed21Auto">
+    <Component class="javax.swing.JToggleButton" name="jToggleButtonPSPFeed21Auto">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
           <FontInfo relative="true">
-            <Font bold="false" component="jToggleButtonPSP1Feed21Auto" property="font" relativeSize="true" size="0"/>
+            <Font bold="false" component="jToggleButtonPSPFeed21Auto" property="font" relativeSize="true" size="0"/>
           </FontInfo>
         </Property>
         <Property name="text" type="java.lang.String" value="&#x2190;"/>
@@ -266,7 +266,7 @@
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jToggleButtonPSP1Feed21AutoActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jToggleButtonPSPFeed21AutoActionPerformed"/>
       </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -274,7 +274,7 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Container class="com.hartrusion.rbmksim.gui.elements.LightBulb" name="lightBulbPSP1Feed21Auto">
+    <Container class="com.hartrusion.rbmksim.gui.elements.LightBulb" name="lightBulbPSPFeed21Auto">
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="36" y="376" width="-1" height="-1"/>
@@ -1355,7 +1355,7 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchPSP2Feed12">
+    <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchPSPFeed12">
       <Properties>
         <Property name="component" type="java.lang.String" value="ECCS12#PspPumpValve"/>
         <Property name="controlledValve" type="boolean" value="true"/>
@@ -1367,11 +1367,11 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JToggleButton" name="jToggleButtonPSP2Feed12Auto">
+    <Component class="javax.swing.JToggleButton" name="jToggleButtonPSPFeed12Auto">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
           <FontInfo relative="true">
-            <Font bold="false" component="jToggleButtonPSP2Feed12Auto" property="font" relativeSize="true" size="0"/>
+            <Font bold="false" component="jToggleButtonPSPFeed12Auto" property="font" relativeSize="true" size="0"/>
           </FontInfo>
         </Property>
         <Property name="text" type="java.lang.String" value="&#x2190;"/>
@@ -1381,7 +1381,7 @@
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jToggleButtonPSP2Feed12AutoActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jToggleButtonPSPFeed12AutoActionPerformed"/>
       </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -1389,7 +1389,7 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Container class="com.hartrusion.rbmksim.gui.elements.LightBulb" name="lightBulbPSP2Feed12Auto">
+    <Container class="com.hartrusion.rbmksim.gui.elements.LightBulb" name="lightBulbPSPFeed12Auto">
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="122" y="328" width="-1" height="-1"/>
@@ -1400,7 +1400,7 @@
         <Property name="useNullLayout" type="boolean" value="true"/>
       </Layout>
     </Container>
-    <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchPSP2Feed22">
+    <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchPSPFeed22">
       <Properties>
         <Property name="component" type="java.lang.String" value="ECCS22#PspPumpValve"/>
         <Property name="controlledValve" type="boolean" value="true"/>
@@ -1412,11 +1412,11 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JToggleButton" name="jToggleButtonControl1Enable13">
+    <Component class="javax.swing.JToggleButton" name="jToggleButtonPSPFeed22Auto">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
           <FontInfo relative="true">
-            <Font bold="false" component="jToggleButtonControl1Enable13" property="font" relativeSize="true" size="0"/>
+            <Font bold="false" component="jToggleButtonPSPFeed22Auto" property="font" relativeSize="true" size="0"/>
           </FontInfo>
         </Property>
         <Property name="text" type="java.lang.String" value="&#x2190;"/>
@@ -1426,7 +1426,7 @@
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jToggleButtonControl1Enable13ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jToggleButtonPSPFeed22AutoActionPerformed"/>
       </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -1434,7 +1434,7 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Container class="com.hartrusion.rbmksim.gui.elements.LightBulb" name="lightBulbPSP2Feed22Auto">
+    <Container class="com.hartrusion.rbmksim.gui.elements.LightBulb" name="lightBulbPSPFeed22Auto">
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="122" y="376" width="-1" height="-1"/>
@@ -1586,7 +1586,7 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchPSP3Feed13">
+    <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchPSPFeed13">
       <Properties>
         <Property name="component" type="java.lang.String" value="ECCS13#PspPumpValve"/>
         <Property name="controlledValve" type="boolean" value="true"/>
@@ -1598,11 +1598,11 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JToggleButton" name="jToggleButtonPSP3Feed13Auto">
+    <Component class="javax.swing.JToggleButton" name="jToggleButtonPSPFeed13Auto">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
           <FontInfo relative="true">
-            <Font bold="false" component="jToggleButtonPSP3Feed13Auto" property="font" relativeSize="true" size="0"/>
+            <Font bold="false" component="jToggleButtonPSPFeed13Auto" property="font" relativeSize="true" size="0"/>
           </FontInfo>
         </Property>
         <Property name="text" type="java.lang.String" value="&#x2190;"/>
@@ -1612,7 +1612,7 @@
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jToggleButtonPSP3Feed13AutoActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jToggleButtonPSPFeed13AutoActionPerformed"/>
       </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -1620,7 +1620,7 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Container class="com.hartrusion.rbmksim.gui.elements.LightBulb" name="lightBulbPSP3Feed13Auto">
+    <Container class="com.hartrusion.rbmksim.gui.elements.LightBulb" name="lightBulbPSPFeed13Auto">
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="208" y="328" width="-1" height="-1"/>
@@ -1631,7 +1631,7 @@
         <Property name="useNullLayout" type="boolean" value="true"/>
       </Layout>
     </Container>
-    <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchPSP3Feed23">
+    <Component class="com.hartrusion.rbmksim.gui.elements.IntegralSwitch" name="integralSwitchPSPFeed23">
       <Properties>
         <Property name="component" type="java.lang.String" value="ECCS23#PspPumpValve"/>
         <Property name="controlledValve" type="boolean" value="true"/>
@@ -1643,11 +1643,11 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JToggleButton" name="jToggleButtonPSP3Feed23Auto">
+    <Component class="javax.swing.JToggleButton" name="jToggleButtonPSPFeed23Auto">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
           <FontInfo relative="true">
-            <Font bold="false" component="jToggleButtonPSP3Feed23Auto" property="font" relativeSize="true" size="0"/>
+            <Font bold="false" component="jToggleButtonPSPFeed23Auto" property="font" relativeSize="true" size="0"/>
           </FontInfo>
         </Property>
         <Property name="text" type="java.lang.String" value="&#x2190;"/>
@@ -1657,7 +1657,7 @@
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jToggleButtonPSP3Feed23AutoActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jToggleButtonPSPFeed23AutoActionPerformed"/>
       </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -1665,7 +1665,7 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Container class="com.hartrusion.rbmksim.gui.elements.LightBulb" name="lightBulbPSP3Feed23Auto">
+    <Container class="com.hartrusion.rbmksim.gui.elements.LightBulb" name="lightBulbPSPFeed23Auto">
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="208" y="376" width="-1" height="-1"/>

@@ -2406,8 +2406,8 @@ public class ThermalLayout extends Subsystem implements Runnable {
 
         // The model works by setting an out vapour fraction and consuming all
         // of the energy, this will drive the shaft later.
-        turbineHighPressureFirst.setOutVaporFraction(1.0);
-        turbineHighPressureSecond.setOutVaporFraction(0.85);
+        turbineHighPressureFirst.setOutVaporFractionWithDiff(1.0, 54.5e5);
+        turbineHighPressureSecond.setOutVaporFractionWithDiff(0.85, 7e5);
 
         // In theroy, 41.1 kg/s flow of 180 °C at 10.5 barabs will flow to the
         // deaerators in steady state on full power.
@@ -2497,11 +2497,12 @@ public class ThermalLayout extends Subsystem implements Runnable {
         // 2.5      125.7       110       200        74.3       1.1486
         // 2.0      118.9       65        166        47.1       1.0942
         // 1.5      110.7       38        133        22.3       1.0446
-        turbineLowPressureStage[0].setOutVaporFraction(1.2048);
-        turbineLowPressureStage[1].setOutVaporFraction(1.1486);
-        turbineLowPressureStage[2].setOutVaporFraction(1.0942);
-        turbineLowPressureStage[3].setOutVaporFraction(1.0446);
-        turbineLowPressureStage[4].setOutVaporFraction(0.9); // to condenser
+        // 0.006147 28 - condenser
+        turbineLowPressureStage[0].setOutVaporFractionWithDiff(1.2048, 0.5e5);
+        turbineLowPressureStage[1].setOutVaporFractionWithDiff(1.1486, 0.5e5);
+        turbineLowPressureStage[2].setOutVaporFractionWithDiff(1.0942, 0.5e5);
+        turbineLowPressureStage[3].setOutVaporFractionWithDiff(1.0446, 0.5e5);
+        turbineLowPressureStage[4].setOutVaporFractionWithDiff(0.9, 1.494e5);
 
         // 1154.36 kg/s from 3.5 to 3.0 bar:
         turbineLowPressureStage[0].setResistanceParameter(43.314);

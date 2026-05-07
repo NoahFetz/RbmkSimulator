@@ -58,7 +58,7 @@ import com.hartrusion.modeling.heatfluid.HeatVolumizedFlowResistance;
 import com.hartrusion.modeling.phasedfluid.PhasedClosedSteamedReservoir;
 import com.hartrusion.modeling.phasedfluid.PhasedEffortSource;
 import com.hartrusion.modeling.phasedfluid.PhasedExpandingThermalExchanger;
-import com.hartrusion.modeling.phasedfluid.PhasedLimitedPhaseSimpleFlowResistance;
+import com.hartrusion.modeling.phasedfluid.PhasedTurbineStage;
 import com.hartrusion.modeling.phasedfluid.PhasedNode;
 import com.hartrusion.modeling.phasedfluid.PhasedOrigin;
 import com.hartrusion.modeling.phasedfluid.PhasedPropertiesWater;
@@ -376,10 +376,10 @@ public class ThermalLayout extends Subsystem implements Runnable {
     private final PhasedNode turbineHighPressureIn;
     private final PhasedThermalExchanger turbineHighPressureInMass;
     private final PhasedNode turbineHighPressureMidIn;
-    private final PhasedLimitedPhaseSimpleFlowResistance turbineHighPressureFirst;
+    private final PhasedTurbineStage turbineHighPressureFirst;
     private final PhasedNode turbineHighPressureInside;
     private final PhasedValve turbineHighPressureTapValve;
-    private final PhasedLimitedPhaseSimpleFlowResistance turbineHighPressureSecond;
+    private final PhasedTurbineStage turbineHighPressureSecond;
     private final PhasedNode turbineHighPressureMidOut;
     private final PhasedThermalExchanger turbineHighPressureOutMass;
     private final PhasedNode turbineReheaterSteam;
@@ -404,8 +404,8 @@ public class ThermalLayout extends Subsystem implements Runnable {
     private final PhasedNode turbineLowPressureIn;
     private final PhasedThermalExchanger turbineLowPressureInMass;
     private final PhasedNode turbineLowPressureMidIn;
-    private final PhasedLimitedPhaseSimpleFlowResistance[] turbineLowPressureStage
-            = new PhasedLimitedPhaseSimpleFlowResistance[5];
+    private final PhasedTurbineStage[] turbineLowPressureStage
+            = new PhasedTurbineStage[5];
     private final PhasedNode[] turbineLowPressureStageOut
             = new PhasedNode[4];
     private final PhasedValve[] turbineLowPressureTapValve = new PhasedValve[4];
@@ -1133,13 +1133,13 @@ public class ThermalLayout extends Subsystem implements Runnable {
         turbineHighPressureInMass.setName("Turbine#HighPressureInMass");
         turbineHighPressureMidIn = new PhasedNode();
         turbineHighPressureMidIn.setName("Turbine#HighPressureMidIn");
-        turbineHighPressureFirst = new PhasedLimitedPhaseSimpleFlowResistance(phasedWater);
+        turbineHighPressureFirst = new PhasedTurbineStage(phasedWater);
         turbineHighPressureFirst.setName("Turbine#HighPressureFirst");
         turbineHighPressureInside = new PhasedNode();
         turbineHighPressureInside.setName("Turbine#HighPressureInside");
         turbineHighPressureTapValve = new PhasedValve();
         turbineHighPressureTapValve.initName("Turbine#HighPressureTapValve");
-        turbineHighPressureSecond = new PhasedLimitedPhaseSimpleFlowResistance(phasedWater);
+        turbineHighPressureSecond = new PhasedTurbineStage(phasedWater);
         turbineHighPressureSecond.setName("Turbine#HighPressureSecond");
         turbineHighPressureMidOut = new PhasedNode();
         turbineHighPressureMidOut.setName("Turbine#HighPressureMidOut");
@@ -1194,7 +1194,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
         turbineLowPressureMidIn.setName("Turbine#LowPressureMidIn");
         for (int idx = 0; idx < 5; idx++) {
             turbineLowPressureStage[idx]
-                    = new PhasedLimitedPhaseSimpleFlowResistance(phasedWater);
+                    = new PhasedTurbineStage(phasedWater);
             turbineLowPressureStage[idx].setName(
                     "Turbine" + (idx + 1) + "#LowPressureStage");
         }
@@ -2404,10 +2404,11 @@ public class ThermalLayout extends Subsystem implements Runnable {
         // This number is not calculated but found by randomly trying.
         turbineHighPressureTapValve.initCharacteristicSimple(900);
 
-        // The model works by setting an out vapour fraction and consuming all
-        // of the energy, this will drive the shaft later.
-        turbineHighPressureFirst.setOutVaporFractionWithDiff(1.0, 54.5e5);
-        turbineHighPressureSecond.setOutVaporFractionWithDiff(0.85, 7e5);
+        // The model works by setting an isentropic factor that works like an 
+        // efficiency but is positive due to the way too high heat capacity in
+        // high temperature ranges.
+        turbineHighPressureFirst.setIsentropicFactor(1.0034);
+        turbineHighPressureSecond.setIsentropicFactor(2.3876);
 
         // In theroy, 41.1 kg/s flow of 180 °C at 10.5 barabs will flow to the
         // deaerators in steady state on full power.
@@ -2498,11 +2499,11 @@ public class ThermalLayout extends Subsystem implements Runnable {
         // 2.0      118.9       65        166        47.1       1.0942
         // 1.5      110.7       38        133        22.3       1.0446
         // 0.006147 28 - condenser
-        turbineLowPressureStage[0].setOutVaporFractionWithDiff(1.2048, 0.5e5);
-        turbineLowPressureStage[1].setOutVaporFractionWithDiff(1.1486, 0.5e5);
-        turbineLowPressureStage[2].setOutVaporFractionWithDiff(1.0942, 0.5e5);
-        turbineLowPressureStage[3].setOutVaporFractionWithDiff(1.0446, 0.5e5);
-        turbineLowPressureStage[4].setOutVaporFractionWithDiff(0.9, 1.494e5);
+        turbineLowPressureStage[0].setIsentropicFactor(3.4983);
+        turbineLowPressureStage[1].setIsentropicFactor(3.7253);
+        turbineLowPressureStage[2].setIsentropicFactor(3.3305);
+        turbineLowPressureStage[3].setIsentropicFactor(2.7783);
+        turbineLowPressureStage[4].setIsentropicFactor(1.2641);
 
         // 1154.36 kg/s from 3.5 to 3.0 bar:
         turbineLowPressureStage[0].setResistanceParameter(43.314);

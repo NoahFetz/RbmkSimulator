@@ -1119,7 +1119,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
             turbineStartupSteamValve[idx].initName(
                     "Turbine" + (idx + 1) + "#StartupSteamValve");
             turbineMainSteamValve[idx] = new PhasedValveControlled();
-            turbineMainSteamValve[idx].registerController(new PIControl());
+            turbineMainSteamValve[idx].registerController(new PIDControl());
             turbineMainSteamValve[idx].initName(
                     "Turbine" + (idx + 1) + "#MainSteamValve");
             turbineReheaterSteamValve[idx] = new PhasedValveControlled();
@@ -2432,7 +2432,11 @@ public class ThermalLayout extends Subsystem implements Runnable {
             // 2 turbines). 
             turbineMainSteamValve[idx].initCharacteristicAdvanced(
                     700, 5.3e6, 2800); // Todo
-            turbineMainSteamValve[idx].getIntegrator().setMaxRate(8);
+            // turbineMainSteamValve[idx].getIntegrator().setMaxRate(8);
+            // the idea was to have the valve slower to add more realism but as 
+            // the whole plant is totally speed up we will use a faster valve
+            // like it is done with the bypass valves.
+            turbineMainSteamValve[idx].getIntegrator().setMaxRate(30);
         }
 
         // Reheater is designed to have a flow of 359.0 kg/s (from the linear
@@ -3256,10 +3260,12 @@ public class ThermalLayout extends Subsystem implements Runnable {
             }
         });
         for (int idx = 0; idx < 2; idx++) {
-            ((PIControl) turbineMainSteamValve[idx].getController())
+            ((PIDControl) turbineMainSteamValve[idx].getController())
                     .setParameterK(6.0);
-            ((PIControl) turbineMainSteamValve[idx].getController())
-                    .setParameterTN(8);
+            ((PIDControl) turbineMainSteamValve[idx].getController())
+                    .setParameterTN(40);
+            ((PIDControl) turbineMainSteamValve[idx].getController())
+                    .setParameterTV(8);
         } // Todo: Get some parameters, those here were random numbers!
 
         turbineReheaterSteamValve[0].getController().addInputProvider(

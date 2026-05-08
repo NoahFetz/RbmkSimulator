@@ -4734,7 +4734,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
         // Time condstant for condenser
         condenserVacuum.setMaxOutput(1e5); // 1 bar
         condenserVacuum.setMinOutput(0); // 0 bar
-        condenserVacuum.setTi(2e-4);
+        condenserVacuum.setTi(5e-4);
         condenserVacuum.forceOutputValue(1e5); // initialize with ambient press.
 
         // Initialize MCP cavitation state 

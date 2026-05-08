@@ -420,11 +420,11 @@ public class ThermalLayout extends Subsystem implements Runnable {
     private final PhasedNode environment;
     private final PhasedValve[] pressureReliefValveToEnvironment
             = new PhasedValve[2];
-    
-    private final HeatFluidPumpSimple[] bubblerSprinklerPump 
+
+    private final HeatFluidPumpSimple[] bubblerSprinklerPump
             = new HeatFluidPumpSimple[2];
     private final HeatNode[] bubblerSprinklerPumpOut = new HeatNode[2];
-    private final HeatExchangerNoMass[] bubblerSprinklerCooler 
+    private final HeatExchangerNoMass[] bubblerSprinklerCooler
             = new HeatExchangerNoMass[2];
     private final HeatNode[] bubblerSprinklerCoolerIn = new HeatNode[2];
     private final HeatValve[] bubblerSprinklerCoolerValve = new HeatValve[2];
@@ -1232,7 +1232,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
             pressureReliefValveToEnvironment[idx].initName(
                     "PRV" + (idx + 1) + "#ToEnvironment");
         }
-        
+
         for (int idx = 0; idx < 2; idx++) {
             bubblerSprinklerPump[idx] = new HeatFluidPumpSimple();
             bubblerSprinklerPump[idx].initName("Bubbler"
@@ -1248,7 +1248,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
                     + (idx + 1) + "#SprinklerCoolerIn");
             bubblerSprinklerCoolerValve[idx] = new HeatValve();
             bubblerSprinklerCoolerValve[idx].initName("Bubbler"
-                        + (idx + 1) + "#SprinklerCoolerValve");
+                    + (idx + 1) + "#SprinklerCoolerValve");
         }
 
         for (int idx = 0; idx < 2; idx++) {
@@ -3047,6 +3047,20 @@ public class ThermalLayout extends Subsystem implements Runnable {
                         - setpointDrumPressure.getOutput();
             }
         });
+        // Limit the Flow to 37.5 on automatic mode, but set this to Integral
+        // part only as the effect is immediately there. This will result in 
+        // no warnings during startup but the pressure setpoint might not be
+        // hold, which is fine.
+        ((PIControl) auxCondSteamValve[0].getController())
+                .addIntegralAdaptionProvider(
+                        new DoubleSupplier() {
+                    @Override
+                    public double getAsDouble() {
+                        return 5.0 * Math.min(37.5 - auxCondSteamValve[0]
+                                .getValveElement().getFlow(), 0.0);
+                    }
+                });
+
         auxCondSteamValve[1].getController().addInputProvider(
                 new DoubleSupplier() {
             @Override
@@ -3055,6 +3069,15 @@ public class ThermalLayout extends Subsystem implements Runnable {
                         - setpointDrumPressure.getOutput();
             }
         });
+        ((PIControl) auxCondSteamValve[1].getController())
+                .addIntegralAdaptionProvider(
+                        new DoubleSupplier() {
+                    @Override
+                    public double getAsDouble() {
+                        return 5.0 * Math.min(37.5 - auxCondSteamValve[1]
+                                .getValveElement().getFlow(), 0.0);
+                    }
+                });
         for (int idx = 0; idx < 2; idx++) {
             ((PIControl) auxCondSteamValve[idx].getController())
                     .setParameterK(16.0);
@@ -5433,11 +5456,11 @@ public class ThermalLayout extends Subsystem implements Runnable {
                     pressureReliefValveToEnvironment[idx]
                             .getValveElement().getFlow());
         }
-        outputValues.setParameterValue("BubblerPool#Level", 
+        outputValues.setParameterValue("BubblerPool#Level",
                 bubblerPool.getFillHeight()); // this one uses meters?
-        outputValues.setParameterValue("BubblerPool#Temperature", 
+        outputValues.setParameterValue("BubblerPool#Temperature",
                 bubblerPool.getTemperature() - 273.15);
-        
+
         // </editor-fold>
     }
 

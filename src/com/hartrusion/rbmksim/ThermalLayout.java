@@ -2431,7 +2431,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
             // (theres 2 valves to 1 turbine but we calculate as 2 valves on
             // 2 turbines). 
             turbineMainSteamValve[idx].initCharacteristicAdvanced(
-                    900, 5.3e6, 2800); // Todo
+                    800, 5.3e6, 2800); // Todo
             // turbineMainSteamValve[idx].getIntegrator().setMaxRate(8);
             // the idea was to have the valve slower to add more realism but as 
             // the whole plant is totally speed up we will use a faster valve
@@ -2451,7 +2451,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
         // advanced characteristic on the valve to get a linear behavior.
         for (int idx = 0; idx < 2; idx++) {
             turbineReheaterSteamValve[idx].initCharacteristicAdvanced(
-                    400, 6e6, 1.1e4);
+                    250, 6e6, 1.1e4);
             turbineReheaterSteamValve[idx].getIntegrator().setMaxRate(12);
         }
 
@@ -3146,11 +3146,11 @@ public class ThermalLayout extends Subsystem implements Runnable {
         });
         for (int idx = 0; idx < 2; idx++) {
             ((PIDControl) mainSteamDump[idx].getController())
-                    .setParameterK(8.0); // 18/40 seems fine for small pressure
+                    .setParameterK(7.0); // 18/40 seems fine for small pressure
             ((PIDControl) mainSteamDump[idx].getController())
-                    .setParameterTN(25);
+                    .setParameterTN(20);
             ((PIDControl) mainSteamDump[idx].getController())
-                    .setParameterTV(9);
+                    .setParameterTV(2.0);
         }
 
         preheaterCondensateValve[0].getController().addInputProvider(
@@ -3261,11 +3261,11 @@ public class ThermalLayout extends Subsystem implements Runnable {
         });
         for (int idx = 0; idx < 2; idx++) {
             ((PIDControl) turbineMainSteamValve[idx].getController())
-                    .setParameterK(6.0);
+                    .setParameterK(3.0);
             ((PIDControl) turbineMainSteamValve[idx].getController())
-                    .setParameterTN(40);
+                    .setParameterTN(15);
             ((PIDControl) turbineMainSteamValve[idx].getController())
-                    .setParameterTV(8);
+                    .setParameterTV(1.0);
         } // Todo: Get some parameters, those here were random numbers!
 
         turbineReheaterSteamValve[0].getController().addInputProvider(

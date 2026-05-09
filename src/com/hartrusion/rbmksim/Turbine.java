@@ -336,6 +336,14 @@ public class Turbine extends Subsystem implements Runnable {
         }
         // Do not force the turbine setpoint to current value to allow it to be
         // set individually.
+        
+        // In case of backwards energy flow and turbine ventilation, open the
+        // generator breaker. This must be done in a better way with some alarm
+        if (generatorSynched) {
+            if (generatorPower <= -10) {
+                generatorSynched = false;
+            }
+        }
 
         runner.invokeAll();
 
@@ -559,7 +567,7 @@ public class Turbine extends Subsystem implements Runnable {
         // There could be a fancy calculation on how to get the time constand 
         // but this number was found by trying some and getting a nice spin up
         // dynamic behavior.
-        turbineInertia.setTimeConstant(0.04);
+        turbineInertia.setTimeConstant(0.4);
 
         // Set up a solver for this network
         rotorSolver.addNetwork(turbineVelocity);

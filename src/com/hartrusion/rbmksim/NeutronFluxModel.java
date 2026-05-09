@@ -217,12 +217,20 @@ public class NeutronFluxModel implements Runnable {
     private double yNeutronRate, yNeutronRateFiltered;
     private double yThermalPower1, yThermalPower2; // In Megawatts
     private double yThermalPower;
+    
+    private double mDisplay, bDisplay;
 
     /**
      * For displaying small flux changes, we have this value that displays
      * log10(Flux/100). Other way round will be Flux = 10^(value+1).
      */
     private double yNeutronFluxLog;
+    
+    NeutronFluxModel() {
+        // Generate linear coefficients to hide the idle heat from display.
+        mDisplay = 3200 / (3200 - IDLE_HEAT);
+        bDisplay = - mDisplay * IDLE_HEAT;
+    }
 
     /**
      * Sets the model to a steady state for the given initial conditions
@@ -467,8 +475,8 @@ public class NeutronFluxModel implements Runnable {
      *
      * @return Power in Megawatts.
      */
-    public double getYThermalPowerDisplayed() {
-        return yThermalPower - IDLE_HEAT;
+    public double getYThermalPowerDisplayed() {      
+        return mDisplay * yThermalPower + bDisplay;
     }
 
     public void setStepTime(double stepTime) {

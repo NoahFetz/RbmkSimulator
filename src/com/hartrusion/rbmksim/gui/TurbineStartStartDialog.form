@@ -7,7 +7,6 @@
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
       <Dimension value="[400, 300]"/>
     </Property>
-    <Property name="modal" type="boolean" value="true"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -38,7 +37,7 @@
             <Property name="columns" type="int" value="20"/>
             <Property name="lineWrap" type="boolean" value="true"/>
             <Property name="rows" type="int" value="5"/>
-            <Property name="text" type="java.lang.String" value="Visit the project page for a brief introduction: https://hartrusion.com/en/rbmk-simulator/&#xa;&#xa;The simulation starts with the Blowdown/Cooldown system in place to remove heat from the core, no MCP is active. Close the bypass, use MCP for recirculation and modify the paths of the feedwater to make sure the reheater is in use, this reduces heat removal from the core.&#xa;&#xa;Certain alarms need to be cleared to allow resetting the RPS. To start the nuclear chain reaction, pull out enough manual rods (fully pull them out one by one, do not move all at once!) to get to a reactivity where the auto rods can be used to control the reactivity around 0.&#xa;&#xa;Use a neutron flux of about 4 % and remove the heat using the auxiliary condensers. Use the startup ejectors to evacuate the condensers. Take a look at the startup pressure setpoint diagram, the pressure setpoint is set automatically for startup.&#xa;&#xa;When condensation is available, start warming up the turbine using the startup valves. You need about 350 MWth to sync to the grid."/>
+            <Property name="text" type="java.lang.String" value="The turbine warmup procedure for cold start is designed to have the turbine spin up and synced to grid without the steam reheater, warming the high pressure part first. The steam drums pressure setpoint used for startup is defined as a function of thermal reactor output and can be viewed with a diagram representing it.&#xa;&#xa;Those are the designed turbine hold points with steam parameters and reactor power and the neutron flux setpoints.&#xa;&#xa;0750 1/min - 15 bar - 140 MWth - 4.7 %N&#xa;1500 1/min - 27 bar - 206 MWth - 7.0 %N&#xa;2250 1/min - 38 bar - 263 MWth - 8.8 %N&#xa;3000 1/min - 50 bar - 326 MWth - 10.9 %N&#xa;&#xa;It is not neccessary to have precisely those values.&#xa;&#xa;The turbine should be synced to grid with 50 bars. From a neutron setpoint of 13 %N, the pressure setpoint will be 64 bars.&#xa;&#xa;With 15 %N, start heating up the low pressure turbine by carefully using the steam reheater.&#xa;"/>
             <Property name="wrapStyleWord" type="boolean" value="true"/>
           </Properties>
         </Component>

@@ -20,12 +20,12 @@ package com.hartrusion.rbmksim.gui;
  *
  * @author Viktor Alexander Hartung
  */
-public class HowtoStartDialog extends javax.swing.JDialog {
+public class TurbineStartStartDialog extends javax.swing.JDialog {
     
     /**
      * Creates new form HowtoStartDialog
      */
-    public HowtoStartDialog(java.awt.Frame parent, boolean modal) {
+    public TurbineStartStartDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
@@ -45,14 +45,13 @@ public class HowtoStartDialog extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("How to start");
         setMinimumSize(new java.awt.Dimension(400, 300));
-        setModal(true);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
 
         jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
         jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
-        jTextArea1.setText("Visit the project page for a brief introduction: https://hartrusion.com/en/rbmk-simulator/\n\nThe simulation starts with the Blowdown/Cooldown system in place to remove heat from the core, no MCP is active. Close the bypass, use MCP for recirculation and modify the paths of the feedwater to make sure the reheater is in use, this reduces heat removal from the core.\n\nCertain alarms need to be cleared to allow resetting the RPS. To start the nuclear chain reaction, pull out enough manual rods (fully pull them out one by one, do not move all at once!) to get to a reactivity where the auto rods can be used to control the reactivity around 0.\n\nUse a neutron flux of about 4 % and remove the heat using the auxiliary condensers. Use the startup ejectors to evacuate the condensers. Take a look at the startup pressure setpoint diagram, the pressure setpoint is set automatically for startup.\n\nWhen condensation is available, start warming up the turbine using the startup valves. You need about 350 MWth to sync to the grid.");
+        jTextArea1.setText("The turbine warmup procedure for cold start is designed to have the turbine spin up and synced to grid without the steam reheater, warming the high pressure part first. The steam drums pressure setpoint used for startup is defined as a function of thermal reactor output and can be viewed with a diagram representing it.\n\nThose are the designed turbine hold points with steam parameters and reactor power and the neutron flux setpoints.\n\n0750 1/min - 15 bar - 140 MWth - 4.7 %N\n1500 1/min - 27 bar - 206 MWth - 7.0 %N\n2250 1/min - 38 bar - 263 MWth - 8.8 %N\n3000 1/min - 50 bar - 326 MWth - 10.9 %N\n\nIt is not neccessary to have precisely those values.\n\nThe turbine should be synced to grid with 50 bars. From a neutron setpoint of 13 %N, the pressure setpoint will be 64 bars.\n\nWith 15 %N, start heating up the low pressure turbine by carefully using the steam reheater.\n");
         jTextArea1.setWrapStyleWord(true);
         jScrollPane1.setViewportView(jTextArea1);
 

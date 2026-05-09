@@ -199,7 +199,7 @@ public class ControlPanel extends javax.swing.JFrame implements
         jMenuItemPresetNone = new javax.swing.JMenuItem();
         jMenuHelp = new javax.swing.JMenu();
         jMenuAbout = new javax.swing.JMenuItem();
-        jMenuItemHowToStart = new javax.swing.JMenuItem();
+        jMenuItemTurbineHelp = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
         jMenuItemTriggerDisaster = new javax.swing.JMenuItem();
         jMenuItemDebugDiagramPreheaters = new javax.swing.JMenuItem();
@@ -481,9 +481,9 @@ public class ControlPanel extends javax.swing.JFrame implements
         jMenuAbout.addActionListener(this::jMenuAboutActionPerformed);
         jMenuHelp.add(jMenuAbout);
 
-        jMenuItemHowToStart.setText("How to start");
-        jMenuItemHowToStart.addActionListener(this::jMenuItemHowToStartActionPerformed);
-        jMenuHelp.add(jMenuItemHowToStart);
+        jMenuItemTurbineHelp.setText("Turbine Startup Setpoints");
+        jMenuItemTurbineHelp.addActionListener(this::jMenuItemTurbineHelpActionPerformed);
+        jMenuHelp.add(jMenuItemTurbineHelp);
         jMenuHelp.add(jSeparator4);
 
         jMenuItemTriggerDisaster.setText("Debug: Trigger Disaster");
@@ -1067,10 +1067,10 @@ public class ControlPanel extends javax.swing.JFrame implements
         dialog.setVisible(true);
     }//GEN-LAST:event_jMenuAboutActionPerformed
 
-    private void jMenuItemHowToStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemHowToStartActionPerformed
-        HowtoStartDialog dialog = new HowtoStartDialog(new javax.swing.JFrame(), true);
+    private void jMenuItemTurbineHelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemTurbineHelpActionPerformed
+        TurbineStartStartDialog dialog = new TurbineStartStartDialog(new javax.swing.JFrame(), true);
         dialog.setVisible(true);
-    }//GEN-LAST:event_jMenuItemHowToStartActionPerformed
+    }//GEN-LAST:event_jMenuItemTurbineHelpActionPerformed
 
     private void jMenuItemNewPanelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNewPanelActionPerformed
         // call on parent as this does all the initialization.
@@ -1627,7 +1627,6 @@ public class ControlPanel extends javax.swing.JFrame implements
     private javax.swing.JMenuItem jMenuItemFeedwater;
     private javax.swing.JMenuItem jMenuItemGenerator;
     private javax.swing.JMenuItem jMenuItemHotwellDALevels;
-    private javax.swing.JMenuItem jMenuItemHowToStart;
     private javax.swing.JMenuItem jMenuItemLoop1LevelControl;
     private javax.swing.JMenuItem jMenuItemLoop2LevelControl;
     private javax.swing.JMenuItem jMenuItemMnemonicAuxCondenser;
@@ -1658,6 +1657,7 @@ public class ControlPanel extends javax.swing.JFrame implements
     private javax.swing.JMenuItem jMenuItemTurbineBypass;
     private javax.swing.JMenuItem jMenuItemTurbineExpansion;
     private javax.swing.JMenuItem jMenuItemTurbineHPTemperatures;
+    private javax.swing.JMenuItem jMenuItemTurbineHelp;
     private javax.swing.JMenuItem jMenuItemTurbineLPTemperatures;
     private javax.swing.JMenuItem jMenuItemTurbineOperator;
     private javax.swing.JMenuItem jMenuItemTurbineReheaterDiag;

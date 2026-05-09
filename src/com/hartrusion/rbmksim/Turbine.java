@@ -276,11 +276,11 @@ public class Turbine extends Subsystem implements Runnable {
         if (oldSetpointSpeedGradient != setpointSpeedGradient) {
             switch (setpointSpeedGradient) {
                 case LOW ->
-                    setpointTurbineSpeed.setMaxRate(30);
+                    setpointTurbineSpeed.setMaxRate(10);
                 case MED ->
-                    setpointTurbineSpeed.setMaxRate(60);
+                    setpointTurbineSpeed.setMaxRate(30);
                 case HIGH ->
-                    setpointTurbineSpeed.setMaxRate(90);
+                    setpointTurbineSpeed.setMaxRate(60);
             }
             controller.propertyChange(new PropertyChangeEvent(
                     this, "Turbine#SpeedSetpointGradient",
@@ -559,7 +559,7 @@ public class Turbine extends Subsystem implements Runnable {
         // There could be a fancy calculation on how to get the time constand 
         // but this number was found by trying some and getting a nice spin up
         // dynamic behavior.
-        turbineInertia.setTimeConstant(0.11);
+        turbineInertia.setTimeConstant(0.04);
 
         // Set up a solver for this network
         rotorSolver.addNetwork(turbineVelocity);

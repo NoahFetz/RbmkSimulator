@@ -203,7 +203,8 @@ public class ControlPanel extends javax.swing.JFrame implements
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
         jMenuItemTriggerDisaster = new javax.swing.JMenuItem();
         jMenuItemDebugDiagramPreheaters = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItemDebugTurbineHPTemp = new javax.swing.JMenuItem();
+        jMenuItemDebugCoreTemp = new javax.swing.JMenuItem();
 
         jTextField1.setText("jTextField1");
 
@@ -494,9 +495,13 @@ public class ControlPanel extends javax.swing.JFrame implements
         jMenuItemDebugDiagramPreheaters.addActionListener(this::jMenuItemDebugDiagramPreheatersActionPerformed);
         jMenuHelp.add(jMenuItemDebugDiagramPreheaters);
 
-        jMenuItem1.setText("Debug: Turbine HP Temp (all)");
-        jMenuItem1.addActionListener(this::jMenuItem1ActionPerformed);
-        jMenuHelp.add(jMenuItem1);
+        jMenuItemDebugTurbineHPTemp.setText("Debug: Turbine HP Temp (all)");
+        jMenuItemDebugTurbineHPTemp.addActionListener(this::jMenuItemDebugTurbineHPTempActionPerformed);
+        jMenuHelp.add(jMenuItemDebugTurbineHPTemp);
+
+        jMenuItemDebugCoreTemp.setLabel("Debug: Core Temperature");
+        jMenuItemDebugCoreTemp.addActionListener(this::jMenuItemDebugCoreTempActionPerformed);
+        jMenuHelp.add(jMenuItemDebugCoreTemp);
 
         jMenuBar1.add(jMenuHelp);
 
@@ -1323,7 +1328,7 @@ public class ControlPanel extends javax.swing.JFrame implements
         initializeDiagram(df);
     }//GEN-LAST:event_jMenuItemDebugDiagramPreheatersActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void jMenuItemDebugTurbineHPTempActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDebugTurbineHPTempActionPerformed
         // Check if there is already an active frame using the desired class
         for (InternalFrameDiagram df : diagrams) {
             if (df.getTitle().equals("Turbine: HP Temperatures")) {
@@ -1335,7 +1340,7 @@ public class ControlPanel extends javax.swing.JFrame implements
         df.setTitle("Turbine: HP Temperatures");
         DiagramPresets.turbineHPTemperatures(df.getFigure(), plotData, true);
         initializeDiagram(df);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_jMenuItemDebugTurbineHPTempActionPerformed
 
     private void jMenuItemTurbineExpansionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemTurbineExpansionActionPerformed
         // Check if there is already an active frame using the desired class
@@ -1466,6 +1471,20 @@ public class ControlPanel extends javax.swing.JFrame implements
     private void jMenuItemStartServerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemStartServerActionPerformed
         controller.userAction(new ActionCommand("StartServer", null));
     }//GEN-LAST:event_jMenuItemStartServerActionPerformed
+
+    private void jMenuItemDebugCoreTempActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDebugCoreTempActionPerformed
+        // Check if there is already an active frame using the desired class
+        for (InternalFrameDiagram df : diagrams) {
+            if (df.getTitle().equals("Core Temperatures")) {
+                return;
+            }
+        }
+        // if not, generate a new diagram and make it known.
+        InternalFrameDiagram df = new InternalFrameDiagram();
+        df.setTitle("Core Temperatures");
+        DiagramPresets.coreTemperaturesDebugging(df.getFigure(), plotData);
+        initializeDiagram(df);
+    }//GEN-LAST:event_jMenuItemDebugCoreTempActionPerformed
 
     /**
      * Makes some initializations to the mnemonic frame object and add it to the
@@ -1612,7 +1631,6 @@ public class ControlPanel extends javax.swing.JFrame implements
     private javax.swing.JMenu jMenuFile;
     private javax.swing.JMenuItem jMenuGlobalControl;
     private javax.swing.JMenu jMenuHelp;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItemAuxCond;
     private javax.swing.JMenuItem jMenuItemBlowdown;
@@ -1622,7 +1640,9 @@ public class ControlPanel extends javax.swing.JFrame implements
     private javax.swing.JMenuItem jMenuItemDA1Steam;
     private javax.swing.JMenuItem jMenuItemDA2Steam;
     private javax.swing.JMenuItem jMenuItemDeaerators;
+    private javax.swing.JMenuItem jMenuItemDebugCoreTemp;
     private javax.swing.JMenuItem jMenuItemDebugDiagramPreheaters;
+    private javax.swing.JMenuItem jMenuItemDebugTurbineHPTemp;
     private javax.swing.JMenuItem jMenuItemExit;
     private javax.swing.JMenuItem jMenuItemFeedwater;
     private javax.swing.JMenuItem jMenuItemGenerator;

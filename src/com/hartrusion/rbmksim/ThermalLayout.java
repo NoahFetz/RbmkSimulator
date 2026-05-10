@@ -168,10 +168,11 @@ public class ThermalLayout extends Subsystem implements Runnable {
     private final FlowSource[] fuelThermalSource = new FlowSource[2];
     private final SelfCapacitance[] fuelThermalCapacity
             = new SelfCapacitance[2];
-    private final GeneralNode[] fuelThermalOut = new GeneralNode[2];
-    private final LinearDissipator[] fuelThermalResistance
+    private final GeneralNode[] fuelThermalCapacityNode
+            = new GeneralNode[2];
+    private final LinearDissipator[] fuelThermalCapacityResistance
             = new LinearDissipator[2];
-    private final GeneralNode[] fuelEvaporatorNode = new GeneralNode[2];
+    private final GeneralNode[] fuelThermalOut = new GeneralNode[2];
 
     // Blowdown and cooldown system
     private final HeatValve[] blowdownValveFromDrum = new HeatValve[2];
@@ -449,7 +450,9 @@ public class ThermalLayout extends Subsystem implements Runnable {
     private final HeatFluidTank[] eccsPressureVessel = new HeatFluidTank[2];
     private final HeatNode[] eccsPvNode = new HeatNode[2];
     private final HeatValveControlled[][] eccsPvValve = new HeatValveControlled[2][2];
-    private final HeatValve[] eccsFPFillValve = new HeatValve[2]; // Feed pump   
+    private final HeatValve[] eccsFPFillValve = new HeatValve[2]; // Feed pump
+
+    private final PhasedValve[] channelLeak = new PhasedValve[2];
 
     // </editor-fold>
     private final Setpoint[] setpointDrumLevel = new Setpoint[2];
@@ -689,15 +692,17 @@ public class ThermalLayout extends Subsystem implements Runnable {
             fuelThermalCapacity[idx]
                     = new SelfCapacitance(PhysicalDomain.THERMAL);
             fuelThermalCapacity[idx].setName(
-                    "Fuel#ThermalCapacity" + (idx + 1));
-            fuelThermalOut[idx] = new GeneralNode(PhysicalDomain.THERMAL);
-            fuelThermalOut[idx].setName("Fuel#ThermalOut" + (idx + 1));
-            fuelThermalResistance[idx]
+                    "Fuel" + (idx + 1) + "#ThermalCapacity");
+            fuelThermalCapacityNode[idx]
+                    = new GeneralNode(PhysicalDomain.THERMAL);
+            fuelThermalCapacityNode[idx].setName(
+                    "Fuel" + (idx + 1) + "#ThermalCapactityNode");
+            fuelThermalCapacityResistance[idx]
                     = new LinearDissipator(PhysicalDomain.THERMAL);
-            fuelThermalResistance[idx].setName("Fuel#ThermalResistance"
-                    + (idx + 1));
-            fuelEvaporatorNode[idx] = new GeneralNode(PhysicalDomain.THERMAL);
-            fuelEvaporatorNode[idx].setName("Fuel#EvaporatorNode" + (idx + 1));
+            fuelThermalCapacityResistance[idx].setName(
+                    "Fuel" + (idx + 1) + "#ThermalCapacityResistance");
+            fuelThermalOut[idx] = new GeneralNode(PhysicalDomain.THERMAL);
+            fuelThermalOut[idx].setName("Fuel" + (idx + 1) + "#ThermalOut");
         }
 
         for (int idx = 0; idx < 2; idx++) {
@@ -1326,6 +1331,11 @@ public class ThermalLayout extends Subsystem implements Runnable {
                     + (idx + 1) + "#FPFillValve");
         }
 
+        for (int idx = 0; idx < 2; idx++) {
+            channelLeak[idx] = new PhasedValve();
+            channelLeak[idx].initName("Channel" + (idx - 1) + "Leak");
+        }
+
         //</editor-fold>      
         blowdownBalanceControlLoop.setName("Blowdown#BalanceControl");
         solver.setString("ThermalLayoutMainSolver");
@@ -1451,17 +1461,19 @@ public class ThermalLayout extends Subsystem implements Runnable {
             loopEvaporator[idx].connectToVia(
                     loopSteamDrum[idx], loopNodeDrumFromReactor[idx]);
         }
-        // Define the fuel thermal model and connect it to the loop.
+        // Define the fuel thermal model and connect it to the loop. It is a 
+        // simple thermal flow source that gets connected to the evaporator.
         fuelGround.connectTo(fuelGroundNode);
         for (int idx = 0; idx < 2; idx++) {
             fuelThermalSource[idx].connectTo(fuelGroundNode);
             fuelThermalSource[idx].connectTo(fuelThermalOut[idx]);
-            // fuelThermalCapacity[idx].connectTo(fuelThermalOut[idx]);
-            fuelThermalResistance[idx].connectBetween(
-                    fuelThermalOut[idx], fuelEvaporatorNode[idx]);
-            // Connect to the Evaporators Temperature source
-            loopEvaporator[idx].getInnerThermalEffortSource().connectTo(
-                    fuelEvaporatorNode[idx]);
+            // Connect to the Evaporators Temperature resistance
+            loopEvaporator[idx].getInnerThermalResistanceElement()
+                    .connectTo(fuelThermalOut[idx]);
+            // Add a capacitance for modeling the fuels thermal capacity
+            fuelThermalCapacity[idx].connectTo(fuelThermalCapacityNode[idx]);
+            fuelThermalCapacityResistance[idx].connectBetween(
+                    fuelThermalCapacityNode[idx], fuelThermalOut[idx]);
         }
         // Connect steam shutoff valves to drum 
         for (int idx = 0; idx < 2; idx++) {
@@ -2017,6 +2029,13 @@ public class ThermalLayout extends Subsystem implements Runnable {
                     .connectBetween(mainSteamDrumNode[idx], environment);
         }
 
+        // Channel leakage is connected to the bottom of the evaporator and goes
+        // just into the lower bubbler pools so far
+        for (int idx = 0; idx < 2; idx++) {
+            channelLeak[idx].getValveElement().connectBetween(
+                    loopEvaporatorIn[idx], bubblerPoolIn);
+        }
+
         // </editor-fold>
         // <editor-fold defaultstate="collapsed" desc="Element properties">
         makeupStorage.setTimeConstant(100 / 9.81);
@@ -2077,11 +2096,21 @@ public class ThermalLayout extends Subsystem implements Runnable {
             loopMcpMass[idx].setBridgedConnection();
             loopMcpMass[idx].setInnerThermalMass(100);
             loopDownflow[idx].setResistanceParameter(12.6);
-            loopDownflow[idx].setInnerThermalMass(50); // initial: 100
-            loopChannelFlowResistance[idx].setInnerThermalMass(50);
+            loopDownflow[idx].setInnerThermalMass(150); // initial: 100
+            loopChannelFlowResistance[idx].setInnerThermalMass(100);
             loopChannelFlowResistance[idx].setResistanceParameter(293.1);
-            // 20 m³ volume in evaporator per side
-            loopEvaporator[idx].setThermalDimension(20.0, 5000);
+            // 20 m³ volume in evaporator per side is way too slow for 
+            // mcp loss accident.
+            // Fuel model: Full thermal power per side is 1.6e9 Watts with fuel
+            // temperature of 570 °C (843 K) and recirc out temp of 284°/557 K.
+            // . Resistance: R = DeltaT / P_th = (843-557) / 1.6e9 
+            // = 1.78e-7 K/(J*s). As G: 1/1.8e-7 is about 5.5e6.
+            // For loss of circulation: The evaporator will slowly start to boil
+            // and loose its mass. It should met at 2800 °C (3073 K) and we just
+            // randomly define 4000 K and 50 MW when running empty, so it is
+            // G = P_th / DeltaT = 50e6 J/s / 4000 K = 1.25e4 when almost empty.
+            loopEvaporator[idx].setThermalDimension(14.0, 200, 5.5e6,
+                    10000, 1.5e4, 6000);
         }
 
         // Steam Drum: to compare with RXmodel simulator: Experiments show
@@ -2119,17 +2148,13 @@ public class ThermalLayout extends Subsystem implements Runnable {
             loopBypass[idx].initCharacteristicSimple(10.0);
         }
 
-        // Fuel model: Full thermal power per side is 1.6e9 Watts with fuel
-        // temperature of 570 °C (843 K) and recirc out temp of 284 °C (557 K).
-        // Resistance: R = DeltaT / P = (843-557) / 1.6e9 = 1.78e-7 K/(J*s)
         // 192 Tons (96 per side) of fuel in reactor. Specific heat capacity
         // of uranium dioxide: 270 J/kg/K
         // Thermal capacity: m * c = 96000 kg * 270 J/kg/K = 2.6e7 J/K
         for (int idx = 0; idx < 2; idx++) {
             fuelThermalCapacity[idx].setTimeConstant(2.6e7);
-            fuelThermalResistance[idx].setResistanceParameter(1.78e-7);
+            fuelThermalCapacityResistance[idx].setResistanceParameter(1.78e-7);
         }
-
         // Blowdown System
         for (int idx = 0; idx < 2; idx++) {
             // Two large pipes from and to reactor
@@ -2611,6 +2636,13 @@ public class ThermalLayout extends Subsystem implements Runnable {
                     7.9e6 / 400);
         }
 
+        // Channel leakage: Represented with a valve to be able to set an amount
+        // of leakage with the given characteristic. Worst leakage will be
+        // on 64e5 Pa with 500 kg/s: 
+        for (int idx = 0; idx < 2; idx++) {
+            channelLeak[idx].initCharacteristicSimple(12800);
+        }
+
         // </editor-fold>
         turbine.initElementProperties();
         // <editor-fold defaultstate="collapsed" desc="Set Initial conditions">
@@ -2627,6 +2659,9 @@ public class ThermalLayout extends Subsystem implements Runnable {
                 // All trim valves are fully opened.
                 loopTrimValve[idx][jdx].initOpening(100);
             }
+        }
+        for (int idx = 0; idx < 2; idx++) {
+            fuelThermalCapacity[idx].setInitialEffort(273.15 + 38);
         }
 
         for (int idx = 0; idx < 2; idx++) {
@@ -3409,16 +3444,12 @@ public class ThermalLayout extends Subsystem implements Runnable {
         for (int idx = 0; idx < 2; idx++) {
             setpointDALevel[idx].forceOutputValue(100);
         }
-
         setpointTurbineReheaterSuperheating.forceOutputValue(126);
         setpointTurbineReheaterLevel.forceOutputValue(60);
-
         for (int idx = 0; idx < 3; idx++) {
             setpointPreheaterLevel[idx].forceOutputValue(50);
         }
-
         startupPressureSetpointActive = true;
-
         // <editor-fold defaultstate="collapsed" desc="Alarm Definitions">
         // Alarm monitors are defined here and stored in the alarmUpdater only,
         // there is no need to have a class field for them.
@@ -5070,7 +5101,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
 
         // Update Alarms
         alarmUpdater.invokeAll();
-        
+
         // <editor-fold defaultstate="collapsed" desc="Gain measurement data and set it to parameter out handler">
         outputValues.setParameterValue("MakeupStorage#Level",
                 makeupStorage.getEffort() * 1.0224e-4); // Pa in meters
@@ -5145,6 +5176,14 @@ public class ThermalLayout extends Subsystem implements Runnable {
             outputValues.setParameterValue(
                     "Core" + (idx + 1) + "#Temperature",
                     fuelThermalOut[idx].getEffort() - 273.15);
+
+            outputValues.setParameterValue(
+                    "Loop" + (idx + 1) + "#EvapSpecHeatEnergy",
+                    loopEvaporator[idx].getPhasedHandler().getHeatEnergy()
+                    / 1000);
+            outputValues.setParameterValue(
+                    "Loop" + (idx + 1) + "#EvapMass",
+                    loopEvaporator[idx].getMass());
 
             outputValues.setParameterValue(
                     "Loop" + (idx + 1) + "#Voiding",

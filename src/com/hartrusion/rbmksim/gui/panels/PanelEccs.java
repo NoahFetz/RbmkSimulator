@@ -1849,7 +1849,7 @@ public class PanelEccs extends AbstractPanelWidget
             case "Loop2#DrumLevel" ->
                 ammeterDrum2Level.setChornobylValue(newValue);
             case "Loop2#DrumPressure" ->
-                ammeterDrum1Pressure.setChornobylValue(newValue);
+                ammeterDrum2Pressure.setChornobylValue(newValue);
             case "MakeupStorage#Level" ->
                 ammeterCCSLevel.setChornobylValue(newValue);
             case "MakeupStorage#Temperature" ->

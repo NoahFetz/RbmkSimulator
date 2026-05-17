@@ -300,18 +300,18 @@ public class PanelEccs extends AbstractPanelWidget
 
         ammeterVessel1Pressure.setBackground(new java.awt.Color(255, 255, 255));
         ammeterVessel1Pressure.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        ammeterVessel1Pressure.setChornobylMaximum(90.0);
+        ammeterVessel1Pressure.setChornobylMinimum(30.0);
         ammeterVessel1Pressure.setForeground(new java.awt.Color(0, 0, 0));
-        ammeterVessel1Pressure.setLeftLabel("0 bar");
-        ammeterVessel1Pressure.setRightLabel("90 bar");
+        ammeterVessel1Pressure.setLeftLabel("30 bar");
+        ammeterVessel1Pressure.setRightLabel("100 bar");
         add(ammeterVessel1Pressure, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 76, 92, 58));
 
         ammeterVessel2Pressure.setBackground(new java.awt.Color(255, 255, 255));
         ammeterVessel2Pressure.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        ammeterVessel2Pressure.setChornobylMaximum(90.0);
+        ammeterVessel2Pressure.setChornobylMinimum(30.0);
         ammeterVessel2Pressure.setForeground(new java.awt.Color(0, 0, 0));
-        ammeterVessel2Pressure.setLeftLabel("0 bar");
-        ammeterVessel2Pressure.setRightLabel("90 bar");
+        ammeterVessel2Pressure.setLeftLabel("30 bar");
+        ammeterVessel2Pressure.setRightLabel("100 bar");
         add(ammeterVessel2Pressure, new org.netbeans.lib.awtextra.AbsoluteConstraints(122, 76, 92, 58));
 
         panelWidgetSprinklerPump1.setChornobylPrefix("Bubbler1#SprinklerPump");
@@ -369,6 +369,8 @@ public class PanelEccs extends AbstractPanelWidget
         jLabelCaptionPSPP1F11.setMinimumSize(new java.awt.Dimension(52, 14));
         jLabelCaptionPSPP1F11.setPreferredSize(new java.awt.Dimension(52, 14));
         add(jLabelCaptionPSPP1F11, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 302, 72, 14));
+
+        integralSwitchDrainDrum1.setComponent("ECCS1#DrainValve");
         add(integralSwitchDrainDrum1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 218, -1, -1));
 
         jLabelCaptionDrainDrum1.setFont(jLabelCaptionDrainDrum1.getFont().deriveFont(jLabelCaptionDrainDrum1.getFont().getSize()-2f));
@@ -378,6 +380,8 @@ public class PanelEccs extends AbstractPanelWidget
         jLabelCaptionDrainDrum1.setMinimumSize(new java.awt.Dimension(52, 14));
         jLabelCaptionDrainDrum1.setPreferredSize(new java.awt.Dimension(52, 14));
         add(jLabelCaptionDrainDrum1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 200, 58, 14));
+
+        integralSwitchDrainDrum2.setComponent("ECCS2#DrainValve");
         add(integralSwitchDrainDrum2, new org.netbeans.lib.awtextra.AbsoluteConstraints(414, 218, -1, -1));
 
         jLabelCaptionDrainDrum2.setFont(jLabelCaptionDrainDrum2.getFont().deriveFont(jLabelCaptionDrainDrum2.getFont().getSize()-2f));
@@ -936,6 +940,8 @@ public class PanelEccs extends AbstractPanelWidget
         jLabelCaptionGaugesPSP.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelCaptionGaugesPSP.setText("Pressure Suppresion Pool");
         add(jLabelCaptionGaugesPSP, new org.netbeans.lib.awtextra.AbsoluteConstraints(486, 12, 200, 14));
+
+        integralSwitchDrum1SteamToPool.setComponent("ECCS1#PRValve");
         add(integralSwitchDrum1SteamToPool, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 134, -1, -1));
 
         jLabelCaptionBypass4.setFont(jLabelCaptionBypass4.getFont().deriveFont(jLabelCaptionBypass4.getFont().getSize()-2f));
@@ -945,6 +951,8 @@ public class PanelEccs extends AbstractPanelWidget
         jLabelCaptionBypass4.setMinimumSize(new java.awt.Dimension(52, 14));
         jLabelCaptionBypass4.setPreferredSize(new java.awt.Dimension(52, 14));
         add(jLabelCaptionBypass4, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 116, 58, 14));
+
+        integralSwitchDrum2SteamToPool.setComponent("ECCS2#PRValve");
         add(integralSwitchDrum2SteamToPool, new org.netbeans.lib.awtextra.AbsoluteConstraints(414, 134, -1, -1));
 
         jLabelCaptionBypass5.setFont(jLabelCaptionBypass5.getFont().deriveFont(jLabelCaptionBypass5.getFont().getSize()-2f));
@@ -1301,19 +1309,19 @@ public class PanelEccs extends AbstractPanelWidget
     }//GEN-LAST:event_jToggleButtonPSPFeed21AutoActionPerformed
 
     private void jButtonDrumDrain1CoolantCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDrumDrain1CoolantCloseActionPerformed
-        // TODO add your handling code here:
+        controller.userAction(new ActionCommand("ECCS1#DrainCoolerValve", false));
     }//GEN-LAST:event_jButtonDrumDrain1CoolantCloseActionPerformed
 
     private void jButtonDrumDrain1CoolantOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDrumDrain1CoolantOpenActionPerformed
-        // TODO add your handling code here:
+        controller.userAction(new ActionCommand("ECCS1#DrainCoolerValve", true));
     }//GEN-LAST:event_jButtonDrumDrain1CoolantOpenActionPerformed
 
     private void jButtonDrumDrain2CoolantCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDrumDrain2CoolantCloseActionPerformed
-        // TODO add your handling code here:
+        controller.userAction(new ActionCommand("ECCS2#DrainCoolerValve", false));
     }//GEN-LAST:event_jButtonDrumDrain2CoolantCloseActionPerformed
 
     private void jButtonDrumDrain2CoolantOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDrumDrain2CoolantOpenActionPerformed
-        // TODO add your handling code here:
+        controller.userAction(new ActionCommand("ECCS2#DrainCoolerValve", true));
     }//GEN-LAST:event_jButtonDrumDrain2CoolantOpenActionPerformed
 
     private void jButtonCoolantPSPP1CloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCoolantPSPP1CloseActionPerformed
@@ -1325,19 +1333,43 @@ public class PanelEccs extends AbstractPanelWidget
     }//GEN-LAST:event_jButtonCoolantPSPP1OpenActionPerformed
 
     private void jToggleButtonPV1Feed11AutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonPV1Feed11AutoActionPerformed
-        // TODO add your handling code here:
+        if (jToggleButtonPV1Feed11Auto.isSelected()) {
+            jToggleButtonPV1Feed11Auto.setText("↑");
+            controller.userAction(new ActionCommand("ECCS11#PvValveControlCommand", ControlCommand.AUTOMATIC));
+        } else {
+            jToggleButtonPV1Feed11Auto.setText("←");
+            controller.userAction(new ActionCommand("ECCS11#PvValveControlCommand", ControlCommand.MANUAL_OPERATION));
+        }
     }//GEN-LAST:event_jToggleButtonPV1Feed11AutoActionPerformed
 
     private void jToggleButtonPV1Feed21AutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonPV1Feed21AutoActionPerformed
-        // TODO add your handling code here:
+        if (jToggleButtonPV1Feed21Auto.isSelected()) {
+            jToggleButtonPV1Feed21Auto.setText("↑");
+            controller.userAction(new ActionCommand("ECCS21#PvValveControlCommand", ControlCommand.AUTOMATIC));
+        } else {
+            jToggleButtonPV1Feed21Auto.setText("←");
+            controller.userAction(new ActionCommand("ECCS21#PvValveControlCommand", ControlCommand.MANUAL_OPERATION));
+        }
     }//GEN-LAST:event_jToggleButtonPV1Feed21AutoActionPerformed
 
     private void jToggleButtonPV2Feed22AutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonPV2Feed22AutoActionPerformed
-        // TODO add your handling code here:
+        if (jToggleButtonPV2Feed22Auto.isSelected()) {
+            jToggleButtonPV2Feed22Auto.setText("↑");
+            controller.userAction(new ActionCommand("ECCS22#PvValveControlCommand", ControlCommand.AUTOMATIC));
+        } else {
+            jToggleButtonPV2Feed22Auto.setText("←");
+            controller.userAction(new ActionCommand("ECCS22#PvValveControlCommand", ControlCommand.MANUAL_OPERATION));
+        }
     }//GEN-LAST:event_jToggleButtonPV2Feed22AutoActionPerformed
 
     private void jToggleButtonPV2Feed12AutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonPV2Feed12AutoActionPerformed
-        // TODO add your handling code here:
+        if (jToggleButtonPV2Feed12Auto.isSelected()) {
+            jToggleButtonPV2Feed12Auto.setText("↑");
+            controller.userAction(new ActionCommand("ECCS12#PvValveControlCommand", ControlCommand.AUTOMATIC));
+        } else {
+            jToggleButtonPV2Feed12Auto.setText("←");
+            controller.userAction(new ActionCommand("ECCS12#PvValveControlCommand", ControlCommand.MANUAL_OPERATION));
+        }
     }//GEN-LAST:event_jToggleButtonPV2Feed12AutoActionPerformed
 
     private void jButtonToMcpHeader12CloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonToMcpHeader12CloseActionPerformed
@@ -1437,11 +1469,23 @@ public class PanelEccs extends AbstractPanelWidget
     }//GEN-LAST:event_jButtonCoolantPSPP3OpenActionPerformed
 
     private void jToggleButtonP3Feed13AutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonP3Feed13AutoActionPerformed
-        // TODO add your handling code here:
+        if (jToggleButtonP3Feed13Auto.isSelected()) {
+            jToggleButtonP3Feed13Auto.setText("↑");
+            controller.userAction(new ActionCommand("ECCS1#FPFillValveControlCommand", ControlCommand.AUTOMATIC));
+        } else {
+            jToggleButtonP3Feed13Auto.setText("←");
+            controller.userAction(new ActionCommand("ECCS1#FPFillValveControlCommand", ControlCommand.MANUAL_OPERATION));
+        }
     }//GEN-LAST:event_jToggleButtonP3Feed13AutoActionPerformed
 
     private void jToggleButtonP3Feed23AutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonP3Feed23AutoActionPerformed
-        // TODO add your handling code here:
+        if (jToggleButtonP3Feed23Auto.isSelected()) {
+            jToggleButtonP3Feed23Auto.setText("↑");
+            controller.userAction(new ActionCommand("ECCS2#FPFillValveControlCommand", ControlCommand.AUTOMATIC));
+        } else {
+            jToggleButtonP3Feed23Auto.setText("←");
+            controller.userAction(new ActionCommand("ECCS2#FPFillValveControlCommand", ControlCommand.MANUAL_OPERATION));
+        }
     }//GEN-LAST:event_jToggleButtonP3Feed23AutoActionPerformed
 
     private void jButtonSprinklerCoolant1CloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSprinklerCoolant1CloseActionPerformed
@@ -1461,27 +1505,63 @@ public class PanelEccs extends AbstractPanelWidget
     }//GEN-LAST:event_jButtonSprinklerCoolant2OpenActionPerformed
 
     private void jToggleButtonCCSP1Feed11AutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonCCSP1Feed11AutoActionPerformed
-        // TODO add your handling code here:
+        if (jToggleButtonCCSP1Feed11Auto.isSelected()) {
+            jToggleButtonCCSP1Feed11Auto.setText("↑");
+            controller.userAction(new ActionCommand("ECCS11#CcsPumpValveControlCommand", ControlCommand.AUTOMATIC));
+        } else {
+            jToggleButtonCCSP1Feed11Auto.setText("←");
+            controller.userAction(new ActionCommand("ECCS11#CcsPumpValveControlCommand", ControlCommand.MANUAL_OPERATION));
+        }
     }//GEN-LAST:event_jToggleButtonCCSP1Feed11AutoActionPerformed
 
     private void jToggleButtonCCSP1Feed21AutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonCCSP1Feed21AutoActionPerformed
-        // TODO add your handling code here:
+        if (jToggleButtonCCSP1Feed21Auto.isSelected()) {
+            jToggleButtonCCSP1Feed21Auto.setText("↑");
+            controller.userAction(new ActionCommand("ECCS21#CcsPumpValveControlCommand", ControlCommand.AUTOMATIC));
+        } else {
+            jToggleButtonCCSP1Feed21Auto.setText("←");
+            controller.userAction(new ActionCommand("ECCS21#CcsPumpValveControlCommand", ControlCommand.MANUAL_OPERATION));
+        }
     }//GEN-LAST:event_jToggleButtonCCSP1Feed21AutoActionPerformed
 
     private void jToggleButtonCCSP2Feed12AutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonCCSP2Feed12AutoActionPerformed
-        // TODO add your handling code here:
+        if (jToggleButtonCCSP2Feed12Auto.isSelected()) {
+            jToggleButtonCCSP2Feed12Auto.setText("↑");
+            controller.userAction(new ActionCommand("ECCS12#CcsPumpValveControlCommand", ControlCommand.AUTOMATIC));
+        } else {
+            jToggleButtonCCSP2Feed12Auto.setText("←");
+            controller.userAction(new ActionCommand("ECCS12#CcsPumpValveControlCommand", ControlCommand.MANUAL_OPERATION));
+        }
     }//GEN-LAST:event_jToggleButtonCCSP2Feed12AutoActionPerformed
 
     private void jToggleButtonCCSP2Feed22AutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonCCSP2Feed22AutoActionPerformed
-        // TODO add your handling code here:
+        if (jToggleButtonCCSP2Feed22Auto.isSelected()) {
+            jToggleButtonCCSP2Feed22Auto.setText("↑");
+            controller.userAction(new ActionCommand("ECCS22#CcsPumpValveControlCommand", ControlCommand.AUTOMATIC));
+        } else {
+            jToggleButtonCCSP2Feed22Auto.setText("←");
+            controller.userAction(new ActionCommand("ECCS22#CcsPumpValveControlCommand", ControlCommand.MANUAL_OPERATION));
+        }
     }//GEN-LAST:event_jToggleButtonCCSP2Feed22AutoActionPerformed
 
     private void jToggleButtonCCSP3Feed13AutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonCCSP3Feed13AutoActionPerformed
-        // TODO add your handling code here:
+        if (jToggleButtonCCSP3Feed13Auto.isSelected()) {
+            jToggleButtonCCSP3Feed13Auto.setText("↑");
+            controller.userAction(new ActionCommand("ECCS13#CcsPumpValveControlCommand", ControlCommand.AUTOMATIC));
+        } else {
+            jToggleButtonCCSP3Feed13Auto.setText("←");
+            controller.userAction(new ActionCommand("ECCS13#CcsPumpValveControlCommand", ControlCommand.MANUAL_OPERATION));
+        }
     }//GEN-LAST:event_jToggleButtonCCSP3Feed13AutoActionPerformed
 
     private void jToggleButtonCCSP3Feed23AutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonCCSP3Feed23AutoActionPerformed
-        // TODO add your handling code here:
+        if (jToggleButtonCCSP3Feed23Auto.isSelected()) {
+            jToggleButtonCCSP3Feed23Auto.setText("↑");
+            controller.userAction(new ActionCommand("ECCS23#CcsPumpValveControlCommand", ControlCommand.AUTOMATIC));
+        } else {
+            jToggleButtonCCSP3Feed23Auto.setText("←");
+            controller.userAction(new ActionCommand("ECCS23#CcsPumpValveControlCommand", ControlCommand.MANUAL_OPERATION));
+        }
     }//GEN-LAST:event_jToggleButtonCCSP3Feed23AutoActionPerformed
 
 
@@ -1831,6 +1911,238 @@ public class PanelEccs extends AbstractPanelWidget
                     lightBulbPSPFeed23Auto.setActive(false);
                 }
             }
+
+            case "ECCS11#PvValveControlState" -> {
+                // Set the initial position of the switch button
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()
+                        && !jToggleButtonPV1Feed11Auto.isSelected()) {
+                    jToggleButtonPV1Feed11Auto.setSelected(true);
+                    jToggleButtonPV1Feed11Auto.setText("↑");
+                }
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbPV1Feed11Auto.setActive(true);
+                } else if (ControlCommand.MANUAL_OPERATION
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbPV1Feed11Auto.setActive(false);
+                }
+            }
+            case "ECCS12#PvValveControlState" -> {
+                // Set the initial position of the switch button
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()
+                        && !jToggleButtonPV2Feed12Auto.isSelected()) {
+                    jToggleButtonPV2Feed12Auto.setSelected(true);
+                    jToggleButtonPV2Feed12Auto.setText("↑");
+                }
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbPV2Feed12Auto.setActive(true);
+                } else if (ControlCommand.MANUAL_OPERATION
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbPV2Feed12Auto.setActive(false);
+                }
+            }
+            case "ECCS21#PvValveControlState" -> {
+                // Set the initial position of the switch button
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()
+                        && !jToggleButtonPV1Feed21Auto.isSelected()) {
+                    jToggleButtonPV1Feed21Auto.setSelected(true);
+                    jToggleButtonPV1Feed21Auto.setText("↑");
+                }
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbPV1Feed21Auto.setActive(true);
+                } else if (ControlCommand.MANUAL_OPERATION
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbPV1Feed21Auto.setActive(false);
+                }
+            }
+            case "ECCS22#PvValveControlState" -> {
+                // Set the initial position of the switch button
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()
+                        && !jToggleButtonPV2Feed22Auto.isSelected()) {
+                    jToggleButtonPV2Feed22Auto.setSelected(true);
+                    jToggleButtonPV2Feed22Auto.setText("↑");
+                }
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbPV2Feed22Auto.setActive(true);
+                } else if (ControlCommand.MANUAL_OPERATION
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbPV2Feed22Auto.setActive(false);
+                }
+            }
+
+            case "ECCS1#FPFillValveControlCommand" -> {
+                // Set the initial position of the switch button
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()
+                        && !jToggleButtonP3Feed13Auto.isSelected()) {
+                    jToggleButtonP3Feed13Auto.setSelected(true);
+                    jToggleButtonP3Feed13Auto.setText("↑");
+                }
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbP3Feed13Auto.setActive(true);
+                } else if (ControlCommand.MANUAL_OPERATION
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbP3Feed13Auto.setActive(false);
+                }
+            }
+            case "ECCS2#FPFillValveControlCommand" -> {
+                // Set the initial position of the switch button
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()
+                        && !jToggleButtonP3Feed23Auto.isSelected()) {
+                    jToggleButtonP3Feed23Auto.setSelected(true);
+                    jToggleButtonP3Feed23Auto.setText("↑");
+                }
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbP3Feed23Auto.setActive(true);
+                } else if (ControlCommand.MANUAL_OPERATION
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbP3Feed23Auto.setActive(false);
+                }
+            }
+            case "ECCS11#CcsPumpValveControlState" -> {
+                // Set the initial position of the switch button
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()
+                        && !jToggleButtonCCSP1Feed11Auto.isSelected()) {
+                    jToggleButtonCCSP1Feed11Auto.setSelected(true);
+                    jToggleButtonCCSP1Feed11Auto.setText("↑");
+                }
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbCCSP1Feed11Auto.setActive(true);
+                } else if (ControlCommand.MANUAL_OPERATION
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbCCSP1Feed11Auto.setActive(false);
+                }
+            }
+            case "ECCS12#CcsPumpValveControlState" -> {
+                // Set the initial position of the switch button
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()
+                        && !jToggleButtonCCSP2Feed12Auto.isSelected()) {
+                    jToggleButtonCCSP2Feed12Auto.setSelected(true);
+                    jToggleButtonCCSP2Feed12Auto.setText("↑");
+                }
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbCCSP2Feed12Auto.setActive(true);
+                } else if (ControlCommand.MANUAL_OPERATION
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbCCSP2Feed12Auto.setActive(false);
+                }
+            }
+            case "ECCS13#CcsPumpValveControlState" -> {
+                // Set the initial position of the switch button
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()
+                        && !jToggleButtonCCSP3Feed13Auto.isSelected()) {
+                    jToggleButtonCCSP3Feed13Auto.setSelected(true);
+                    jToggleButtonCCSP3Feed13Auto.setText("↑");
+                }
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbCCSP3Feed13Auto.setActive(true);
+                } else if (ControlCommand.MANUAL_OPERATION
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbCCSP3Feed13Auto.setActive(false);
+                }
+            }
+            case "ECCS21#CcsPumpValveControlState" -> {
+                // Set the initial position of the switch button
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()
+                        && !jToggleButtonCCSP1Feed21Auto.isSelected()) {
+                    jToggleButtonCCSP1Feed21Auto.setSelected(true);
+                    jToggleButtonCCSP1Feed21Auto.setText("↑");
+                }
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbCCSP1Feed21Auto.setActive(true);
+                } else if (ControlCommand.MANUAL_OPERATION
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbCCSP1Feed21Auto.setActive(false);
+                }
+            }
+            case "ECCS22#CcsPumpValveControlState" -> {
+                // Set the initial position of the switch button
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()
+                        && !jToggleButtonCCSP2Feed22Auto.isSelected()) {
+                    jToggleButtonCCSP2Feed22Auto.setSelected(true);
+                    jToggleButtonCCSP2Feed22Auto.setText("↑");
+                }
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbCCSP2Feed22Auto.setActive(true);
+                } else if (ControlCommand.MANUAL_OPERATION
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbCCSP2Feed22Auto.setActive(false);
+                }
+            }
+            case "ECCS23#CcsPumpValveControlState" -> {
+                // Set the initial position of the switch button
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()
+                        && !jToggleButtonCCSP3Feed23Auto.isSelected()) {
+                    jToggleButtonCCSP3Feed23Auto.setSelected(true);
+                    jToggleButtonCCSP3Feed23Auto.setText("↑");
+                }
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbCCSP3Feed23Auto.setActive(true);
+                } else if (ControlCommand.MANUAL_OPERATION
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbCCSP3Feed23Auto.setActive(false);
+                }
+            }
+            case "ECCS1#DrainCoolerValve_Pos" ->
+                setValveButtons(jButtonDrumDrain1CoolantClose,
+                        jButtonDrumDrain1CoolantOpen, evt.getNewValue());
+            case "ECCS2#DrainCoolerValve_Pos" ->
+                setValveButtons(jButtonDrumDrain2CoolantClose,
+                        jButtonDrumDrain2CoolantOpen, evt.getNewValue());
+            case "ECCS1#FPFillValveControlState" -> {
+                // Set the initial position of the switch button
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()
+                        && !jToggleButtonP3Feed13Auto.isSelected()) {
+                    jToggleButtonP3Feed13Auto.setSelected(true);
+                    jToggleButtonP3Feed13Auto.setText("↑");
+                }
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbP3Feed13Auto.setActive(true);
+                } else if (ControlCommand.MANUAL_OPERATION
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbP3Feed13Auto.setActive(false);
+                }
+            }
+            case "ECCS2#FPFillValveControlState" -> {
+                // Set the initial position of the switch button
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()
+                        && !jToggleButtonP3Feed23Auto.isSelected()) {
+                    jToggleButtonP3Feed23Auto.setSelected(true);
+                    jToggleButtonP3Feed23Auto.setText("↑");
+                }
+                if (ControlCommand.AUTOMATIC
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbP3Feed23Auto.setActive(true);
+                } else if (ControlCommand.MANUAL_OPERATION
+                        == (ControlCommand) evt.getNewValue()) {
+                    lightBulbP3Feed23Auto.setActive(false);
+                }
+            }
         }
     }
 
@@ -1858,6 +2170,10 @@ public class PanelEccs extends AbstractPanelWidget
                 ammeterPSPLevel.setChornobylValue(newValue);
             case "BubblerPool#Temperature" ->
                 ammeterPSPTemperature.setChornobylValue(newValue);
+            case "ECCS1#PVPressure" ->
+                ammeterVessel1Pressure.setChornobylValue(newValue);
+            case "ECCS2#PVPressure" ->
+                ammeterVessel2Pressure.setChornobylValue(newValue);
         }
     }
 

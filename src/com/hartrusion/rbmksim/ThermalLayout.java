@@ -6277,6 +6277,18 @@ public class ThermalLayout extends Subsystem implements Runnable {
             mainSteamDump[0].getController().setManualMode(false);
             mainSteamDump[1].getController().setManualMode(false);
         }
+        
+        // Close all turbine reg valves here, they would be closed by safety 
+        // if the trip is enforced but for manual trip, this has to be done
+        // manually here.
+        for (int idx = 0; idx < 2; idx++) {
+            turbineStartupSteamValve[idx].getController().setManualMode(true);
+            turbineStartupSteamValve[idx].operateCloseValve();
+            turbineMainSteamValve[idx].getController().setManualMode(true);
+            turbineMainSteamValve[idx].operateCloseValve();
+            turbineReheaterSteamValve[idx].getController().setManualMode(true);
+            turbineReheaterSteamValve[idx].operateCloseValve();
+        }
     }
 
     /**

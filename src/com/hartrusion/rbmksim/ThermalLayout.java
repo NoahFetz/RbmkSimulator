@@ -434,8 +434,8 @@ public class ThermalLayout extends Subsystem implements Runnable {
     private final PhasedValve[] pressureReliefValveToEnvironment
             = new PhasedValve[2];
 
-    private final HeatNode eccsCoolantDistributionNode;
-    private final HeatNode eccsCoolantCollectorNode;
+    // private final HeatNode eccsCoolantDistributionNode;
+    // private final HeatNode eccsCoolantCollectorNode;
 
     // Sprinkler coolant loop for pressure suppression pool
     private final HeatFluidPumpSimple[] bubblerSprinklerPump
@@ -454,7 +454,8 @@ public class ThermalLayout extends Subsystem implements Runnable {
     private final HeatNode[][] eccsFeedLineIn = new HeatNode[2][3];
 
     // Pumps for damaged half of reactor
-    private final HeatValveControlled[][] eccsPspPumpValve = new HeatValveControlled[2][3];
+    private final HeatValveControlled[][] eccsPspPumpValve
+            = new HeatValveControlled[2][3];
     private final HeatNode[] eccsPspPumpOut = new HeatNode[3];
     private final HeatFluidPump[] eccsPspPump = new HeatFluidPump[3];
     private final HeatExchangerNoMass[] eccsPspCooler
@@ -463,18 +464,22 @@ public class ThermalLayout extends Subsystem implements Runnable {
     private final HeatNode[] eccsPspPumpCoolerIn = new HeatNode[3];
     private final HeatValve[] eccsPspCoolantValve = new HeatValve[3];
     // Pumps for intact half of reactor
-    private final HeatValveControlled[][] eccsCcsPumpValve = new HeatValveControlled[2][3];
+    private final HeatValveControlled[][] eccsCcsPumpValve
+            = new HeatValveControlled[2][3];
     private final HeatNode[] eccsCcsPumpOut = new HeatNode[3];
     private final HeatFluidPump[] eccsCcsPump = new HeatFluidPump[3];
     // Pressure vessels
     private final HeatFluidPumpSimple eccsPvFillPump;
     private final HeatNode eccsPvFillPumpOut;
     private final HeatValve[] eccsPvFillValve = new HeatValve[2];
-    private final HeatClosedFluidTank[] eccsPressureVessel = new HeatClosedFluidTank[2];
+    private final HeatClosedFluidTank[] eccsPressureVessel
+            = new HeatClosedFluidTank[2];
     private final HeatNode[] eccsPvNode = new HeatNode[2];
-    private final HeatValveControlled[][] eccsPvValve = new HeatValveControlled[2][2];
+    private final HeatValveControlled[][] eccsPvValve
+            = new HeatValveControlled[2][2];
     // Feed pump 3 to EECS lines
-    private final HeatValveControlled[] eccsFPFillValve = new HeatValveControlled[2];
+    private final HeatValveControlled[] eccsFPFillValve
+            = new HeatValveControlled[2];
     // Steam drum steam pressure release and feedwater drain
     private final PhasedValve[] eccsPRValve = new PhasedValve[2];
     private final PhasedValve[] eccsDrainValve = new PhasedValve[2];
@@ -1322,10 +1327,10 @@ public class ThermalLayout extends Subsystem implements Runnable {
                     + (idx + 1) + "#SprinklerCoolerValve");
         }
 
-        eccsCoolantDistributionNode = new HeatNode();
-        eccsCoolantDistributionNode.setName("ECCS#CoolantDistributionNode");
-        eccsCoolantCollectorNode = new HeatNode();
-        eccsCoolantCollectorNode.setName("ECCS#CoolantCollectorNode");
+        // eccsCoolantDistributionNode = new HeatNode();
+        // eccsCoolantDistributionNode.setName("ECCS#CoolantDistributionNode");
+        // eccsCoolantCollectorNode = new HeatNode();
+        // eccsCoolantCollectorNode.setName("ECCS#CoolantCollectorNode");
         for (int idx = 0; idx < 2; idx++) {
             for (int jdx = 0; jdx < 3; jdx++) {
                 eccsFeedValve[idx][jdx] = new HeatValve();
@@ -2116,9 +2121,12 @@ public class ThermalLayout extends Subsystem implements Runnable {
 
         environmentOrigin.connectTo(environment);
 
-        // Bubbler Pool: prepare separate converters for heat in-connection...
-        for (int idx = 0; idx < bubblerPoolInConverter.length; idx++) {
+        // Bubbler Pool
+        for (int idx = 0; idx < bubblerPoolIn.length; idx++) {
             bubblerPool.connectTo(bubblerPoolIn[idx]);
+        }
+        //prepare separate converters for heat in-connection...
+        for (int idx = 0; idx < bubblerPoolInConverter.length; idx++) {
             bubblerPoolInConverter[idx].connectBetween(
                     bubblerPoolIn[idx], bubblerPoolHeatIn[idx]);
         }
@@ -2148,11 +2156,11 @@ public class ThermalLayout extends Subsystem implements Runnable {
             bubblerSprinklerCooler[idx].getPrimarySide().connectBetween(
                     bubblerSprinklerPumpOut[idx], bubblerPoolHeatIn[idx]);
             bubblerSprinklerCoolerValve[idx].getValveElement().connectBetween(
-                    eccsCoolantDistributionNode, bubblerSprinklerCoolerIn[idx]);
+                    coolantMainNode, bubblerSprinklerCoolerIn[idx]);
             bubblerSprinklerCooler[idx].getSecondarySide().connectBetween(
-                    bubblerSprinklerCoolerIn[idx], eccsCoolantCollectorNode);
+                    bubblerSprinklerCoolerIn[idx], coolantSinkNode);
         }
-        
+
         // All ECCS components will push fluid through individual feed lines
         // which are represented by a volumized flow here.
         for (int idx = 0; idx < 2; idx++) {
@@ -2162,7 +2170,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
                 eccsFeedValve[idx][jdx].getValveElement().connectBetween(
                         eccsFeedIn[idx][jdx], loopDistributor[idx]);
             }
-            
+
         }
 
         // Pumps from Pressure Suppression Pool to ECCS distributor: Used to 
@@ -2183,9 +2191,9 @@ public class ThermalLayout extends Subsystem implements Runnable {
                     eccsPspPumpOut[idx], eccsFeedLineIn[1][idx]);
             // Coolant loop:
             eccsPspCoolantValve[idx].getValveElement().connectBetween(
-                    eccsCoolantDistributionNode, eccsPspPumpCoolerIn[idx]);
+                    coolantMainNode, eccsPspPumpCoolerIn[idx]);
             eccsPspCooler[idx].getSecondarySide().connectBetween(
-                    eccsPspPumpCoolerIn[idx], eccsCoolantCollectorNode);
+                    eccsPspPumpCoolerIn[idx], coolantSinkNode);
         }
 
         // Non-controllable safety relief valves from steam drums to
@@ -2212,11 +2220,11 @@ public class ThermalLayout extends Subsystem implements Runnable {
             eccsDrainCooler[idx].getPrimarySide().connectBetween(
                     eccsDrainValveOutNode[idx], bubblerPoolIn[idx + 6]);
             eccsDrainCoolerValve[idx].getValveElement().connectBetween(
-                    eccsCoolantDistributionNode,
+                    coolantMainNode,
                     eccsDrainCoolerCoolantInNode[idx]);
             eccsDrainCooler[idx].getSecondarySide().connectBetween(
                     eccsDrainCoolerCoolantInNode[idx],
-                    eccsCoolantCollectorNode);
+                    coolantSinkNode);
         }
 
         // Pumps from cold condensate storage (makeup) to cool the undamaged 
@@ -2872,25 +2880,24 @@ public class ThermalLayout extends Subsystem implements Runnable {
         // be split with 500 on valve and 2000 on cooler.
         for (int idx = 0; idx < 2; idx++) {
             bubblerSprinklerCooler[idx].getSecondarySide()
-                    .setResistanceParameter(2000);
-            bubblerSprinklerCoolerValve[idx].initCharacteristicSimple(500);
+                    .setResistanceParameter(400);
+            bubblerSprinklerCoolerValve[idx].initCharacteristicSimple(200);
             eccsDrainCooler[idx].getSecondarySide()
-                    .setResistanceParameter(2000);
-            eccsDrainCoolerValve[idx].initCharacteristicSimple(500);
+                    .setResistanceParameter(1000);
+            eccsDrainCoolerValve[idx].initCharacteristicSimple(200);
         }
         for (int idx = 0; idx < 3; idx++) {
             eccsPspCooler[idx].getSecondarySide()
-                    .setResistanceParameter(2000);
-            eccsPspCoolantValve[idx].initCharacteristicSimple(500);
+                    .setResistanceParameter(1000);
+            eccsPspCoolantValve[idx].initCharacteristicSimple(200);
         }
 
         // Sprinkler pumps: Those do 200 kg/s each on 10 bar, so resistance
         // will be R = p/m_ = 10e5/200 = 5e3 Pa*s/kg
         for (int idx = 0; idx < 2; idx++) {
-            bubblerSprinklerPump[idx].initCharacteristic(15e5, 10e5, 200);
+            bubblerSprinklerPump[idx].initCharacteristic(15e5, 10e5, 500);
             bubblerSprinklerCooler[idx].getPrimarySide()
-                    .setResistanceParameter(2000);
-            bubblerSprinklerCoolerValve[idx].initCharacteristicSimple(500);
+                    .setResistanceParameter(1000);
         }
 
         // ECCS Dimensioning
@@ -3011,7 +3018,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
         // fill height of 30 cm that will be 400 m^2 * 0.3 m = 120 m^3 which 
         // is 120 tons of water.
         bubblerPool.setInitialState(300000, 273.15 + 19.0);
-        
+
         // The ECCS vessel is using pressure as state variable, it should be
         // initialized with slightly more than the empty precharge value.
         for (int idx = 0; idx < 2; idx++) {
@@ -3725,6 +3732,48 @@ public class ThermalLayout extends Subsystem implements Runnable {
         });
         // Let the controller run away to keep the valve shut.
         hotwellDrainValve.getController().setMinOutput(-5.0);
+
+        // ECCS: Those are more simple 2-point-control loops that open and close 
+        // the valves automatically depending on the steam drum level.
+        for (int idx = 0; idx < 3; idx++) {
+            eccsPspPumpValve[0][idx].getController().addInputProvider(()
+                    -> setpointDrumLevel[0].getOutput()
+                    - ((loopSteamDrum[0].getFillHeight() - 1.15) * 100));
+            eccsPspPumpValve[1][idx].getController().addInputProvider(()
+                    -> setpointDrumLevel[0].getOutput()
+                    - ((loopSteamDrum[1].getFillHeight() - 1.15) * 100));
+
+            ((TwoPointControl) eccsPspPumpValve[0][idx].getController())
+                    .setHysteresis(10);
+            ((TwoPointControl) eccsPspPumpValve[1][idx].getController())
+                    .setHysteresis(10);
+
+            eccsCcsPumpValve[0][idx].getController().addInputProvider(()
+                    -> setpointDrumLevel[0].getOutput()
+                    - ((loopSteamDrum[0].getFillHeight() - 1.15) * 100));
+            eccsCcsPumpValve[1][idx].getController().addInputProvider(()
+                    -> setpointDrumLevel[0].getOutput()
+                    - ((loopSteamDrum[1].getFillHeight() - 1.15) * 100));
+
+            ((TwoPointControl) eccsCcsPumpValve[0][idx].getController())
+                    .setHysteresis(10);
+            ((TwoPointControl) eccsCcsPumpValve[1][idx].getController())
+                    .setHysteresis(10);
+        }
+
+        for (int idx = 0; idx < 2; idx++) {
+            eccsPvValve[0][idx].getController().addInputProvider(()
+                    -> setpointDrumLevel[0].getOutput() - 50
+                    - ((loopSteamDrum[0].getFillHeight() - 1.15) * 100));
+            eccsPvValve[1][idx].getController().addInputProvider(()
+                    -> setpointDrumLevel[0].getOutput() - 50
+                    - ((loopSteamDrum[1].getFillHeight() - 1.15) * 100));
+
+            ((TwoPointControl) eccsPvValve[0][idx].getController())
+                    .setHysteresis(10);
+            ((TwoPointControl) eccsPvValve[1][idx].getController())
+                    .setHysteresis(10);
+        }
 
         // </editor-fold>
         // Initial Setpoint Values
@@ -5076,23 +5125,23 @@ public class ThermalLayout extends Subsystem implements Runnable {
                 return true;
             }
         });
-        
+
         // ECCS: Note that the ECCS does not use the safety logic to implement 
         // its main functionality, the safety logic is used here only to 
         // ensure it can't be operated in a way that would make the model crash.
         // PV vessels: Must not run empty and no backwards flow.
-        eccsPvValve[0][0].addSafeClosedProvider(() 
+        eccsPvValve[0][0].addSafeClosedProvider(()
                 -> eccsPvNode[0].getEffort() > eccsFeedLineIn[0][0].getEffort()
-                    && eccsPressureVessel[0].getEffort() > 32e5);
-        eccsPvValve[1][0].addSafeClosedProvider(() 
+                && eccsPressureVessel[0].getEffort() > 32e5);
+        eccsPvValve[1][0].addSafeClosedProvider(()
                 -> eccsPvNode[0].getEffort() > eccsFeedLineIn[1][0].getEffort()
-                    && eccsPressureVessel[0].getEffort() > 32e5);
-        eccsPvValve[0][1].addSafeClosedProvider(() 
+                && eccsPressureVessel[0].getEffort() > 32e5);
+        eccsPvValve[0][1].addSafeClosedProvider(()
                 -> eccsPvNode[1].getEffort() > eccsFeedLineIn[0][01].getEffort()
-                    && eccsPressureVessel[1].getEffort() > 32e5);
-        eccsPvValve[1][1].addSafeClosedProvider(() 
+                && eccsPressureVessel[1].getEffort() > 32e5);
+        eccsPvValve[1][1].addSafeClosedProvider(()
                 -> eccsPvNode[1].getEffort() > eccsFeedLineIn[1][1].getEffort()
-                    && eccsPressureVessel[1].getEffort() > 32e5);
+                && eccsPressureVessel[1].getEffort() > 32e5);
 
         // </editor-fold>
         // Time condstant for condenser
@@ -5476,7 +5525,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
 
         // Update Alarms
         alarmUpdater.invokeAll();
-
+        
         // <editor-fold defaultstate="collapsed" desc="Gain measurement data and set it to parameter out handler">
         outputValues.setParameterValue("MakeupStorage#Level",
                 makeupStorage.getEffort() * 1.0224e-4); // Pa in meters
@@ -6277,7 +6326,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
             mainSteamDump[0].getController().setManualMode(false);
             mainSteamDump[1].getController().setManualMode(false);
         }
-        
+
         // Close all turbine reg valves here, they would be closed by safety 
         // if the trip is enforced but for manual trip, this has to be done
         // manually here.

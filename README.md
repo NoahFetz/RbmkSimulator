@@ -22,7 +22,7 @@ here on Github. If you have no clue about Java and use a Windows computer,
 download the **RbmkSimulator-Windows-x64.zip** file there. It contains a .exe 
 file that you can just run (no installation needed). If you have a different 
 operating system or a java runtime/jdk already installed, you can download the 
-**RbmkSimulator-SNAPSHOT.jar** file instead which is way smaller.
+**RbmkSimulator.jar** file instead which is way smaller.
 
 A current development snapshot can be downloaded here: 
 [RbmkSimulator-SNAPSHOT.jar](https://github.com/hartrusion/RbmkSimulator/releases/download/github-ci-snapshot/RbmkSimulator-SNAPSHOT.jar). 

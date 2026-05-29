@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Maven POM for RbmkSimulator.
+  This maven POM file is ued for the github CI release build and will be copied 
+  to the project root as pom.xml. It uses the Github Packages from the other 
+  repositories to build the release file. You can also use it in that way.
 
-  This file lives under .github/pom.xml and is intentionally NOT stored at the
-  repository root, so the repository remains as source-only. Copy it to the
-  repository root when you want to use Maven (CI does this automatically):
-
-    cp .github/pom.xml pom.xml
+    cp .github/github-ci-pom.xml pom.xml
     mvn dependency:copy-dependencies -DoutputDirectory=lib -DincludeScope=compile
 
   GitHub Packages authentication (required for hartrusion/* dependencies):

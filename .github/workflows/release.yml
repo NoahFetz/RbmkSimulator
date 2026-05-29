@@ -54,7 +54,7 @@ jobs:
 
       - name: Resolve dependencies via Maven into lib/
         run: |
-          cp .github/pom.xml pom.xml
+          cp .github/github-ci-pom.xml pom.xml
           mkdir -p lib
           mvn -B dependency:copy-dependencies \
             -DoutputDirectory=lib \

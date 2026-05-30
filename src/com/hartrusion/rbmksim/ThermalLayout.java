@@ -436,7 +436,6 @@ public class ThermalLayout extends Subsystem implements Runnable {
 
     // private final HeatNode eccsCoolantDistributionNode;
     // private final HeatNode eccsCoolantCollectorNode;
-
     // Sprinkler coolant loop for pressure suppression pool
     private final HeatFluidPumpSimple[] bubblerSprinklerPump
             = new HeatFluidPumpSimple[2];
@@ -491,7 +490,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
 
     private final PhasedValve[] channelLeakLower = new PhasedValve[2];
     private final PhasedNode[] channelLeakLowerNode = new PhasedNode[2];
-    private final PhasedEffortSource[] channelLeakLowerGravity 
+    private final PhasedEffortSource[] channelLeakLowerGravity
             = new PhasedEffortSource[2];
     private final PhasedValve[] channelLeakUpper = new PhasedValve[2];
     private final PhasedNode[] channelLeakUpperNode = new PhasedNode[2];
@@ -1445,13 +1444,13 @@ public class ThermalLayout extends Subsystem implements Runnable {
                     "Channel" + (idx - 1) + "LeakLowerNode");
             channelLeakUpperNode[idx] = new PhasedNode();
             channelLeakUpperNode[idx].setName(
-                    "Channel" + (idx - 1) + "LeakUpperNode"); 
+                    "Channel" + (idx - 1) + "LeakUpperNode");
             channelLeakLowerGravity[idx] = new PhasedEffortSource();
             channelLeakLowerGravity[idx].setName(
                     "Channel" + (idx - 1) + "LeakLowerGravity");
             channelLeakUpperGravity[idx] = new PhasedEffortSource();
             channelLeakUpperGravity[idx].setName(
-                   "Channel" + (idx - 1) + "LeakUpperGravity");
+                    "Channel" + (idx - 1) + "LeakUpperGravity");
         }
 
         //</editor-fold>      
@@ -3508,8 +3507,39 @@ public class ThermalLayout extends Subsystem implements Runnable {
             ((PIDControl) mainSteamDump[idx].getController())
                     .setParameterTN(20);
             ((PIDControl) mainSteamDump[idx].getController())
-                    .setParameterTV(2.0);
+                    .setParameterTV(1.5);
         }
+
+        // When main steam valves on turbine are in use, automatically close
+        // the steam dump valves by the opening of the main steam valve. This
+        // is done by applying a negative value on the integral part of the 
+        // pid control
+        ((PIDControl) mainSteamDump[0].getController())
+                .addIntegralAdaptionProvider(
+                        new DoubleSupplier() {
+                    @Override
+                    public double getAsDouble() {
+                        if (turbineMainSteamValve[0]
+                                .getController().isManualMode()) {
+                            return 0.0;
+                        }
+                        return -0.05 * turbineMainSteamValve[0]
+                                .getValveElement().getOpening();
+                    }
+                });
+        ((PIDControl) mainSteamDump[1].getController())
+                .addIntegralAdaptionProvider(
+                        new DoubleSupplier() {
+                    @Override
+                    public double getAsDouble() {
+                        if (turbineMainSteamValve[1]
+                                .getController().isManualMode()) {
+                            return 0.0;
+                        }
+                        return -0.05 * turbineMainSteamValve[1]
+                                .getValveElement().getOpening();
+                    }
+                });
 
         preheaterCondensateValve[0].getController().addInputProvider(
                 new DoubleSupplier() {
@@ -5552,7 +5582,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
 
         // Update Alarms
         alarmUpdater.invokeAll();
-        
+
         // <editor-fold defaultstate="collapsed" desc="Gain measurement data and set it to parameter out handler">
         outputValues.setParameterValue("MakeupStorage#Level",
                 makeupStorage.getEffort() * 1.0224e-4); // Pa in meters
@@ -6345,14 +6375,6 @@ public class ThermalLayout extends Subsystem implements Runnable {
         turbineTripValve[0].operateCloseValve();
         turbineTripValve[1].operateCloseValve();
         turbineLowPressureTripValve.operateCloseValve();
-
-        // Some rudimentary but important automation: In case of vacuum ok
-        // in condenser, set both turbine bypass valves to automatic to prevent
-        // sudden pressure buildup. 
-        if (!alarmManager.isAlarmActive("CondenserVacuum", AlarmState.MIN1)) {
-            mainSteamDump[0].getController().setManualMode(false);
-            mainSteamDump[1].getController().setManualMode(false);
-        }
 
         // Close all turbine reg valves here, they would be closed by safety 
         // if the trip is enforced but for manual trip, this has to be done

@@ -343,7 +343,7 @@ public class PanelMCP extends AbstractPanelWidget
 
         jLabel3.setFont(jLabel3.getFont().deriveFont(jLabel3.getFont().getStyle() | java.awt.Font.BOLD, jLabel3.getFont().getSize()-2));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("MCP 1.2");
+        jLabel3.setText("MCP 1.3");
         jLabel3.setToolTipText("");
         add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(122, 168, 52, -1));
 
@@ -385,7 +385,7 @@ public class PanelMCP extends AbstractPanelWidget
 
         jLabel11.setFont(jLabel11.getFont().deriveFont(jLabel11.getFont().getStyle() | java.awt.Font.BOLD, jLabel11.getFont().getSize()-2));
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setText("MCP 2.2");
+        jLabel11.setText("MCP 2.3");
         jLabel11.setToolTipText("");
         add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(364, 168, 52, -1));
 

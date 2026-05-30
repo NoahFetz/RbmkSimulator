@@ -490,7 +490,13 @@ public class ThermalLayout extends Subsystem implements Runnable {
     private final HeatNode[] eccsDrainCoolerCoolantInNode = new HeatNode[2];
 
     private final PhasedValve[] channelLeakLower = new PhasedValve[2];
+    private final PhasedNode[] channelLeakLowerNode = new PhasedNode[2];
+    private final PhasedEffortSource[] channelLeakLowerGravity 
+            = new PhasedEffortSource[2];
     private final PhasedValve[] channelLeakUpper = new PhasedValve[2];
+    private final PhasedNode[] channelLeakUpperNode = new PhasedNode[2];
+    private final PhasedEffortSource[] channelLeakUpperGravity
+            = new PhasedEffortSource[2];
 
     // </editor-fold>
     private final Setpoint[] setpointDrumLevel = new Setpoint[2];
@@ -1434,6 +1440,18 @@ public class ThermalLayout extends Subsystem implements Runnable {
             channelLeakLower[idx].initName("Channel" + (idx - 1) + "LeakLower");
             channelLeakUpper[idx] = new PhasedValve();
             channelLeakUpper[idx].initName("Channel" + (idx - 1) + "LeakUpper");
+            channelLeakLowerNode[idx] = new PhasedNode();
+            channelLeakLowerNode[idx].setName(
+                    "Channel" + (idx - 1) + "LeakLowerNode");
+            channelLeakUpperNode[idx] = new PhasedNode();
+            channelLeakUpperNode[idx].setName(
+                    "Channel" + (idx - 1) + "LeakUpperNode"); 
+            channelLeakLowerGravity[idx] = new PhasedEffortSource();
+            channelLeakLowerGravity[idx].setName(
+                    "Channel" + (idx - 1) + "LeakLowerGravity");
+            channelLeakUpperGravity[idx] = new PhasedEffortSource();
+            channelLeakUpperGravity[idx].setName(
+                   "Channel" + (idx - 1) + "LeakUpperGravity");
         }
 
         //</editor-fold>      
@@ -2268,9 +2286,13 @@ public class ThermalLayout extends Subsystem implements Runnable {
         // bubbler pool connections.
         for (int idx = 0; idx < 2; idx++) {
             channelLeakLower[idx].getValveElement().connectBetween(
-                    loopEvaporatorIn[idx], bubblerPoolIn[8 + idx]);
+                    loopEvaporatorIn[idx], channelLeakLowerNode[idx]);
             channelLeakUpper[idx].getValveElement().connectBetween(
-                    loopNodeDrumWaterOut[idx], bubblerPoolIn[8 + idx]);
+                    loopNodeDrumWaterOut[idx], channelLeakUpperNode[idx]);
+            channelLeakLowerGravity[idx].connectBetween(
+                    channelLeakLowerNode[idx], bubblerPoolIn[8 + idx]);
+            channelLeakUpperGravity[idx].connectBetween(
+                    channelLeakUpperNode[idx], bubblerPoolIn[8 + idx]);
         }
 
         // </editor-fold>
@@ -2925,6 +2947,9 @@ public class ThermalLayout extends Subsystem implements Runnable {
             channelLeakLower[idx].getIntegrator().setMaxRate(50);
             channelLeakUpper[idx].initCharacteristicSimple(12800);
             channelLeakUpper[idx].getIntegrator().setMaxRate(50);
+
+            channelLeakLowerGravity[idx].setEffort(1e5);
+            channelLeakUpperGravity[idx].setEffort(1e5);
         }
 
         // </editor-fold>
@@ -3735,44 +3760,46 @@ public class ThermalLayout extends Subsystem implements Runnable {
 
         // ECCS: Those are more simple 2-point-control loops that open and close 
         // the valves automatically depending on the steam drum level.
+        // The setpoint is 8 cm below the actual setpoint and the hysteresis 
+        // is double that value so it will open at -16 cm and close at 0 cm.
         for (int idx = 0; idx < 3; idx++) {
             eccsPspPumpValve[0][idx].getController().addInputProvider(()
-                    -> setpointDrumLevel[0].getOutput()
+                    -> setpointDrumLevel[0].getOutput() - 8.0
                     - ((loopSteamDrum[0].getFillHeight() - 1.15) * 100));
             eccsPspPumpValve[1][idx].getController().addInputProvider(()
-                    -> setpointDrumLevel[0].getOutput()
+                    -> setpointDrumLevel[0].getOutput() - 8.0
                     - ((loopSteamDrum[1].getFillHeight() - 1.15) * 100));
 
             ((TwoPointControl) eccsPspPumpValve[0][idx].getController())
-                    .setHysteresis(10);
+                    .setHysteresis(16);
             ((TwoPointControl) eccsPspPumpValve[1][idx].getController())
-                    .setHysteresis(10);
+                    .setHysteresis(16);
 
             eccsCcsPumpValve[0][idx].getController().addInputProvider(()
-                    -> setpointDrumLevel[0].getOutput()
+                    -> setpointDrumLevel[0].getOutput() - 8.0
                     - ((loopSteamDrum[0].getFillHeight() - 1.15) * 100));
             eccsCcsPumpValve[1][idx].getController().addInputProvider(()
-                    -> setpointDrumLevel[0].getOutput()
+                    -> setpointDrumLevel[0].getOutput() - 8.0
                     - ((loopSteamDrum[1].getFillHeight() - 1.15) * 100));
 
             ((TwoPointControl) eccsCcsPumpValve[0][idx].getController())
-                    .setHysteresis(10);
+                    .setHysteresis(16);
             ((TwoPointControl) eccsCcsPumpValve[1][idx].getController())
-                    .setHysteresis(10);
+                    .setHysteresis(16);
         }
 
         for (int idx = 0; idx < 2; idx++) {
             eccsPvValve[0][idx].getController().addInputProvider(()
-                    -> setpointDrumLevel[0].getOutput() - 50
+                    -> setpointDrumLevel[0].getOutput() - 8.0
                     - ((loopSteamDrum[0].getFillHeight() - 1.15) * 100));
             eccsPvValve[1][idx].getController().addInputProvider(()
-                    -> setpointDrumLevel[0].getOutput() - 50
+                    -> setpointDrumLevel[0].getOutput() - 8.0
                     - ((loopSteamDrum[1].getFillHeight() - 1.15) * 100));
 
             ((TwoPointControl) eccsPvValve[0][idx].getController())
-                    .setHysteresis(10);
+                    .setHysteresis(16);
             ((TwoPointControl) eccsPvValve[1][idx].getController())
-                    .setHysteresis(10);
+                    .setHysteresis(16);
         }
 
         // </editor-fold>

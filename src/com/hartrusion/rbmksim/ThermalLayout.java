@@ -3782,9 +3782,24 @@ public class ThermalLayout extends Subsystem implements Runnable {
                 // negative: open valve to decrease level.
                 return hotwell.getPrimarySideReservoir()
                         .getFillHeight() * 100 // m to cm
-                        - setpointHotwellLowerLevel.getOutput();
+                        - setpointHotwellUpperLevel.getOutput();
             }
         });
+        // Add some help to the drain valve to close it if both valves are on
+        // auto mode and both are open.
+        ((PIControl) hotwellDrainValve.getController())
+                .addIntegralAdaptionProvider(
+                        new DoubleSupplier() {
+                    @Override
+                    public double getAsDouble() {
+                        if (hotwellDrainValve.getController().isManualMode()) {
+                            return 0.0;
+                        }
+                        return -0.5 * hotwellFillValve
+                               .getValveElement().getOpening();
+                    }
+                });
+
         // Let the controller run away to keep the valve shut.
         hotwellDrainValve.getController().setMinOutput(-5.0);
 

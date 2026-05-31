@@ -3268,10 +3268,10 @@ public class ThermalLayout extends Subsystem implements Runnable {
         // setpoint instead of directyl calling the function.
         setpointDrumPressure.setLowerLimit(1.0);
         setpointDrumPressure.setUpperLimit(72.0);
-        setpointDrumPressure.setMaxRate(2.0);
+        setpointDrumPressure.setMaxRate(0.3);
         setpointDrumPressureOffset.setLowerLimit(-5.0);
         setpointDrumPressureOffset.setUpperLimit(15.0);
-        setpointDrumPressure.setMaxRate(5.0);
+        setpointDrumPressureOffset.setMaxRate(5.0);
 
         // Preheater Levels: Scale is 0..150 cm
         for (int idx = 0; idx < 3; idx++) {

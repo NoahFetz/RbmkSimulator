@@ -52,6 +52,7 @@ import com.hartrusion.modeling.heatfluid.HeatClosedFluidTank;
 import com.hartrusion.modeling.heatfluid.HeatEffortSource;
 import com.hartrusion.modeling.heatfluid.HeatFlowSource;
 import com.hartrusion.modeling.heatfluid.HeatFluidTank;
+import com.hartrusion.modeling.heatfluid.HeatFrictionedFlowResistance;
 import com.hartrusion.modeling.heatfluid.HeatNode;
 import com.hartrusion.modeling.heatfluid.HeatOrigin;
 import com.hartrusion.modeling.heatfluid.HeatSimpleFlowResistance;
@@ -152,9 +153,12 @@ public class ThermalLayout extends Subsystem implements Runnable {
             = new HeatVolumizedFlowResistance[2];
     private final HeatValve[] loopBypass = new HeatValve[2];
     private final HeatNode[] loopDistributor = new HeatNode[2]; // to channels
-    private final HeatVolumizedFlowResistance[] loopChannelFlowResistance
-            = new HeatVolumizedFlowResistance[2];
+    private final HeatFrictionedFlowResistance[] loopChannelFlowResistance
+            = new HeatFrictionedFlowResistance[2];
     private final HeatNode[] loopAfterResistance = new HeatNode[2];
+    private final HeatVolumizedFlowResistance[] loopChannelMass
+            = new HeatVolumizedFlowResistance[2];
+    private final HeatNode[] loopAfterChannelMass = new HeatNode[2];
     private final HeatEffortSource[] loopThermalLift = new HeatEffortSource[2];
     private final HeatNode[] loopAfterThermalLift = new HeatNode[2];
     private final PhasedHeatFluidConverter[] loopToReactorConverter
@@ -709,12 +713,18 @@ public class ThermalLayout extends Subsystem implements Runnable {
             loopBypass[idx].initName("Loop" + (idx + 1) + "#Bypass");
             loopDistributor[idx] = new HeatNode();
             loopDistributor[idx].setName("Loop" + (idx + 1) + "#Distributor");
-            loopChannelFlowResistance[idx] = new HeatVolumizedFlowResistance();
+            loopChannelFlowResistance[idx] = new HeatFrictionedFlowResistance();
             loopChannelFlowResistance[idx].setName("Loop" + (idx + 1)
                     + "#ChannelFlowResistance");
             loopAfterResistance[idx] = new HeatNode();
             loopAfterResistance[idx].setName("Loop" + (idx + 1)
                     + "#AfterResistance");
+            loopChannelMass[idx] = new HeatVolumizedFlowResistance();
+            loopChannelMass[idx].setName("Loop" + (idx + 1)
+                    + "#ChannelMass");
+            loopAfterChannelMass[idx] = new HeatNode();
+            loopAfterChannelMass[idx].setName("Loop" + (idx + 1)
+                    + "#AfterChannelMass");
             loopThermalLift[idx] = new HeatEffortSource();
             loopThermalLift[idx].setName("Loop" + (idx + 1) + "#ThermalLift");
             loopAfterThermalLift[idx] = new HeatNode();
@@ -1569,7 +1579,9 @@ public class ThermalLayout extends Subsystem implements Runnable {
             // add pressure difference for natural ciruclation on open bypass
             loopChannelFlowResistance[idx].connectBetween(
                     loopDistributor[idx], loopAfterResistance[idx]);
-            loopThermalLift[idx].connectTo(loopAfterResistance[idx]);
+            loopChannelMass[idx].connectBetween(
+                    loopAfterResistance[idx], loopAfterChannelMass[idx]);
+            loopThermalLift[idx].connectTo(loopAfterChannelMass[idx]);
             loopThermalLift[idx].connectTo(loopAfterThermalLift[idx]);
             loopToReactorConverter[idx].connectBetween(
                     loopAfterThermalLift[idx], loopEvaporatorIn[idx]);
@@ -2354,9 +2366,23 @@ public class ThermalLayout extends Subsystem implements Runnable {
             loopMcpMass[idx].setBridgedConnection();
             loopMcpMass[idx].setInnerThermalMass(100);
             loopDownflow[idx].setResistanceParameter(12.6);
-            loopDownflow[idx].setInnerThermalMass(150); // initial: 100
-            loopChannelFlowResistance[idx].setInnerThermalMass(100);
+            loopDownflow[idx].setInnerThermalMass(150);
             loopChannelFlowResistance[idx].setResistanceParameter(293.1);
+            // Manipulate the specific heat capacity here to make the heatup 
+            // from the MCP circulation much more intense. Default is 4200, the
+            // heat increase is delta_p / (density * specHeatCap)
+            loopChannelFlowResistance[idx].setFrictionHeatupParameters(
+                    1000, 2000);
+            for (int jdx = 0; jdx < 4; jdx++) {
+                // make this effect worse on trim valves, so a throttled loop
+                // will not heat up slower than one that is not throttled (yes,
+                // faking some effects here!)
+                loopTrimValve[idx][jdx].getValveElement()
+                        .setFrictionHeatupParameters(1000, 1000);
+            }
+
+            loopChannelMass[idx].setInnerThermalMass(300);
+            loopChannelMass[idx].setBridgedConnection();
             // 20 m³ volume in evaporator per side is way too slow for 
             // mcp loss accident.
             // Fuel model: Full thermal power per side is 1.6e9 Watts with fuel
@@ -2999,7 +3025,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
             loopBypass[idx].initOpening(100); // Open Bypass
             loopDownflow[idx].getHeatHandler()
                     .setInitialTemperature(273.15 + 25.3);
-            loopChannelFlowResistance[idx].getHeatHandler()
+            loopChannelMass[idx].getHeatHandler()
                     .setInitialTemperature(273.15 + 25.3);
 
             blowdownPipeFromMcp[idx].getHeatHandler().setInitialTemperature(
@@ -3796,7 +3822,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
                             return 0.0;
                         }
                         return -0.5 * hotwellFillValve
-                               .getValveElement().getOpening();
+                                .getValveElement().getOpening();
                     }
                 });
 

@@ -856,7 +856,7 @@ public class PanelTurbine extends AbstractPanelWidget
 
         jLabelTempSetpoint.setFont(jLabelTempSetpoint.getFont().deriveFont(jLabelTempSetpoint.getFont().getStyle() & ~java.awt.Font.BOLD, jLabelTempSetpoint.getFont().getSize()-2));
         jLabelTempSetpoint.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelTempSetpoint.setText("Setpoint (K)");
+        jLabelTempSetpoint.setText("Setpoint (°C)");
         jLabelTempSetpoint.setToolTipText("Scrams the reactor by immediately inserting all rods");
         jLabelTempSetpoint.setMaximumSize(new java.awt.Dimension(52, 14));
         jLabelTempSetpoint.setMinimumSize(new java.awt.Dimension(52, 14));

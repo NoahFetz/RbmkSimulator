@@ -510,7 +510,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
     private final Setpoint setpointDrumPressureOffset;
     private final Setpoint setpointHotwellUpperLevel;
     private final Setpoint setpointHotwellLowerLevel;
-    private final Setpoint setpointTurbineReheaterSuperheating;
+    private final Setpoint setpointTurbineReheaterTemperature;
     private final Setpoint setpointTurbineReheaterLevel;
     private final Setpoint[] setpointPreheaterLevel = new Setpoint[3];
 
@@ -532,9 +532,11 @@ public class ThermalLayout extends Subsystem implements Runnable {
     private double turbineDebugLPInTemp;
 
     /**
-     * Saturation temperature of the HP turbine out. This is used for generating
-     * a setpoint for superheating. Value has to be saved to be available on
-     * calculation start.
+     * Saturation temperature of the HP turbine out. This was used for 
+     * generating a setpoint for superheating. Value had to be saved to be 
+     * available on calculation start.
+     * <p>
+     * This was removed in 0.3.4 but will value will be kept for diagnostics
      */
     private double turbineHPOutSatTemp;
 
@@ -1490,8 +1492,8 @@ public class ThermalLayout extends Subsystem implements Runnable {
         setpointDrumPressure.initName("LoopPressureSetpoint");
         setpointDrumPressureOffset = new Setpoint();
         setpointDrumPressureOffset.initName("Loop#PressureSetpointOffset");
-        setpointTurbineReheaterSuperheating = new Setpoint();
-        setpointTurbineReheaterSuperheating.initName(
+        setpointTurbineReheaterTemperature = new Setpoint();
+        setpointTurbineReheaterTemperature.initName(
                 "Turbine#SetpointReheaterTemperature");
         setpointTurbineReheaterLevel = new Setpoint();
         setpointTurbineReheaterLevel.initName(
@@ -3261,7 +3263,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
         runner.submit(setpointDrumPressureOffset);
         runner.submit(setpointHotwellUpperLevel);
         runner.submit(setpointHotwellLowerLevel);
-        runner.submit(setpointTurbineReheaterSuperheating);
+        runner.submit(setpointTurbineReheaterTemperature);
         runner.submit(setpointTurbineReheaterLevel);
         for (int idx = 0; idx < 3; idx++) {
             runner.submit(setpointPreheaterLevel[idx]);
@@ -3686,8 +3688,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
                 new DoubleSupplier() {
             @Override
             public double getAsDouble() {
-                return turbineHPOutSatTemp
-                        + setpointTurbineReheaterSuperheating.getOutput()
+                return setpointTurbineReheaterTemperature.getOutput()
                         - reheaterOutTemperature;
             }
         });
@@ -3695,8 +3696,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
                 new DoubleSupplier() {
             @Override
             public double getAsDouble() {
-                return turbineHPOutSatTemp
-                        + setpointTurbineReheaterSuperheating.getOutput()
+                return setpointTurbineReheaterTemperature.getOutput()
                         - reheaterOutTemperature;
             }
         });
@@ -3780,11 +3780,11 @@ public class ThermalLayout extends Subsystem implements Runnable {
         setpointHotwellLowerLevel.setMaxRate(8.0);
         setpointHotwellLowerLevel.setLowerLimit(10);
         setpointHotwellLowerLevel.setUpperLimit(90);
-        // This sets the turbine superheating as a delta in Kelvin. By default,
+        // This sets the turbine superheater outlet temperature. By default,
         // it is HP out 137 °C reheated to 263 °C, this is a Delta of 126 °C.
-        setpointTurbineReheaterSuperheating.setMaxRate(10);
-        setpointTurbineReheaterSuperheating.setLowerLimit(50);
-        setpointTurbineReheaterSuperheating.setUpperLimit(200);
+        setpointTurbineReheaterTemperature.setMaxRate(10);
+        setpointTurbineReheaterTemperature.setLowerLimit(150);
+        setpointTurbineReheaterTemperature.setUpperLimit(300);
         setpointTurbineReheaterLevel.setMaxRate(10);
         setpointTurbineReheaterLevel.setLowerLimit(40);
         setpointTurbineReheaterLevel.setUpperLimit(140);
@@ -3882,7 +3882,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
         for (int idx = 0; idx < 2; idx++) {
             setpointDALevel[idx].forceOutputValue(100);
         }
-        setpointTurbineReheaterSuperheating.forceOutputValue(126);
+        setpointTurbineReheaterTemperature.forceOutputValue(263);
         setpointTurbineReheaterLevel.forceOutputValue(60);
         for (int idx = 0; idx < 3; idx++) {
             setpointPreheaterLevel[idx].forceOutputValue(50);
@@ -5999,7 +5999,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
                 -turbineReheater.getPrimarySideCondenser().getFlow());
         outputValues.setParameterValue("Turbine#ReheaterTemperatureSetpoint",
                 turbineHPOutSatTemp
-                + setpointTurbineReheaterSuperheating.getOutput()
+                + setpointTurbineReheaterTemperature.getOutput()
                 - 273.15);
         for (int idx = 0; idx < 2; idx++) {
             outputValues.setParameterValue(
@@ -6370,7 +6370,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
             for (int idx = 0; idx < 4; idx++) {
                 turbineLowPressureTapValve[idx].handleAction(ac);
             }
-            setpointTurbineReheaterSuperheating.handleAction(ac);
+            setpointTurbineReheaterTemperature.handleAction(ac);
             setpointTurbineReheaterLevel.handleAction(ac);
 
             if (ac.getPropertyName().equals("SetCoreOnly")) {

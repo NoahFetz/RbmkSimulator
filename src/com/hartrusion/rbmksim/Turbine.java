@@ -596,7 +596,37 @@ public class Turbine extends Subsystem implements Runnable {
         });
         am.registerAlarmManager(alarmManager);
         alarmUpdater.submit(am);
-
+        
+        // Expansion for HP and LP with trip 
+        am = new ValueAlarmMonitor();
+        am.setName("DiffExpansionHPTurbine");
+        am.addInputProvider(() -> Math.abs(hpDiffExpansion));
+        am.defineAlarm(1.5, AlarmState.MAX1);
+        am.defineAlarm(1.3, AlarmState.HIGH2);
+        am.defineAlarm(1.1, AlarmState.HIGH1);
+        am.addAlarmAction(new AlarmAction(AlarmState.MAX1) {
+            @Override
+            public void run() {
+                triggerTurbineTrip();
+            }
+        });
+        am.registerAlarmManager(alarmManager);
+        alarmUpdater.submit(am);
+        
+        am = new ValueAlarmMonitor();
+        am.setName("DiffExpansionLPTurbine");
+        am.addInputProvider(() -> Math.abs(lpDiffExpansion));
+        am.defineAlarm(3.4, AlarmState.MAX1);
+        am.defineAlarm(3.0, AlarmState.HIGH2);
+        am.defineAlarm(2.6, AlarmState.HIGH1);
+        am.addAlarmAction(new AlarmAction(AlarmState.MAX1) {
+            @Override
+            public void run() {
+                triggerTurbineTrip();
+            }
+        });
+        am.registerAlarmManager(alarmManager);
+        alarmUpdater.submit(am);
     }
 
     /**

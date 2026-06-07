@@ -264,9 +264,13 @@ public class Turbine extends Subsystem implements Runnable {
         double lpStatorLength
                 = LP_LENGTH * (1 + (lpStatorTemperature - 293.15) * EXP_C);
 
-        // Calculate expansions
-        hpDiffExpansion = hpRotorLength - hpStatorLength;
-        lpDiffExpansion = lpRotorLength - lpStatorLength;
+        // Calculate expansions: Stator lengths are manipulated as the stator
+        // is slightly colder due to contact to environment for cooldown 
+        // modeling. There's sure some formula (simply solve the network 
+        // circuit) but for now those numbers were taken from steady state using
+        // debugging. 
+        hpDiffExpansion = hpRotorLength - hpStatorLength * 1.03980254387591;
+        lpDiffExpansion = lpRotorLength - lpStatorLength* 1.03397295439119;
         statorAbsExpansion = hpStatorLength + lpStatorLength
                 - LP_LENGTH - HP_LENGTH;
 
@@ -318,7 +322,7 @@ public class Turbine extends Subsystem implements Runnable {
             // as values are kind of made up and nothing is really calculated,
             // we need to add a factor here to make the output exactly 1000 on
             // 3200 mw thermal
-            generatorPower = (shaftPower - holdPower) * 0.570066;
+            generatorPower = (shaftPower - holdPower) * 0.57144;
         }
 
         // Get startup valves auto/manual mode
@@ -694,7 +698,7 @@ public class Turbine extends Subsystem implements Runnable {
             thermalResistanceSteamToRotor[idx].setConductanceParameter(5e4);
 
             thermalEnvTemperature[idx].setEffort(273.15 + 24.0);
-            thermalResistanceStatorToEnv[idx].setConductanceParameter(1e2);
+            thermalResistanceStatorToEnv[idx].setConductanceParameter(3e3);
         }
 
         // Initialize Temperatures

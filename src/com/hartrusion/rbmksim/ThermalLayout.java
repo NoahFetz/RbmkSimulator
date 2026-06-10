@@ -63,7 +63,7 @@ import com.hartrusion.modeling.phasedfluid.PhasedExpandingThermalExchanger;
 import com.hartrusion.modeling.phasedfluid.PhasedTurbineStage;
 import com.hartrusion.modeling.phasedfluid.PhasedNode;
 import com.hartrusion.modeling.phasedfluid.PhasedOrigin;
-import com.hartrusion.modeling.phasedfluid.PhasedPropertiesWater;
+import com.hartrusion.modeling.phasedfluid.Water;
 import com.hartrusion.modeling.phasedfluid.PhasedSimpleFlowResistance;
 import com.hartrusion.modeling.phasedfluid.PhasedThermalExchanger;
 import com.hartrusion.modeling.phasedfluid.PhasedVolumizedFlowResistance;
@@ -96,9 +96,6 @@ public class ThermalLayout extends Subsystem implements Runnable {
     // Reference to the turbine class that holds the network elements and 
     // controls for the turbine that are not part of the steam flow.
     private Turbine turbine;
-
-    private final PhasedPropertiesWater phasedWater
-            = new PhasedPropertiesWater();
 
     // <editor-fold defaultstate="collapsed" desc="Model elements declaration and array instantiation">
     // Cold condensate storage
@@ -667,7 +664,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
         }
 
         for (int idx = 0; idx < 2; idx++) {
-            loopSteamDrum[idx] = new PhasedClosedSteamedReservoir(phasedWater);
+            loopSteamDrum[idx] = new PhasedClosedSteamedReservoir(Water.INSTANCE);
             loopSteamDrum[idx].setName("Loop" + (idx + 1) + "SteamDrum");
             loopNodeDrumWaterOut[idx] = new PhasedNode();
             loopNodeDrumWaterOut[idx].setName("Loop" + (idx + 1)
@@ -679,11 +676,11 @@ public class ThermalLayout extends Subsystem implements Runnable {
             loopNodeDrumFromReactor[idx].setName("Loop" + (idx + 1)
                     + "#NodeDrumFromReactor");
             loopFromDrumConverter[idx]
-                    = new PhasedHeatFluidConverter(phasedWater);
+                    = new PhasedHeatFluidConverter(Water.INSTANCE);
             loopFromDrumConverter[idx].setName("Loop" + (idx + 1)
                     + "#FromDrumConverter");
             loopFromDrumBlowdownConverter[idx]
-                    = new PhasedHeatFluidConverter(phasedWater);
+                    = new PhasedHeatFluidConverter(Water.INSTANCE);
             loopFromDrumBlowdownConverter[idx].setName("Loop" + (idx + 1)
                     + "#FromDrumBlowdownConverter");
             loopNodeDrumBlowdownHeatOut[idx] = new HeatNode();
@@ -733,13 +730,13 @@ public class ThermalLayout extends Subsystem implements Runnable {
             loopAfterThermalLift[idx].setName("Loop" + (idx + 1)
                     + "#AfterThermalLift");
             loopToReactorConverter[idx]
-                    = new PhasedHeatFluidConverter(phasedWater);
+                    = new PhasedHeatFluidConverter(Water.INSTANCE);
             loopToReactorConverter[idx].setName("Loop" + (idx + 1)
                     + "+ToReactorConverter");
             loopEvaporatorIn[idx] = new PhasedNode();
             loopEvaporatorIn[idx].setName("Loop" + (idx + 1) + "#EvaporatorIn");
             loopEvaporator[idx]
-                    = new PhasedExpandingThermalExchanger(phasedWater);
+                    = new PhasedExpandingThermalExchanger(Water.INSTANCE);
             loopEvaporator[idx].setName("Loop" + (idx + 1) + "#Evaporator");
         }
 
@@ -851,7 +848,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
         }
 
         for (int idx = 0; idx < 2; idx++) {
-            deaerator[idx] = new PhasedClosedSteamedReservoir(phasedWater);
+            deaerator[idx] = new PhasedClosedSteamedReservoir(Water.INSTANCE);
             deaerator[idx].setName("Deaerator" + (idx + 1));
             deaeratorOutNode[idx] = new PhasedNode();
             deaeratorOutNode[idx].setName(
@@ -860,7 +857,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
             deaeratorInNode[idx].setName(
                     "Deaerator" + (idx + 1) + "#InNode");
             deaeratorToFeedwaterConverter[idx]
-                    = new PhasedHeatFluidConverter(phasedWater);
+                    = new PhasedHeatFluidConverter(Water.INSTANCE);
             deaeratorToFeedwaterConverter[idx].setName(
                     "Deaerator" + (idx + 1) + "#ToFeedwaterConverter");
             deaeratorFeedwaterOutHeatNode[idx] = new HeatNode();
@@ -885,7 +882,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
             deaeratorSteamDistribution[idx].setName(
                     "Deaerator" + (idx + 1) + "#SteamDistribution");
             deaeratorToDrainConverter[idx]
-                    = new PhasedHeatFluidConverter(phasedWater);
+                    = new PhasedHeatFluidConverter(Water.INSTANCE);
             deaeratorToDrainConverter[idx].setName(
                     "Deaerator" + (idx + 1) + "#ToDrainConverter");
             deaeratorDrainOutHeatNode[idx] = new HeatNode();
@@ -951,7 +948,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
             auxCondSteamValve[idx].registerController(new PIControl());
             auxCondSteamValve[idx].initName(
                     "AuxCond" + (idx + 1) + "#SteamValve");
-            auxCondensers[idx] = new PhasedCondenserNoMass(phasedWater);
+            auxCondensers[idx] = new PhasedCondenserNoMass(Water.INSTANCE);
             auxCondensers[idx].initGenerateNodes();
             auxCondensers[idx].initName("AuxCond" + (idx + 1) + "#Condenser");
             auxCondCoolantValve[idx] = new HeatValve();
@@ -961,7 +958,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
             auxCondCoolantCollector[idx].setName(
                     "AuxCond" + (idx + 1) + "#CoolantCollector");
             auxCondOutConverter[idx]
-                    = new PhasedHeatFluidConverter(phasedWater);
+                    = new PhasedHeatFluidConverter(Water.INSTANCE);
             auxCondOutConverter[idx].setName(
                     "AuxCond" + (idx + 1) + "#CondOutConverter");
             auxCondCondenserOutNode[idx] = new HeatNode();
@@ -990,7 +987,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
         auxCondValveToHotwell.initName("AuxCond#ToHotwell");
         auxCondValveToHotwellHeatNode = new HeatNode();
         auxCondValveToHotwellHeatNode.setName("AuxCond#ToHotwellHeatNode");
-        auxCondValveToHotwellConverter = new PhasedHeatFluidConverter(phasedWater);
+        auxCondValveToHotwellConverter = new PhasedHeatFluidConverter(Water.INSTANCE);
         auxCondValveToHotwellConverter.setName("AuxCond#ToHotwellConverter");
         // auxCondValveToHotwellPhasedNode = new PhasedNode();
         // auxCondValveToHotwellPhasedNode.setName("AuxCond#ToHotwellPhasedNode");
@@ -1006,10 +1003,10 @@ public class ThermalLayout extends Subsystem implements Runnable {
         }
 
         // Condensation
-        hotwell = new PhasedCondenserNoMass(phasedWater);
+        hotwell = new PhasedCondenserNoMass(Water.INSTANCE);
         hotwell.initName("Hotwell");
         hotwell.initGenerateNodes();
-        hotwellOutConverter = new PhasedHeatFluidConverter(phasedWater);
+        hotwellOutConverter = new PhasedHeatFluidConverter(Water.INSTANCE);
         hotwellOutConverter.setName("Hotwell#OutConverter");
         hotwellOutNode = new HeatNode();
         hotwellOutNode.setName("Hotwell#OutNode");
@@ -1038,12 +1035,12 @@ public class ThermalLayout extends Subsystem implements Runnable {
             condensationValveOut[idx].setName(
                     "Condensation" + (idx + 1) + "#ValveOut");
             condensationToDeaeratorConverter[idx]
-                    = new PhasedHeatFluidConverter(phasedWater);
+                    = new PhasedHeatFluidConverter(Water.INSTANCE);
             condensationToDeaeratorConverter[idx].setName(
                     "Condensation" + (idx + 1) + "#ToDeaeratorConverter");
         }
 
-        hotwellFillValveConverter = new PhasedHeatFluidConverter(phasedWater);
+        hotwellFillValveConverter = new PhasedHeatFluidConverter(Water.INSTANCE);
         hotwellFillValveConverter.setName("Hotwell#FillValveConverter");
         hotwellFillNode = new HeatNode();
         hotwellFillNode.setName("Hotwell#FillNode");
@@ -1055,7 +1052,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
         hotwellDrainValve.initName("Hotwell#DrainValve");
 
         for (int idx = 0; idx < 5; idx++) {
-            condenserCooler[idx] = new PhasedHeatExchangerNoMass(phasedWater);
+            condenserCooler[idx] = new PhasedHeatExchangerNoMass(Water.INSTANCE);
             condenserCooler[idx].initName(
                     "Condenser#Cooler" + (idx + 1));
             condenserCoolerIn[idx] = new PhasedNode();
@@ -1085,11 +1082,11 @@ public class ThermalLayout extends Subsystem implements Runnable {
             ejectorSuctionValve[idx] = new DummyValve();
             ejectorSuctionValve[idx].initName(
                     "EjectorMain" + (idx + 1) + "#SuctionValve");
-            ejectorMain[idx] = new PhasedHeatExchangerNoMass(phasedWater);
+            ejectorMain[idx] = new PhasedHeatExchangerNoMass(Water.INSTANCE);
             ejectorMain[idx].initGenerateNodes();
             ejectorMain[idx].initName("EjectorMain" + (idx + 1));
             ejectorMainCondensate[idx]
-                    = new PhasedHeatFluidConverter(phasedWater);
+                    = new PhasedHeatFluidConverter(Water.INSTANCE);
             ejectorMainCondensate[idx].setName(
                     "EjectorMain" + (idx + 1) + "#Condensate");
             ejectorMainCondensateOut[idx] = new HeatNode();
@@ -1120,20 +1117,20 @@ public class ThermalLayout extends Subsystem implements Runnable {
         ejectorMainBypass.initName("EjectorMain#Bypass");
         ejectorToHotwellHeatNode = new HeatNode();
         ejectorToHotwellHeatNode.setName("Ejector#ToHotwellHeatNode");
-        ejectorToHotwellConverter = new PhasedHeatFluidConverter(phasedWater);
+        ejectorToHotwellConverter = new PhasedHeatFluidConverter(Water.INSTANCE);
         ejectorToHotwellConverter.setName("Ejector#ToHotwellConverter");
         //ejectorToHotwellPhasedNode = new PhasedNode();
         // ejectorToHotwellPhasedNode.setName("Ejector#ToHotwellPhasedNode");
 
         for (int idx = 0; idx < 3; idx++) {
-            preheater[idx] = new PhasedCondenserNoMass(phasedWater);
+            preheater[idx] = new PhasedCondenserNoMass(Water.INSTANCE);
             preheater[idx].initGenerateNodes();
             preheater[idx].initName(
                     "Preheater" + (idx + 1));
         }
         for (int idx = 0; idx < 2; idx++) {
             preheaterCondensateCooler[idx]
-                    = new PhasedHeatExchangerNoMass(phasedWater);
+                    = new PhasedHeatExchangerNoMass(Water.INSTANCE);
             preheaterCondensateCooler[idx].initName("Preheater"
                     + (idx + 1) + "#CondensateCooler");
         }
@@ -1195,21 +1192,21 @@ public class ThermalLayout extends Subsystem implements Runnable {
         }
         turbineHighPressureIn = new PhasedNode();
         turbineHighPressureIn.setName("Turbine#HighPressureIn");
-        turbineHighPressureInMass = new PhasedThermalExchanger(phasedWater);
+        turbineHighPressureInMass = new PhasedThermalExchanger(Water.INSTANCE);
         turbineHighPressureInMass.setName("Turbine#HighPressureInMass");
         turbineHighPressureMidIn = new PhasedNode();
         turbineHighPressureMidIn.setName("Turbine#HighPressureMidIn");
-        turbineHighPressureFirst = new PhasedTurbineStage(phasedWater);
+        turbineHighPressureFirst = new PhasedTurbineStage(Water.INSTANCE);
         turbineHighPressureFirst.setName("Turbine#HighPressureFirst");
         turbineHighPressureInside = new PhasedNode();
         turbineHighPressureInside.setName("Turbine#HighPressureInside");
         turbineHighPressureTapValve = new PhasedValve();
         turbineHighPressureTapValve.initName("Turbine#HighPressureTapValve");
-        turbineHighPressureSecond = new PhasedTurbineStage(phasedWater);
+        turbineHighPressureSecond = new PhasedTurbineStage(Water.INSTANCE);
         turbineHighPressureSecond.setName("Turbine#HighPressureSecond");
         turbineHighPressureMidOut = new PhasedNode();
         turbineHighPressureMidOut.setName("Turbine#HighPressureMidOut");
-        turbineHighPressureOutMass = new PhasedThermalExchanger(phasedWater);
+        turbineHighPressureOutMass = new PhasedThermalExchanger(Water.INSTANCE);
         turbineHighPressureOutMass.setName("Turbine#HighPressureOutMass");
         turbineReheaterSteam = new PhasedNode();
         turbineReheaterSteam.setName("Turbine#ReheaterSteam");
@@ -1220,10 +1217,10 @@ public class ThermalLayout extends Subsystem implements Runnable {
                 "Turbine#ReheaterPriValvesMidNode");
         turbineReheaterTrimValve = new PhasedValve();
         turbineReheaterTrimValve.initName("Turbine#ReheaterTrimValve");
-        turbineReheater = new PhasedSuperheater(phasedWater);
+        turbineReheater = new PhasedSuperheater(Water.INSTANCE);
         turbineReheater.initGenerateNodes();
         turbineReheater.initName("Turbine#Superheater");
-        turbineRehasterMass = new PhasedVolumizedFlowResistance(phasedWater);
+        turbineRehasterMass = new PhasedVolumizedFlowResistance(Water.INSTANCE);
         turbineRehasterMass.setName("Turbine#ReheaterMass");
         turbineRehasterMassOut = new PhasedNode();
         turbineRehasterMassOut.setName("Turbine#ReheaterMassOut");
@@ -1254,13 +1251,13 @@ public class ThermalLayout extends Subsystem implements Runnable {
         turbineLowPressureTripValve.initName("Turbine#LowPressureTripValve");
         turbineLowPressureIn = new PhasedNode();
         turbineLowPressureIn.setName("Turbine#LowPressureIn");
-        turbineLowPressureInMass = new PhasedThermalExchanger(phasedWater);
+        turbineLowPressureInMass = new PhasedThermalExchanger(Water.INSTANCE);
         turbineLowPressureInMass.setName("Turbine#LowPressureInMass");
         turbineLowPressureMidIn = new PhasedNode();
         turbineLowPressureMidIn.setName("Turbine#LowPressureMidIn");
         for (int idx = 0; idx < 5; idx++) {
             turbineLowPressureStage[idx]
-                    = new PhasedTurbineStage(phasedWater);
+                    = new PhasedTurbineStage(Water.INSTANCE);
             turbineLowPressureStage[idx].setName(
                     "Turbine" + (idx + 1) + "#LowPressureStage");
         }
@@ -1274,10 +1271,10 @@ public class ThermalLayout extends Subsystem implements Runnable {
         }
         turbineLowPressureMidOut = new PhasedNode();
         turbineLowPressureMidOut.setName("Turbine#LowPressureMidOut");
-        turbineLowPressureOutMass = new PhasedThermalExchanger(phasedWater);
+        turbineLowPressureOutMass = new PhasedThermalExchanger(Water.INSTANCE);
         turbineLowPressureOutMass.setName("Turbine#LowPressureOutMass");
 
-        bubblerPool = new PhasedClosedSteamedReservoir(phasedWater);
+        bubblerPool = new PhasedClosedSteamedReservoir(Water.INSTANCE);
         bubblerPool.setName("Bubbler#Pool");
         for (int idx = 0; idx < bubblerPoolIn.length; idx++) {
             bubblerPoolIn[idx] = new PhasedNode();
@@ -1286,7 +1283,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
         }
         for (int idx = 0; idx < bubblerPoolInConverter.length; idx++) {
             bubblerPoolInConverter[idx] = new PhasedHeatFluidConverter(
-                    phasedWater);
+                    Water.INSTANCE);
             bubblerPoolInConverter[idx].setName("Bubbler"
                     + (idx + 1) + "#PoolInConverter");
             bubblerPoolHeatIn[idx] = new HeatNode();
@@ -1301,7 +1298,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
         for (int idx = 0; idx < bubblerPoolOutConverter.length; idx++) {
 
             bubblerPoolOutConverter[idx] = new PhasedHeatFluidConverter(
-                    phasedWater);
+                    Water.INSTANCE);
             bubblerPoolOutConverter[idx].setName("Bubbler"
                     + (idx + 1) + "#PoolOutConverter");
             bubblerPoolHeatOut[idx] = new HeatNode();
@@ -1435,7 +1432,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
             eccsDrainValveOutNode[idx] = new PhasedNode();
             eccsDrainValveOutNode[idx].setName("ECCS"
                     + (idx + 1) + "#DrainValveOutNode");
-            eccsDrainCooler[idx] = new PhasedHeatExchangerNoMass(phasedWater);
+            eccsDrainCooler[idx] = new PhasedHeatExchangerNoMass(Water.INSTANCE);
             eccsDrainCooler[idx].initName("ECCS"
                     + (idx + 1) + "DrainCooler");
             eccsDrainCoolerCoolantInNode[idx] = new HeatNode();
@@ -3061,7 +3058,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
 
         // Turbine: Reheater
         turbineReheater.initConditions(273.15 + 22.5,
-                (273.15 + 22.5) * phasedWater.getSpecificHeatCapacity(),
+                (273.15 + 22.5) * Water.INSTANCE.getSpecificHeatCapacity(),
                 0.5, 0.0);
 
         turbineRehasterMass.initConditions(273.15 + 22.5);
@@ -5483,7 +5480,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
             // Ignore height, we want some trouble here.
             mcpCavitaionTemperatureDiff[idx]
                     = loopCollector[idx].getTemperature()
-                    - phasedWater.getSaturationTemperature(
+                    - Water.INSTANCE.getSaturationTemperature(
                             mainSteamDrumNode[idx].getEffort());
         }
         for (int idx = 0; idx < 2; idx++) {
@@ -5524,7 +5521,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
             if (!turbineRehasterMassOut
                     .noHeatEnergy(turbineLowPressureTripValve.getValveElement())) {
                 reheaterOutTemperature
-                        = phasedWater.getTemperature(
+                        = Water.INSTANCE.getTemperature(
                                 turbineRehasterMassOut
                                         .getHeatEnergy(
                                                 turbineLowPressureTripValve
@@ -5532,7 +5529,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
                                 turbineRehasterMassOut
                                         .getEffort());
                 reheaterOutQuality
-                        = phasedWater.getVapourFraction(
+                        = Water.INSTANCE.getVapourFraction(
                                 turbineRehasterMassOut
                                         .getHeatEnergy(
                                                 turbineLowPressureTripValve
@@ -5546,14 +5543,14 @@ public class ThermalLayout extends Subsystem implements Runnable {
         // without any delays, this is used in the debugging graphs.
         if (turbineHighPressureIn.heatEnergyUpdated(turbineHighPressureInMass)
                 && turbineHighPressureIn.effortUpdated()) {
-            turbineDebugHPInTemp = phasedWater.getTemperature(
+            turbineDebugHPInTemp = Water.INSTANCE.getTemperature(
                     turbineHighPressureIn.getHeatEnergy(),
                     turbineHighPressureIn.getEffort());
         }
         // Same for Out temperature
         if (turbineHighPressureMidOut.heatEnergyUpdated(turbineHighPressureSecond)
                 && turbineHighPressureMidOut.effortUpdated()) {
-            turbineDebugHPOutTemp = phasedWater.getTemperature(
+            turbineDebugHPOutTemp = Water.INSTANCE.getTemperature(
                     turbineHighPressureMidOut.getHeatEnergy(),
                     turbineHighPressureMidOut.getEffort());
         }
@@ -5561,7 +5558,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
         // this temperature is always around vaccum staturation.
         if (turbineLowPressureMidIn.heatEnergyUpdated(turbineLowPressureStage[0])
                 && turbineLowPressureMidIn.effortUpdated()) {
-            turbineDebugLPInTemp = phasedWater.getTemperature(
+            turbineDebugLPInTemp = Water.INSTANCE.getTemperature(
                     turbineLowPressureMidIn.getHeatEnergy(),
                     turbineLowPressureMidIn.getEffort());
         }
@@ -5570,7 +5567,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
         // HP Turbine
         if (turbineReheater.getPhasedNode(PhasedSuperheater.SECONDARY_IN)
                 .effortUpdated()) {
-            turbineHPOutSatTemp = phasedWater.getSaturationTemperature(
+            turbineHPOutSatTemp = Water.INSTANCE.getSaturationTemperature(
                     turbineReheater.getPhasedNode(
                             PhasedSuperheater.SECONDARY_IN).getEffort());
         }
@@ -5730,7 +5727,7 @@ public class ThermalLayout extends Subsystem implements Runnable {
                     // with the use of the pressure on the node.
                     outputValues.setParameterValue("Loop" + (idx + 1)
                             + "#ReactorOutTemperature",
-                            phasedWater.getTemperature(
+                            Water.INSTANCE.getTemperature(
                                     loopNodeDrumFromReactor[idx].getHeatEnergy(
                                             loopEvaporator[idx]),
                                     loopNodeDrumFromReactor[idx].getEffort()

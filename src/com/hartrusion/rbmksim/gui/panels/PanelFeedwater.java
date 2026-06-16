@@ -556,9 +556,9 @@ public class PanelFeedwater extends AbstractPanelWidget
         add(chornobylGaugeFeed1Temp, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 34, -1, -1));
 
         chornobylGaugeFeed1Flow.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        chornobylGaugeFeed1Flow.setChornobylMaximum(1800.0F);
+        chornobylGaugeFeed1Flow.setChornobylMaximum(700.0F);
         chornobylGaugeFeed1Flow.setChornobylMinimum(0.0F);
-        chornobylGaugeFeed1Flow.setChornobylTicks(new float[] {0.0f, 500.0f, 1000.0f, 1600.0f});
+        chornobylGaugeFeed1Flow.setChornobylTicks(new float[] {0.0f, 200.0f, 400.0f, 600.0f});
         chornobylGaugeFeed1Flow.setChornobylUnitText("kg/s");
         add(chornobylGaugeFeed1Flow, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 4, -1, -1));
 
@@ -585,9 +585,9 @@ public class PanelFeedwater extends AbstractPanelWidget
         add(chornobylGaugeFeed2Temp, new org.netbeans.lib.awtextra.AbsoluteConstraints(252, 34, -1, -1));
 
         chornobylGaugeFeed2Flow.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        chornobylGaugeFeed2Flow.setChornobylMaximum(1800.0F);
+        chornobylGaugeFeed2Flow.setChornobylMaximum(700.0F);
         chornobylGaugeFeed2Flow.setChornobylMinimum(0.0F);
-        chornobylGaugeFeed2Flow.setChornobylTicks(new float[] {0.0f, 500.0f, 1000.0f, 1600.0f});
+        chornobylGaugeFeed2Flow.setChornobylTicks(new float[] {0.0f, 200.0f, 400.0f, 600.0f});
         chornobylGaugeFeed2Flow.setChornobylUnitText("kg/s");
         add(chornobylGaugeFeed2Flow, new org.netbeans.lib.awtextra.AbsoluteConstraints(252, 4, -1, -1));
 

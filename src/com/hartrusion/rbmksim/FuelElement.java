@@ -62,7 +62,28 @@ public class FuelElement extends ReactorElement {
     /**
      * Power in Megawatts when having full neutron flux of 100 %
      */
-    private static final double FULL_FLUX_POWER = 3200;
+    public static final double FULL_FLUX_POWER = 3200;
+
+    private double fluxToPower;
+    private double localIdlePower;
+
+    /**
+     * Fraction of the neutron flux that is distributed among the fuel elements
+     * using their affection value. The remaining fraction (1 - DISTRIBUTED_FLUX)
+     * is applied directly as fission power, independent of the affection. The
+     * affection is therefore only used to redistribute this fraction of the
+     * power without changing the overall amount.
+     */
+    private static final double DISTRIBUTED_FLUX = 0.4;
+
+    /**
+     * Manipulates the time the decay heat goes down so the decay heat will be 
+     * available much longer. This allows less waiting for full load and at the 
+     * same time causes problems when having a coolant problem accident, making 
+     * the heat not disappear that fast and cooling of the reactor is required
+     * for a way longer period of time.
+     */
+    private final double DECAY_DOWN_MODIFIER = 0.07;
     
     /**
      * Fraction of thermal power that will be delayed as it occurs by delayed
@@ -88,9 +109,31 @@ public class FuelElement extends ReactorElement {
 
     /**
      * Global neutron flux value, it is the same for all fuel elements so 
-     * a static variable is used.
+     * a static variable is used. From 0 to 100 %
      */
     private static double globalFlux;
+
+    /**
+     * Local neutron flux for this element in the same range of the global flux,
+     * it consideres the affection distribution and the total number of rods 
+     * in the core. The sum of all localFlux values is globalFlux.
+     */
+    private double localFlux;
+
+    private double localAffection;
+
+    /**
+     * Neutron flux on this fuel rod.
+     */
+    private double rodFlux;
+
+    /**
+     * Average affection over all fuel elements. It is used to normalize the
+     * affection based distribution so the affection only redistributes power
+     * without changing the overall amount. It is the same for all elements so
+     * a static variable is used.
+     */
+    private static double averageAffection;
 
     private double xFirstDelay;
 
@@ -140,17 +183,23 @@ public class FuelElement extends ReactorElement {
 
     private final String propertyTemperature;
     // private final String propertyFlow;
-    private final String propertyAffection;
+    private final String propertyLocalAffection;
+    private final String propertyFissionPower;
 
     public FuelElement(int x, int y) {
         super(x, y);
 
         propertyTemperature = "Fuel" + (100 * x + y) + "#Temperature";
-        propertyAffection = "Fuel" + (100 * x + y) + "#Affection";
+        propertyLocalAffection = "Fuel" + (100 * x + y) + "#LocalAffection";
+        propertyFissionPower = "Fuel" + (100 * x + y) + "#FissionPower";
         //propertyFlow = "Fuel" + x + "-" + y + "#Flow";
 
         // Assign loop by given coordinates.
         loop = ChannelData.getLoop(x, y);
+
+        // Calculate factors for megawatt out of flux.
+        fluxToPower = (FULL_FLUX_POWER - IDLE_HEAT) * 100;
+        localIdlePower = IDLE_HEAT / 376;
 
         // Generate instances
         toReactorConverter = new PhasedHeatFluidConverter(Water.INSTANCE);
@@ -327,6 +376,27 @@ public class FuelElement extends ReactorElement {
     }
 
     /**
+     * Sets the average affection over all fuel elements. This is needed to
+     * normalize the affection based distribution of the fission power so the
+     * affection only redistributes the power without changing the total amount.
+     *
+     * @param average Average affection (0..1) over all fuel elements
+     */
+    public static void applyAverageAffection(double average) {
+        averageAffection = average;
+    }
+
+    /**
+     * Current fission power of this fuel element, given in % in the same unit
+     * as the neutron flux and already considering the affection distribution.
+     *
+     * @return Fission power in %
+     */
+    public double getFissionPower() {
+        return fissionPower;
+    }
+
+    /**
      * Get the temperature on this fuel element.
      *
      * @return Temperature in Kelvin
@@ -349,7 +419,9 @@ public class FuelElement extends ReactorElement {
         outputValues.setParameterValue(
                 propertyTemperature, thermalCapacity.getEffort());
         outputValues.setParameterValue(
-                propertyAffection, affection);
+                propertyLocalAffection, localAffection);
+        outputValues.setParameterValue(
+                propertyFissionPower, fissionPower);
     }
 
     /**
@@ -359,12 +431,37 @@ public class FuelElement extends ReactorElement {
     public void calculationStepPowerModel() {
         double dXFirstDelay, dXDelayedPower;
 
-        // There are 376 fuel elements. 
-        dXFirstDelay = (globalFlux * P_DECAY / 376.0 - xFirstDelay) / T_DECAY;
+        // Calculate a local affection value based on distribution of control
+        // rods, this will influence the power generated by each fuel rod.
+        if (averageAffection > 0.0) {
+            localAffection = affection / averageAffection;
+        } else {
+            localAffection = 1.0;
+        }
+
+        // There are 376 fuel elements in the core. Calculate the flux on this
+        // fuel element considering the number of rods and the current 
+        // distribution.
+        localFlux = (globalFlux * (1.0 - DISTRIBUTED_FLUX)
+                + globalFlux * DISTRIBUTED_FLUX * localAffection) / 376.0;
+
+        dXFirstDelay = (localFlux * P_DECAY - xFirstDelay) / T_DECAY;
+
         dXDelayedPower = (xFirstDelay - xDelayedPower) / T_DECAY;
 
         // Forward Euler
         xFirstDelay += dXFirstDelay * stepTime;
-        xDelayedPower += dXDelayedPower * stepTime;
+        if (dXDelayedPower < 0.0) {
+            // decay heat will be present way longer than it takes time 
+            // to build it up.
+            xDelayedPower += dXDelayedPower * stepTime
+                    * DECAY_DOWN_MODIFIER;
+        } else {
+            xDelayedPower += dXDelayedPower * stepTime;
+        }
+
+        rodFlux = localFlux * (1-P_DECAY) + xDelayedPower;
+
+        fissionPower = rodFlux * fluxToPower + localIdlePower;
     }
 }

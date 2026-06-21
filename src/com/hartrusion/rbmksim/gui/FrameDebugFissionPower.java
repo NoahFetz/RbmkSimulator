@@ -23,11 +23,11 @@ import java.beans.PropertyChangeEvent;
  *
  * @author Viktor Alexander Hartung
  */
-public class FrameDebugAffection extends javax.swing.JFrame implements UpdateReceiver {
+public class FrameDebugFissionPower extends javax.swing.JFrame implements UpdateReceiver {
     /**
-     * Creates new form FrameDebugAffection
+     * Creates new form FrameDebugFissionPower
      */
-    public FrameDebugAffection() {
+    public FrameDebugFissionPower() {
         initComponents();
     }
 
@@ -43,9 +43,10 @@ public class FrameDebugAffection extends javax.swing.JFrame implements UpdateRec
         panelCoreDebugValues1 = new com.hartrusion.rbmksim.gui.PanelCoreDebugValues();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Local fuel rod affection values");
+        setTitle("Fission power per fuel rod (MW)");
 
-        panelCoreDebugValues1.setSuffix("LocalAffection");
+        panelCoreDebugValues1.setSuffix("FissionPower");
+        panelCoreDebugValues1.setToolTipText("");
         panelCoreDebugValues1.setValueFormat("%.3f");
         getContentPane().add(panelCoreDebugValues1, java.awt.BorderLayout.CENTER);
 
@@ -65,7 +66,7 @@ public class FrameDebugAffection extends javax.swing.JFrame implements UpdateRec
     public void updateComponent(String propertyName, Object newValue) {
 
     }
-
+    
     @Override
     public void updateComponent(String propertyName, double newValue) {
         panelCoreDebugValues1.updateComponent(propertyName, newValue);
@@ -73,6 +74,6 @@ public class FrameDebugAffection extends javax.swing.JFrame implements UpdateRec
 
     @Override
     public void updateComponent(String propertyName, boolean newValue) {
- 
+
     }
 }

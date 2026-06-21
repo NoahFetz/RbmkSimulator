@@ -109,6 +109,7 @@ public class ControlPanel extends javax.swing.JFrame implements
     private InternalFrameCoreActivity coreActivity2;
 
     private FrameDebugAffection frameDebugAffection;
+    private FrameDebugFissionPower frameDebugPower;
 
     /**
      * Creates new form ControlPanel
@@ -207,6 +208,7 @@ public class ControlPanel extends javax.swing.JFrame implements
         jMenuItemDebugTurbineLPTemp = new javax.swing.JMenuItem();
         jSeparator9 = new javax.swing.JPopupMenu.Separator();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jMenuHelp = new javax.swing.JMenu();
         jMenuAbout = new javax.swing.JMenuItem();
         jMenuItemTurbineHelp = new javax.swing.JMenuItem();
@@ -504,6 +506,10 @@ public class ControlPanel extends javax.swing.JFrame implements
         jMenuItem1.setText("Core: Affection Values");
         jMenuItem1.addActionListener(this::jMenuItem1ActionPerformed);
         jMenuSecret.add(jMenuItem1);
+
+        jMenuItem3.setText("Core: Thermal Power");
+        jMenuItem3.addActionListener(this::jMenuItem3ActionPerformed);
+        jMenuSecret.add(jMenuItem3);
 
         jMenuBar1.add(jMenuSecret);
 
@@ -1516,6 +1522,21 @@ public class ControlPanel extends javax.swing.JFrame implements
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        if (frameDebugPower == null) {
+            frameDebugPower = new FrameDebugFissionPower();
+            java.awt.EventQueue.invokeLater(() -> {
+                frameDebugPower.setVisible(true);
+            });
+            frameDebugPower.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent evt) {
+                    frameDebugPower = null;
+                }
+            });
+        }
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
     /**
      * Makes some initializations to the mnemonic frame object and add it to the
      * list to have a reference to the created instance.
@@ -1663,6 +1684,7 @@ public class ControlPanel extends javax.swing.JFrame implements
     private javax.swing.JMenu jMenuHelp;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItemAuxCond;
     private javax.swing.JMenuItem jMenuItemBlowdown;
     private javax.swing.JMenuItem jMenuItemCondensation;
@@ -1844,6 +1866,9 @@ public class ControlPanel extends javax.swing.JFrame implements
         }
         if (frameDebugAffection != null) {
             frameDebugAffection.updateComponent(propertyName, newValue);
+        }
+        if (frameDebugPower != null) {
+            frameDebugPower.updateComponent(propertyName, newValue);
         }
     }
 

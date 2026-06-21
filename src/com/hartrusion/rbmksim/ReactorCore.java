@@ -508,8 +508,19 @@ public class ReactorCore extends Subsystem implements Runnable {
             graphiteModel.run();
         }
         
+        // Compute the true average affection over all fuel elements and make
+        // it available so each element can normalize its affection based
+        // fission power distribution.
+        double totalAffection = 0.0;
+        for (FuelElement f : fuelElements) {
+            totalAffection += f.getAffection();
+        }
+        FuelElement.applyAverageAffection(
+                totalAffection / fuelElements.size());
+
         for (FuelElement f : fuelElements) {
             f.applyNeutronFlux(neutronFluxModel.getYNeutronFlux());
+            f.calculationStepPowerModel();
         }
 
         alarmUpdater.invokeAll();

@@ -114,15 +114,6 @@ public class NeutronFluxModel implements Runnable {
      * Time constant for the DT1 part of the control rod movement.
      */
     private final double T_DIFF_RODS = 5.0;
-    
-    /**
-     * Manipulates the time the decay heat goes down so the decay heat will be 
-     * available much longer. This allows less waiting for full load and at the 
-     * same time causes problems when having a coolant problem accident, making 
-     * the heat not disappear that fast and cooling of the reactor is required
-     * for a way longer period of time.
-     */
-    private final double DECAY_DOWN_MODIFIER = 0.07;
 
     /**
      * Time constant for filtering the neutron rate output, there is a need for

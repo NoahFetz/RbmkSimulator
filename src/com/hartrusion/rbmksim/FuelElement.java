@@ -46,6 +46,36 @@ import com.hartrusion.modeling.phasedfluid.Water;
  * @author Viktor Alexander Hartung
  */
 public class FuelElement extends ReactorElement {
+    private double stepTime = 0.1;
+    
+    /**
+     * Besides decay heat, the core will always produce the set amount of heat.
+     * A value of 5.6 MW was decided to be fine, however, this will take a long
+     * time to heat up things even with the way smaller masses here. A higher
+     * value is chosen to get a better simulation experience. This allows
+     * pressure buildup to be observed even without any neutron flux. It was 48
+     * MW at some point but, this also comes with the downside that the aux 
+     * condensers are too small for 48 MW idle heat.
+     */
+    public static final double IDLE_HEAT = 5.6;
+    
+    /**
+     * Power in Megawatts when having full neutron flux of 100 %
+     */
+    private static final double FULL_FLUX_POWER = 3200;
+    
+    /**
+     * Fraction of thermal power that will be delayed as it occurs by delayed
+     * decay instead of the uranium fission. This will be the part that is still
+     * there and slowly decays after scram.
+     */
+    private final double P_DECAY = 0.062;
+
+    /**
+     * Time constant (seconds) for the delayed thermal heat production.
+     */
+    private final double T_DECAY = 120;
+    
 
     private double maxSumOfAffections = 0.0;
 
@@ -55,6 +85,22 @@ public class FuelElement extends ReactorElement {
      * Normalized value between 0..1
      */
     private double affection = 0.0;
+
+    /**
+     * Global neutron flux value, it is the same for all fuel elements so 
+     * a static variable is used.
+     */
+    private static double globalFlux;
+
+    private double xFirstDelay;
+
+    private double xDelayedPower;
+
+    /**
+     * Fission power given in % in same unit as neutron flux. This is already 
+     * considering the affection value.
+     */
+    private double fissionPower;
 
     // Network part for the hydraulic part
     private final HeatFrictionedFlowResistance flowResistance
@@ -92,15 +138,16 @@ public class FuelElement extends ReactorElement {
      */
     private int loop;
 
-    /**
-     * Used to generate various signal names and so on
-     */
-    private String prefix;
+    private final String propertyTemperature;
+    // private final String propertyFlow;
+    private final String propertyAffection;
 
     public FuelElement(int x, int y) {
         super(x, y);
 
-        prefix = "Fuel" + x + "-" + y;
+        propertyTemperature = "Fuel" + (100 * x + y) + "#Temperature";
+        propertyAffection = "Fuel" + (100 * x + y) + "#Affection";
+        //propertyFlow = "Fuel" + x + "-" + y + "#Flow";
 
         // Assign loop by given coordinates.
         loop = ChannelData.getLoop(x, y);
@@ -199,6 +246,9 @@ public class FuelElement extends ReactorElement {
     /**
      * Adds an affection and sums it up. Each fuel element then knows the total
      * affection that can be applied to it at any time.
+     * <p>
+     * This is called during initialization from multiple loops, generating the
+     * total value at the end of the initialization.
      *
      * @param affection
      */
@@ -207,19 +257,20 @@ public class FuelElement extends ReactorElement {
     }
 
     /**
-     * Called by each control rod, it will add its part to this fuel element.
+     * Called before next calculation to prepare sum up of the values
+     */
+    public void prepareAffectionCalculation() {
+        sumOfAffections = 0;
+    }
+
+    /**
+     * Called by each control rod that affects this element, it will add its 
+     * part to this fuel element.
      *
      * @param affection
      */
     public void addAffection(double affection) {
         sumOfAffections += affection;
-    }
-
-    /**
-     * Called before next calculation to prepare sum up of the values
-     */
-    public void prepareAffectionCalculation() {
-        sumOfAffections = 0;
     }
 
     /**
@@ -250,12 +301,12 @@ public class FuelElement extends ReactorElement {
 
     /**
      * Called from the thermal layout during the network setup process, requires
-     * this fuel element to be initialized already. It connects the elements 
-     * to the thermal network.
-     * 
+     * this fuel element to be initialized already. It connects the elements to
+     * the thermal network.
+     *
      * @param distributorNode
      * @param drumNode
-     * @param poolNode 
+     * @param poolNode
      */
     public void connectTo(HeatNode distributorNode,
             PhasedClosedSteamedReservoir steamDrum, PhasedNode poolNode) {
@@ -271,8 +322,8 @@ public class FuelElement extends ReactorElement {
      *
      * @param flux Neutron Flux between 0..100 %
      */
-    public void applyNeutronFlux(double flux) {
-        // Todo: Set to fuel thermal source
+    public static void applyNeutronFlux(double flux) {
+        globalFlux = flux;
     }
 
     /**
@@ -288,8 +339,32 @@ public class FuelElement extends ReactorElement {
         thermalLift.setEffort(5e4); // todo, just a constant for now
     }
 
-    public void sendMeasuremetData() {
-        // Todo: Send Temperature, maybe other things also additonally.
+    /**
+     * Gains data from the model, saves them to class fields and sends the
+     * values to the parameter handler for further use. This is called right
+     * after the model was called in the thermal layout as it's related to the
+     * thermal part.
+     */
+    public void updateMeasurementData() {
+        outputValues.setParameterValue(
+                propertyTemperature, thermalCapacity.getEffort());
+        outputValues.setParameterValue(
+                propertyAffection, affection);
     }
 
+    /**
+     * Called from the thermal layout after the model was called, it will do the
+     * calculations for the power model, which is the part that generates the heat.
+     */
+    public void calculationStepPowerModel() {
+        double dXFirstDelay, dXDelayedPower;
+
+        // There are 376 fuel elements. 
+        dXFirstDelay = (globalFlux * P_DECAY / 376.0 - xFirstDelay) / T_DECAY;
+        dXDelayedPower = (xFirstDelay - xDelayedPower) / T_DECAY;
+
+        // Forward Euler
+        xFirstDelay += dXFirstDelay * stepTime;
+        xDelayedPower += dXDelayedPower * stepTime;
+    }
 }

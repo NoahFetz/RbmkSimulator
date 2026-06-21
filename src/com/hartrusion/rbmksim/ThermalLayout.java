@@ -487,7 +487,6 @@ public class ThermalLayout extends Subsystem implements Runnable {
 
     private double voiding = 0;
     private double coreTemp = 200;
-    private final double[] thermalPower = new double[]{2.4e6, 2.4e6};
 
     private double turbineDebugHPInTemp;
     private double turbineDebugHPOutTemp;
@@ -5087,13 +5086,6 @@ public class ThermalLayout extends Subsystem implements Runnable {
         // with 2100000 J/kg makes 2149980 J/kg energy per mass. 
         // 2149980 J/kg * 1555.56 kg/s = 3344 MW
 
-        // Get the thermal power output per side from the core model. Limit it
-        // to 10 gigawatts so something can be seen on prompt neutron excursion.
-        thermalPower[0] = Math.min(
-                core.getNeutronModel().getYThermalPower1(), 1e4);
-        thermalPower[1] = Math.min(
-                core.getNeutronModel().getYThermalPower1(), 1e4);
-
         // Fire property change update on change of startup pressure setpoint
         // selection.
         if (startupPressureSetpointActive != oldStartupPressureSetpointActive) {
@@ -5109,8 +5101,8 @@ public class ThermalLayout extends Subsystem implements Runnable {
         if (startupPressureSetpointActive) {
             // The pressure setpoint does not consider the idle power so the 
             // display value is also used here.
-            setpointDrumPressure.setInput(getPressureSetpoint(
-                    core.getNeutronModel().getYThermalPowerDisplayed())
+            setpointDrumPressure.setInput(getPressureSetpoint(0) // 0 ersetzen!
+                    // core.getYThermalPowerDisplayed())
                     + setpointDrumPressureOffset.getOutput());
         } else {
             setpointDrumPressure.setInput(PRESSURE_SETPOINT_UPPER

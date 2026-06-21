@@ -507,6 +507,10 @@ public class ReactorCore extends Subsystem implements Runnable {
             graphiteModel.setInputs(neutronFluxModel.getYNeutronFlux());
             graphiteModel.run();
         }
+        
+        for (FuelElement f : fuelElements) {
+            f.applyNeutronFlux(neutronFluxModel.getYNeutronFlux());
+        }
 
         alarmUpdater.invokeAll();
 
@@ -585,8 +589,8 @@ public class ReactorCore extends Subsystem implements Runnable {
         //            rodAbsorption);
         outputValues.setParameterValue("Reactor#Xenon",
                 xenonModel.getYXenon());
-        outputValues.setParameterValue("Reactor#ThermalPowerDisplay",
-                neutronFluxModel.getYThermalPowerDisplayed());
+        //outputValues.setParameterValue("Reactor#ThermalPowerDisplay",
+        //        neutronFluxModel.getYThermalPowerDisplayed());
         outputValues.setParameterValue("Reactor#k",
                 neutronFluxModel.getYK());
         outputValues.setParameterValue("Reactor#Reactivity",
@@ -1167,6 +1171,16 @@ public class ReactorCore extends Subsystem implements Runnable {
     }
 
     /**
+     * Calls all fuel rods and lets them send the model data which is obtained 
+     * from the dynamic model of the thermal hydraulic behavior.
+     */
+    public void updateFuelMeasurementData() {
+        for (FuelElement f : fuelElements) {
+            f.updateMeasurementData();
+        }
+    }
+
+    /**
      * Checks the plant state that it is in a state where it allows the RPS to
      * be cleared. Note that the Alarm system is a trigger-event only, if an
      * alarm does shut down the reactor, it does not prevent it to be
@@ -1228,6 +1242,9 @@ public class ReactorCore extends Subsystem implements Runnable {
         for (ControlRod r : controlRods) {
             r.registerValueHandler(output);
         }
+        for (FuelElement f : fuelElements) {
+            f.registerValueHandler(output);
+        }
     }
 
     public NeutronFluxModel getNeutronModel() {
@@ -1238,7 +1255,7 @@ public class ReactorCore extends Subsystem implements Runnable {
     public void saveTo(SaveGame save) {
         // Generate a save object containint the reactor state
         ReactorState s = new ReactorState();
-        for (int idx = 0; idx < 9; idx++) {
+        for (int idx = 0; idx < 7; idx++) {
             s.setxNeutronFluxModel(
                     neutronFluxModel.getStateSpaceVariable(idx), idx);
         }
@@ -1280,7 +1297,7 @@ public class ReactorCore extends Subsystem implements Runnable {
         ReactorState rs = save.getReactorState();
 
         coreOnlySimulation = save.isCoreOnlySimulation();
-        for (int idx = 0; idx < 9; idx++) {
+        for (int idx = 0; idx < 7; idx++) {
             neutronFluxModel.setStateSpaceVariable(idx, rs.getxNeutronFluxModel(idx));
         }
         neutronFluxModel.setPromptExcursion(false);

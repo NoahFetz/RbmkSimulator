@@ -38,23 +38,6 @@ package com.hartrusion.rbmksim;
  * @author Viktor Alexander Hartung
  */
 public class NeutronFluxModel implements Runnable {
-
-    /**
-     * Power in Megawatts when having full neutron flux of 100 %
-     */
-    private static final double FULL_FLUX_POWER = 3200;
-
-    /**
-     * Besides decay heat, the core will always produce the set amount of heat.
-     * A value of 5.6 MW was decided to be fine, however, this will take a long
-     * time to heat up things even with the way smaller masses here. A higher
-     * value is chosen to get a better simulation experience. This allows
-     * pressure buildup to be observed even without any neutron flux. It was 48
-     * MW at some point but, this also comes with the downside that the aux 
-     * condensers are too small for 48 MW idle heat.
-     */
-    public static final double IDLE_HEAT = 5.6;
-
     /**
      * Step time in Seconds
      */
@@ -94,6 +77,21 @@ public class NeutronFluxModel implements Runnable {
      * with this factor, ultimately resulting in the reactivity of the reactor.
      */
     private final double K_REACTIVITY = 0.0005;
+    
+    /**
+     * Fraction of reactivity that will be instantly available as neutrons,
+     * directly changing the effective neutron multiplication factor. The other
+     * part will be delayed with T_DELAYED_REACTIVITY. This is not to be
+     * confused with the beta value, this will affect the dynamics of the system
+     * and the reaction to the input.
+     */
+    private final double P_INSTANT = 0.6;
+    
+    /**
+     * Time constant for the reactivity part 1-P_INSTANT which will be available
+     * with a delay.
+     */
+    private final double T_DELAYED_REACTIVITY = 16.0;
 
     /**
      * The return value of criticalityFunction will be multiplied by this,
@@ -116,33 +114,6 @@ public class NeutronFluxModel implements Runnable {
      * Time constant for the DT1 part of the control rod movement.
      */
     private final double T_DIFF_RODS = 5.0;
-
-    /**
-     * Fraction of reactivity that will be instantly available as neutrons,
-     * directly changing the effective neutron multiplication factor. The other
-     * part will be delayed with T_DELAYED_REACTIVITY. This is not to be
-     * confused with the beta value, this will affect the dynamics of the system
-     * and the reaction to the input.
-     */
-    private final double P_INSTANT = 0.6;
-
-    /**
-     * Time constant for the reactivity part 1-P_INSTANT which will be available
-     * with a delay.
-     */
-    private final double T_DELAYED_REACTIVITY = 16.0;
-    
-    /**
-     * Fraction of thermal power that will be delayed as it occurs by delayed
-     * decay instead of the uranium fission. This will be the part that is still
-     * there and slowly decays after scram.
-     */
-    private final double P_DECAY = 0.062;
-
-    /**
-     * Time constant (seconds) for the delayed thermal heat production.
-     */
-    private final double T_DECAY = 120;
     
     /**
      * Manipulates the time the decay heat goes down so the decay heat will be 
@@ -207,28 +178,12 @@ public class NeutronFluxModel implements Runnable {
      */
     private double xDeltaRods;
 
-    /**
-     * State space variable. Represents the thermal power from decay that will
-     * occur later
-     */
-    private double xDelayedThermalPower;
-
-    /**
-     * State space variable. Helper for realizing the T2 function on decay heat.
-     */
-    private double xFirstDelay;
-
     private double xNeutronRateDelay;
 
     private double yNeutronFlux;
     private double yK;
     private double yReactivity;
     private double yNeutronRate, yNeutronRateFiltered;
-    private double yThermalPower1, yThermalPower2; // In Megawatts
-    private double yThermalPower;
-    
-    private double mDisplay, bDisplay;
-
     /**
      * For displaying small flux changes, we have this value that displays
      * log10(Flux/100). Other way round will be Flux = 10^(value+1).
@@ -236,9 +191,6 @@ public class NeutronFluxModel implements Runnable {
     private double yNeutronFluxLog;
     
     NeutronFluxModel() {
-        // Generate linear coefficients to hide the idle heat from display.
-        mDisplay = 3200 / (3200 - IDLE_HEAT);
-        bDisplay = - mDisplay * IDLE_HEAT;
     }
 
     /**
@@ -263,8 +215,6 @@ public class NeutronFluxModel implements Runnable {
         double dXNeutronFlux;
         double dXDelayedCriticality;
         double dXDeltaRods;
-        double dXFirstDelay;
-        double dXDelayedThermalPower;
         double dXNeutronRateDelay;
         double reactivity, dynamisedReactivity, critFunctionResult,
                 posFeedbackMultiplier;
@@ -308,13 +258,6 @@ public class NeutronFluxModel implements Runnable {
 
         dXDeltaRods = (uAbsorberRods - xDeltaRods) / T_DIFF_RODS;
 
-        // here: times p decay and make a 0...3200 MW range from 0..100 %
-        dXFirstDelay = (xNeutronFlux
-                * P_DECAY * (FULL_FLUX_POWER - IDLE_HEAT) / 200
-                - xFirstDelay) / T_DECAY;
-
-        dXDelayedThermalPower = (xFirstDelay - xDelayedThermalPower) / T_DECAY;
-
         dXNeutronRateDelay = (dXNeutronFlux - xNeutronRateDelay) / T_RATEFILTER;
 
         // Forward Euler
@@ -335,17 +278,6 @@ public class NeutronFluxModel implements Runnable {
         }
         xDelayedCriticality += dXDelayedCriticality * stepTime;
         xDeltaRods += dXDeltaRods * stepTime;
-        xFirstDelay += dXFirstDelay * stepTime;
-        if (!promptExcursion) {// freeze this effect on explosion
-            if (dXDelayedThermalPower < 0.0) {
-                // decay heat will be present way longer than it takes time 
-                // to build it up.
-                xDelayedThermalPower += dXDelayedThermalPower * stepTime
-                        * DECAY_DOWN_MODIFIER;
-            } else {
-                xDelayedThermalPower += dXDelayedThermalPower * stepTime;
-            }            
-        }
         xNeutronRateDelay += dXNeutronRateDelay * stepTime;
 
         // Update Output variables
@@ -368,25 +300,6 @@ public class NeutronFluxModel implements Runnable {
         }
 
         yNeutronFluxLog = Math.log10(xNeutronFlux / 100);
-
-        // Also limit the total thermal power output to 32.000 Megawatts 
-        // without considering idle heat.
-        // divided by 200 makes 100 % flux to 1 and divides by 2 for 2 sides.
-        // multiplied with full power we get a megawatt number per side here.
-        // The limitation to 15 GW with the reverse of the manipulation of the
-        // power display and idle heat half will make sure that the power to be 
-        // displayed is excacly 30.000.
-        yThermalPower1 = Math.min((15000 - bDisplay) / mDisplay - IDLE_HEAT/2,
-                xNeutronFlux * (1 - P_DECAY)
-                * (FULL_FLUX_POWER - IDLE_HEAT) / 200 * (1.0 + uSkew)
-                + xDelayedThermalPower
-                + IDLE_HEAT / 2);
-        yThermalPower2 = Math.min((15000 - bDisplay) / mDisplay - IDLE_HEAT/2,
-                xNeutronFlux * (1 - P_DECAY)
-                * (FULL_FLUX_POWER - IDLE_HEAT) / 200 * (1.0 - uSkew)
-                + xDelayedThermalPower
-                + IDLE_HEAT / 2);
-        yThermalPower = yThermalPower1 + yThermalPower2;
     }
 
     /**
@@ -462,39 +375,6 @@ public class NeutronFluxModel implements Runnable {
         return yNeutronFluxLog;
     }
 
-    /**
-     * Thermal power for loop 1, including the decay heat and half idle power.
-     * This is read by the thermal model and used for calculation of the
-     * evaporator element. Includes Idle heat.
-     *
-     * @return Power in Megawatts.
-     */
-    public double getYThermalPower1() {
-        return yThermalPower1;
-    }
-
-    /**
-     * Thermal power for loop 2, including the decay heat and half idle power.
-     * This is read by the thermal model and used for calculation of the
-     * evaporator element. Includes idle heat
-     * 
-     * @return Power in Megawatts.
-     */
-    public double getYThermalPower2() {
-        return yThermalPower2;
-    }
-
-    /**
-     * A faked value that does not consider the idle heat. This is used for the
-     * display value as we do not want the display on the core to show the
-     * megawatt value of idle heat.
-     *
-     * @return Power in Megawatts.
-     */
-    public double getYThermalPowerDisplayed() {      
-        return mDisplay * yThermalPower + bDisplay;
-    }
-
     public void setStepTime(double stepTime) {
         this.stepTime = stepTime;
     }
@@ -518,16 +398,12 @@ public class NeutronFluxModel implements Runnable {
             case 2 ->
                 xDeltaRods = x;
             case 3 ->
-                xDelayedThermalPower = x;
-            case 4 ->
-                xFirstDelay = x;
-            case 5 ->
                 xNeutronRateDelay = x;
-            case 6 ->
+            case 4 ->
                 uAbsorberRods = x;
-            case 7 ->
+            case 5 ->
                 uReactivity = x;
-            case 8 ->
+            case 6 ->
                 uSkew = x;
         }
     }
@@ -541,16 +417,12 @@ public class NeutronFluxModel implements Runnable {
             case 2:
                 return xDeltaRods;
             case 3:
-                return xDelayedThermalPower;
-            case 4:
-                return xFirstDelay;
-            case 5:
                 return xNeutronRateDelay;
-            case 6:
+            case 4:
                 return uAbsorberRods;
-            case 7:
+            case 5:
                 return uReactivity;
-            case 8:
+            case 6:
                 return uSkew;
         }
         throw new IllegalArgumentException("Provided index not exsisting.");

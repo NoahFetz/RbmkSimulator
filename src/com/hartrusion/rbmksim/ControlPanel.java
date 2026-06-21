@@ -108,6 +108,8 @@ public class ControlPanel extends javax.swing.JFrame implements
     private InternalFrameCoreActivity coreActivity1;
     private InternalFrameCoreActivity coreActivity2;
 
+    private FrameDebugAffection frameDebugAffection;
+
     /**
      * Creates new form ControlPanel
      */
@@ -203,7 +205,8 @@ public class ControlPanel extends javax.swing.JFrame implements
         jMenuItemDebugDiagramPreheaters = new javax.swing.JMenuItem();
         jMenuItemDebugTurbineHPTemp = new javax.swing.JMenuItem();
         jMenuItemDebugTurbineLPTemp = new javax.swing.JMenuItem();
-        jSeparator10 = new javax.swing.JPopupMenu.Separator();
+        jSeparator9 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenuHelp = new javax.swing.JMenu();
         jMenuAbout = new javax.swing.JMenuItem();
         jMenuItemTurbineHelp = new javax.swing.JMenuItem();
@@ -496,7 +499,11 @@ public class ControlPanel extends javax.swing.JFrame implements
         jMenuItemDebugTurbineLPTemp.setText("Turbine LP Temp (all)");
         jMenuItemDebugTurbineLPTemp.addActionListener(this::jMenuItemDebugTurbineLPTempActionPerformed);
         jMenuSecret.add(jMenuItemDebugTurbineLPTemp);
-        jMenuSecret.add(jSeparator10);
+        jMenuSecret.add(jSeparator9);
+
+        jMenuItem1.setText("Core: Affection Values");
+        jMenuItem1.addActionListener(this::jMenuItem1ActionPerformed);
+        jMenuSecret.add(jMenuItem1);
 
         jMenuBar1.add(jMenuSecret);
 
@@ -1494,6 +1501,21 @@ public class ControlPanel extends javax.swing.JFrame implements
         initializeDiagram(df);
     }//GEN-LAST:event_jMenuItemDebugTurbineLPTempActionPerformed
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        if (frameDebugAffection == null) {
+            frameDebugAffection = new FrameDebugAffection();
+            java.awt.EventQueue.invokeLater(() -> {
+                frameDebugAffection.setVisible(true);
+            });
+            frameDebugAffection.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent evt) {
+                    frameDebugAffection = null;
+                }
+            });
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     /**
      * Makes some initializations to the mnemonic frame object and add it to the
      * list to have a reference to the created instance.
@@ -1639,6 +1661,7 @@ public class ControlPanel extends javax.swing.JFrame implements
     private javax.swing.JMenu jMenuFile;
     private javax.swing.JMenuItem jMenuGlobalControl;
     private javax.swing.JMenu jMenuHelp;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItemAuxCond;
     private javax.swing.JMenuItem jMenuItemBlowdown;
@@ -1703,7 +1726,6 @@ public class ControlPanel extends javax.swing.JFrame implements
     private javax.swing.JMenu jMenuView;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
-    private javax.swing.JPopupMenu.Separator jSeparator10;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
@@ -1711,6 +1733,7 @@ public class ControlPanel extends javax.swing.JFrame implements
     private javax.swing.JPopupMenu.Separator jSeparator6;
     private javax.swing.JPopupMenu.Separator jSeparator7;
     private javax.swing.JPopupMenu.Separator jSeparator8;
+    private javax.swing.JPopupMenu.Separator jSeparator9;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 
@@ -1818,6 +1841,9 @@ public class ControlPanel extends javax.swing.JFrame implements
         }
         if (rodPositions != null) {
             rodPositions.updateComponent(propertyName, newValue);
+        }
+        if (frameDebugAffection != null) {
+            frameDebugAffection.updateComponent(propertyName, newValue);
         }
     }
 

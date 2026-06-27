@@ -31,6 +31,7 @@ import com.hartrusion.modeling.heatfluid.HeatVolumizedFlowResistance;
 import com.hartrusion.modeling.phasedfluid.PhasedClosedSteamedReservoir;
 import com.hartrusion.modeling.phasedfluid.PhasedEffortSource;
 import com.hartrusion.modeling.phasedfluid.PhasedExpandingThermalExchanger;
+import com.hartrusion.modeling.phasedfluid.PhasedExpandingThermalVolumeHandler;
 import com.hartrusion.modeling.phasedfluid.PhasedNode;
 import com.hartrusion.modeling.phasedfluid.Water;
 
@@ -46,19 +47,20 @@ import com.hartrusion.modeling.phasedfluid.Water;
  * @author Viktor Alexander Hartung
  */
 public class FuelElement extends ReactorElement {
+
     private double stepTime = 0.1;
-    
+
     /**
      * Besides decay heat, the core will always produce the set amount of heat.
      * A value of 5.6 MW was decided to be fine, however, this will take a long
      * time to heat up things even with the way smaller masses here. A higher
      * value is chosen to get a better simulation experience. This allows
      * pressure buildup to be observed even without any neutron flux. It was 48
-     * MW at some point but, this also comes with the downside that the aux 
+     * MW at some point but, this also comes with the downside that the aux
      * condensers are too small for 48 MW idle heat.
      */
     public static final double IDLE_HEAT = 5.6;
-    
+
     /**
      * Power in Megawatts when having full neutron flux of 100 %
      */
@@ -69,22 +71,22 @@ public class FuelElement extends ReactorElement {
 
     /**
      * Fraction of the neutron flux that is distributed among the fuel elements
-     * using their affection value. The remaining fraction (1 - DISTRIBUTED_FLUX)
-     * is applied directly as fission power, independent of the affection. The
-     * affection is therefore only used to redistribute this fraction of the
-     * power without changing the overall amount.
+     * using their affection value. The remaining fraction (1 -
+     * DISTRIBUTED_FLUX) is applied directly as fission power, independent of
+     * the affection. The affection is therefore only used to redistribute this
+     * fraction of the power without changing the overall amount.
      */
     private static final double DISTRIBUTED_FLUX = 0.4;
 
     /**
-     * Manipulates the time the decay heat goes down so the decay heat will be 
-     * available much longer. This allows less waiting for full load and at the 
-     * same time causes problems when having a coolant problem accident, making 
+     * Manipulates the time the decay heat goes down so the decay heat will be
+     * available much longer. This allows less waiting for full load and at the
+     * same time causes problems when having a coolant problem accident, making
      * the heat not disappear that fast and cooling of the reactor is required
      * for a way longer period of time.
      */
     private final double DECAY_DOWN_MODIFIER = 0.07;
-    
+
     /**
      * Fraction of thermal power that will be delayed as it occurs by delayed
      * decay instead of the uranium fission. This will be the part that is still
@@ -96,7 +98,6 @@ public class FuelElement extends ReactorElement {
      * Time constant (seconds) for the delayed thermal heat production.
      */
     private final double T_DECAY = 120;
-    
 
     private double maxSumOfAffections = 0.0;
 
@@ -108,15 +109,15 @@ public class FuelElement extends ReactorElement {
     private double affection = 0.0;
 
     /**
-     * Global neutron flux value, it is the same for all fuel elements so 
-     * a static variable is used. From 0 to 100 %
+     * Global neutron flux value, it is the same for all fuel elements so a
+     * static variable is used. From 0 to 100 %
      */
     private static double globalFlux;
 
     /**
      * Local neutron flux for this element in the same range of the global flux,
-     * it consideres the affection distribution and the total number of rods 
-     * in the core. The sum of all localFlux values is globalFlux.
+     * it consideres the affection distribution and the total number of rods in
+     * the core. The sum of all localFlux values is globalFlux.
      */
     private double localFlux;
 
@@ -130,8 +131,8 @@ public class FuelElement extends ReactorElement {
     /**
      * Average affection over all fuel elements. It is used to normalize the
      * affection based distribution so the affection only redistributes power
-     * without changing the overall amount. It is the same for all elements so
-     * a static variable is used.
+     * without changing the overall amount. It is the same for all elements so a
+     * static variable is used.
      */
     private static double averageAffection;
 
@@ -140,7 +141,7 @@ public class FuelElement extends ReactorElement {
     private double xDelayedPower;
 
     /**
-     * Fission power given in % in same unit as neutron flux. This is already 
+     * Fission power given in % in same unit as neutron flux. This is already
      * considering the affection value.
      */
     private double fissionPower;
@@ -182,14 +183,22 @@ public class FuelElement extends ReactorElement {
     private int loop;
 
     private final String propertyTemperature;
-    // private final String propertyFlow;
+    private final String propertyFlow;
+    private final String propertyVoiding;
     private final String propertyLocalAffection;
     private final String propertyFissionPower;
+
+    /**
+     * The calculation element used in the evaporator element.
+     */
+    private PhasedExpandingThermalVolumeHandler evapHandler;
 
     public FuelElement(int x, int y) {
         super(x, y);
 
         propertyTemperature = "Fuel" + (100 * x + y) + "#Temperature";
+        propertyFlow = "Fuel" + (100 * x + y) + "#Flow";
+        propertyVoiding = "Fuel" + (100 * x + y) + "#Voiding";
         propertyLocalAffection = "Fuel" + (100 * x + y) + "#LocalAffection";
         propertyFissionPower = "Fuel" + (100 * x + y) + "#FissionPower";
         //propertyFlow = "Fuel" + x + "-" + y + "#Flow";
@@ -278,7 +287,6 @@ public class FuelElement extends ReactorElement {
         evaporator.setThermalDimension(0.0745, 1.064, 5.5e6,
                 53.2, 1.0e4, 21.3);
 
-
         // Channel leakage: Represented with a valve to be able to set an amount
         // of leakage with the given characteristic. Worst leakage will be
         // on 64e5 Pa with 500 kg/s: 
@@ -294,6 +302,8 @@ public class FuelElement extends ReactorElement {
 
         channelMass.getHeatHandler()
                 .setInitialTemperature(273.15 + 25.3);
+
+        evapHandler = (PhasedExpandingThermalVolumeHandler) evaporator.getPhasedHandler();
     }
 
     /**
@@ -317,7 +327,7 @@ public class FuelElement extends ReactorElement {
     }
 
     /**
-     * Called by each control rod that affects this element, it will add its 
+     * Called by each control rod that affects this element, it will add its
      * part to this fuel element.
      *
      * @param affection
@@ -413,15 +423,19 @@ public class FuelElement extends ReactorElement {
     public void updateMeasurementData() {
         outputValues.setParameterValue(
                 propertyTemperature, thermalCapacity.getEffort() - 273.15);
-        // outputValues.setParameterValue(
-        //         propertyLocalAffection, localAffection);
+         outputValues.setParameterValue(
+                 propertyFlow, toReactorConverter.getFlow());
         outputValues.setParameterValue(
                 propertyFissionPower, fissionPower);
+        outputValues.setParameterValue(
+                propertyVoiding, evapHandler.getVoiding(1e5));
+
     }
 
     /**
-     * Called from the thermal layout after the model was called, it will do the
-     * calculations for the power model, which is the part that generates the heat.
+     * Called from the reactor core for each rod after the model was called, it
+     * will do the calculations for the power model, which is the part that
+     * generates the heat.
      */
     public void calculationStepPowerModel() {
         double dXFirstDelay, dXDelayedPower;
@@ -455,7 +469,7 @@ public class FuelElement extends ReactorElement {
             xDelayedPower += dXDelayedPower * stepTime;
         }
 
-        rodFlux = localFlux * (1-P_DECAY) + xDelayedPower;
+        rodFlux = localFlux * (1 - P_DECAY) + xDelayedPower;
 
         // Fission power consideres the idle power but does not display it,
         // it is added as an invisible energy not shown on the power display.

@@ -23,11 +23,11 @@ import java.beans.PropertyChangeEvent;
  *
  * @author Viktor Alexander Hartung
  */
-public class FrameDebugFuelTemperature extends javax.swing.JFrame implements UpdateReceiver {
+public class FrameDebugVoiding extends javax.swing.JFrame implements UpdateReceiver {
     /**
      * Creates new form FrameDebugAffection
      */
-    public FrameDebugFuelTemperature() {
+    public FrameDebugVoiding() {
         initComponents();
     }
 
@@ -43,9 +43,11 @@ public class FrameDebugFuelTemperature extends javax.swing.JFrame implements Upd
         panelCoreDebugValues1 = new com.hartrusion.rbmksim.gui.PanelCoreDebugValues();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Fuel Temperature");
+        setTitle("Voiding");
 
-        panelCoreDebugValues1.setValueFormat("%.1f");
+        panelCoreDebugValues1.setSuffix("Voiding");
+        panelCoreDebugValues1.setToolTipText("");
+        panelCoreDebugValues1.setValueFormat("%.4f");
         panelCoreDebugValues1.setPreferredSize(new java.awt.Dimension(779, 529));
         getContentPane().add(panelCoreDebugValues1, java.awt.BorderLayout.CENTER);
 

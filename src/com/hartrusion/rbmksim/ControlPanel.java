@@ -110,6 +110,8 @@ public class ControlPanel extends javax.swing.JFrame implements
 
     private FrameDebugFuelTemperature frameDebugTemperature;
     private FrameDebugFissionPower frameDebugPower;
+    private FrameDebugVoiding frameDebugVoiding;
+    private FrameDebugFlow frameDebugFlow;
 
     /**
      * Creates new form ControlPanel
@@ -209,6 +211,8 @@ public class ControlPanel extends javax.swing.JFrame implements
         jSeparator9 = new javax.swing.JPopupMenu.Separator();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
         jMenuHelp = new javax.swing.JMenu();
         jMenuAbout = new javax.swing.JMenuItem();
         jMenuItemTurbineHelp = new javax.swing.JMenuItem();
@@ -511,6 +515,14 @@ public class ControlPanel extends javax.swing.JFrame implements
         jMenuItem3.setToolTipText("");
         jMenuItem3.addActionListener(this::jMenuItem3ActionPerformed);
         jMenuSecret.add(jMenuItem3);
+
+        jMenuItem4.setText("Steam Voiding");
+        jMenuItem4.addActionListener(this::jMenuItem4ActionPerformed);
+        jMenuSecret.add(jMenuItem4);
+
+        jMenuItem5.setText("Flow");
+        jMenuItem5.addActionListener(this::jMenuItem5ActionPerformed);
+        jMenuSecret.add(jMenuItem5);
 
         jMenuBar1.add(jMenuSecret);
 
@@ -1538,6 +1550,36 @@ public class ControlPanel extends javax.swing.JFrame implements
         }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        if (frameDebugVoiding == null) {
+            frameDebugVoiding = new FrameDebugVoiding();
+            java.awt.EventQueue.invokeLater(() -> {
+                frameDebugVoiding.setVisible(true);
+            });
+            frameDebugVoiding.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent evt) {
+                    frameDebugVoiding = null;
+                }
+            });
+        }
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        if (frameDebugFlow == null) {
+            frameDebugFlow = new FrameDebugFlow();
+            java.awt.EventQueue.invokeLater(() -> {
+                frameDebugFlow.setVisible(true);
+            });
+            frameDebugFlow.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent evt) {
+                    frameDebugFlow = null;
+                }
+            });
+        }
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
     /**
      * Makes some initializations to the mnemonic frame object and add it to the
      * list to have a reference to the created instance.
@@ -1686,6 +1728,8 @@ public class ControlPanel extends javax.swing.JFrame implements
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItemAuxCond;
     private javax.swing.JMenuItem jMenuItemBlowdown;
     private javax.swing.JMenuItem jMenuItemCondensation;
@@ -1870,6 +1914,12 @@ public class ControlPanel extends javax.swing.JFrame implements
         }
         if (frameDebugPower != null) {
             frameDebugPower.updateComponent(propertyName, newValue);
+        }
+        if (frameDebugVoiding != null) {
+            frameDebugVoiding.updateComponent(propertyName, newValue);
+        }
+        if (frameDebugFlow != null) {
+            frameDebugFlow.updateComponent(propertyName, newValue);
         }
     }
 

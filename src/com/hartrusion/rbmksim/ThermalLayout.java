@@ -3948,8 +3948,6 @@ public class ThermalLayout extends Subsystem implements Runnable {
                 core.triggerAutoShutdown();
             }
         }); */
-        
-        
         // We need both alarms as the initial state can already be min2 and
         // min1 would be skipped that way.
         am.addAlarmAction(new AlarmAction(AlarmState.MIN2) {
@@ -5342,6 +5340,13 @@ public class ThermalLayout extends Subsystem implements Runnable {
                     turbineReheater.getPhasedNode(
                             PhasedSuperheater.SECONDARY_IN).getEffort());
         }
+
+        // Set the temperatures of the downcomers to the fuel elements via
+        // the reactor core class array that the fuel elements can read.
+        core.setDowncomerTemperature(
+                loopDownflow[0].getHeatHandler().getTemperature(), 0);
+        core.setDowncomerTemperature(
+                loopDownflow[1].getHeatHandler().getTemperature(), 1);
 
         // Update Alarms
         alarmUpdater.invokeAll();

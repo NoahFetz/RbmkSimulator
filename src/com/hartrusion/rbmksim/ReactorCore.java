@@ -104,12 +104,14 @@ public class ReactorCore extends Subsystem implements Runnable {
      * calculated by using the density in the evaporator elements.
      */
     private double voiding = 0;
-
+    
     /**
      * Core temperature in degrees Celsius, used to generate the negative
      * temperature coefficient.
      */
     private double coreTemp = 80;
+    
+    private final double downcomerTemperature[] = new double[2];
 
     private final NeutronFluxModel neutronFluxModel = new NeutronFluxModel();
     private final XenonModel xenonModel = new XenonModel();
@@ -518,9 +520,11 @@ public class ReactorCore extends Subsystem implements Runnable {
         FuelElement.applyAverageAffection(
                 totalAffection / fuelElements.size());
 
+        double thermalPowerDisplay = 0.0;
         for (FuelElement f : fuelElements) {
             f.applyNeutronFlux(neutronFluxModel.getYNeutronFlux());
             f.calculationStepPowerModel();
+            thermalPowerDisplay += f.getFissionPowerForDisplay();
         }
 
         alarmUpdater.invokeAll();
@@ -600,8 +604,8 @@ public class ReactorCore extends Subsystem implements Runnable {
         //            rodAbsorption);
         outputValues.setParameterValue("Reactor#Xenon",
                 xenonModel.getYXenon());
-        //outputValues.setParameterValue("Reactor#ThermalPowerDisplay",
-        //        neutronFluxModel.getYThermalPowerDisplayed());
+        outputValues.setParameterValue("Reactor#ThermalPowerDisplay",
+                thermalPowerDisplay);
         outputValues.setParameterValue("Reactor#k",
                 neutronFluxModel.getYK());
         outputValues.setParameterValue("Reactor#Reactivity",
@@ -1035,6 +1039,15 @@ public class ReactorCore extends Subsystem implements Runnable {
         for (ControlRod rod : controlRods) {
             rod.initAffection(fuelElements);
         }
+        
+        // Make the temperature of the downcomers available to all fuel elements
+        // by passing the reference to the array to the fuel elements.
+        for (FuelElement fuel : fuelElements) {
+            fuel.setDowncomerTemperatureReference(downcomerTemperature);
+        }
+        
+        downcomerTemperature[0] = 260;
+        downcomerTemperature[1] = 260;
 
         setpointPowerGradient.setUpperLimit(0.35);
         setpointPowerGradient.setMaxRate(0.1);
@@ -1189,6 +1202,18 @@ public class ReactorCore extends Subsystem implements Runnable {
         for (FuelElement f : fuelElements) {
             f.updateMeasurementData();
         }
+    }
+    
+    /**
+     * Called from the thermal layout as soon as the temperature in the down
+     * pipes from drum to MCPs is known, will be used by all the fuel cells to
+     * determine the thermal lift.
+     * 
+     * @param value Temperature in K
+     * @param loopIndex 0: Loop 1, 1: Loop 2
+     */
+    public void setDowncomerTemperature(double value, int loopIndex) {
+        downcomerTemperature[loopIndex] = value;
     }
 
     /**

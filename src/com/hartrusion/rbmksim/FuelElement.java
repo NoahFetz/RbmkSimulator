@@ -67,6 +67,7 @@ public class FuelElement extends ReactorElement {
     public static final double FULL_FLUX_POWER = 3200;
 
     private double fluxToPower;
+    private double fluxToDisplayPower;
     private double localIdlePower;
 
     /**
@@ -76,7 +77,7 @@ public class FuelElement extends ReactorElement {
      * the affection. The affection is therefore only used to redistribute this
      * fraction of the power without changing the overall amount.
      */
-    private static final double DISTRIBUTED_FLUX = 0.4;
+    private static final double DISTRIBUTED_FLUX = 0.3;
 
     /**
      * Manipulates the time the decay heat goes down so the decay heat will be
@@ -124,9 +125,9 @@ public class FuelElement extends ReactorElement {
     private double localAffection;
 
     /**
-     * Neutron flux on this fuel rod.
+     * Generated heat power on this fuel rod in 0..100 %
      */
-    private double rodFlux;
+    private double rodHeatGeneration;
 
     /**
      * Average affection over all fuel elements. It is used to normalize the
@@ -145,6 +146,12 @@ public class FuelElement extends ReactorElement {
      * considering the affection value.
      */
     private double fissionPower;
+
+    /**
+     * Fission power for display - this does not consider the idle power, it
+     * will make the power display hide the value.
+     */
+    private double fissionPowerDisplay;
 
     // Network part for the hydraulic part
     private final HeatFrictionedFlowResistance flowResistance
@@ -189,6 +196,12 @@ public class FuelElement extends ReactorElement {
     private final String propertyFissionPower;
 
     /**
+     * Reference to the array that holds the temperature of the downcomers which
+     * is used to generate the thermal lift value.
+     */
+    private double[] downcomerTemperature;
+
+    /**
      * The calculation element used in the evaporator element.
      */
     private PhasedExpandingThermalVolumeHandler evapHandler;
@@ -207,7 +220,8 @@ public class FuelElement extends ReactorElement {
         loop = ChannelData.getLoop(x, y);
 
         // Calculate factors for megawatt out of flux.
-        fluxToPower = (FULL_FLUX_POWER - IDLE_HEAT) * 100;
+        fluxToPower = (FULL_FLUX_POWER - IDLE_HEAT) / 100;
+        fluxToDisplayPower = FULL_FLUX_POWER / 100;
         localIdlePower = IDLE_HEAT / 376;
 
         // Generate instances
@@ -271,6 +285,11 @@ public class FuelElement extends ReactorElement {
         thermalCapacity.setTimeConstant(138298);
         thermalResistance.setResistanceParameter(3.3464e-5);
 
+        // Side note here: The temperature of the fuel in the previous two-
+        // evaporator model was 38 °C when starting the sim, with a very low
+        // flow of about 25 kg/s through one side when blowdown is shut. The 
+        // flow was driven by the temperature diff between downcomer and evap
+        // element.
         // 20 m³ volume in evaporator per side is way too slow for 
         // mcp loss accident.
         // Fuel model: Full thermal power per side is 1.6e9 Watts with fuel
@@ -304,6 +323,8 @@ public class FuelElement extends ReactorElement {
                 .setInitialTemperature(273.15 + 25.3);
 
         evapHandler = (PhasedExpandingThermalVolumeHandler) evaporator.getPhasedHandler();
+
+        thermalLift.setEffort(5e4);
     }
 
     /**
@@ -414,6 +435,10 @@ public class FuelElement extends ReactorElement {
         thermalLift.setEffort(5e4); // todo, just a constant for now
     }
 
+    public void setDowncomerTemperatureReference(double[] temperature) {
+        downcomerTemperature = temperature;
+    }
+
     /**
      * Gains data from the model, saves them to class fields and sends the
      * values to the parameter handler for further use. This is called right
@@ -423,12 +448,17 @@ public class FuelElement extends ReactorElement {
     public void updateMeasurementData() {
         outputValues.setParameterValue(
                 propertyTemperature, thermalCapacity.getEffort() - 273.15);
-         outputValues.setParameterValue(
-                 propertyFlow, toReactorConverter.getFlow());
+        outputValues.setParameterValue(
+                propertyFlow, toReactorConverter.getFlow());
         outputValues.setParameterValue(
                 propertyFissionPower, fissionPower);
         outputValues.setParameterValue(
                 propertyVoiding, evapHandler.getVoiding(1e5));
+
+        thermalLift.setEffort(
+                (evaporator.getTemperature()
+                - downcomerTemperature[loop - 1])
+                * 2000); // try-and-error obtained number
 
     }
 
@@ -436,6 +466,9 @@ public class FuelElement extends ReactorElement {
      * Called from the reactor core for each rod after the model was called, it
      * will do the calculations for the power model, which is the part that
      * generates the heat.
+     * <p>
+     * Called from RectorCore.run() which is invoked BEFORE the thermal layout
+     * is calculated.
      */
     public void calculationStepPowerModel() {
         double dXFirstDelay, dXDelayedPower;
@@ -469,13 +502,21 @@ public class FuelElement extends ReactorElement {
             xDelayedPower += dXDelayedPower * stepTime;
         }
 
-        rodFlux = localFlux * (1 - P_DECAY) + xDelayedPower;
+        rodHeatGeneration = localFlux * (1 - P_DECAY) + xDelayedPower;
 
         // Fission power consideres the idle power but does not display it,
         // it is added as an invisible energy not shown on the power display.
-        fissionPower = rodFlux * fluxToPower + localIdlePower;
+        fissionPower = rodHeatGeneration * fluxToPower + localIdlePower;
 
         // MW to Watt (SI)
         thermalFlowSource.setFlow(fissionPower * 1e6);
+
+        // The displayed fission power will not include the idle heat and show a
+        // wrong 3200 MW display for 100 %
+        fissionPowerDisplay = rodHeatGeneration * fluxToDisplayPower;
+    }
+
+    public double getFissionPowerForDisplay() {
+        return fissionPowerDisplay;
     }
 }

@@ -292,28 +292,36 @@ public class FuelElement extends ReactorElement {
         // Thermal capacity: m * c = 96000 kg * 270 J/kg/K = 2.6e7 J/K per side
         // Per channel: 138298 J/K
         thermalCapacity.setTimeConstant(138298);
-        thermalResistance.setResistanceParameter(3.3464e-5);
+        // We will not have a inner heat transfer resistance, instead, we just
+        // do Tau = R * C to R = Tau/C to get a fancy time constant that 
+        // gets the dynamics we want. Lets use Tau of 10 s so it will be 
+        // R = 10/138298
+        thermalResistance.setResistanceParameter(7.2e-5);
 
         // Side note here: The temperature of the fuel in the previous two-
         // evaporator model was 38 °C when starting the sim, with a very low
         // flow of about 25 kg/s through one side when blowdown is shut. The 
         // flow was driven by the temperature diff between downcomer and evap
-        // element.
+        // element.         
         // 20 m³ volume in evaporator per side is way too slow for 
-        // mcp loss accident.
-        // Fuel model: Full thermal power per side is 1.6e9 Watts with fuel
-        // temperature of 570 °C (843 K) and recirc out temp of 284°/557 K.
-        // . Resistance: R = DeltaT / P_th = (843-557) / 1.6e9 
-        // = 1.78e-7 K/(J*s). As G: 1/1.8e-7 is about 5.5e6.
+        // mcp loss accident.        
         // For loss of circulation: The evaporator will slowly start to boil
         // and loose its mass. It should met at 2800 °C (3073 K) and we just
         // randomly define 4000 K and 50 MW when running empty, so it is
         // G = P_th / DeltaT = 50e6 J/s / 4000 K = 1.25e4 when almost empty.
-        // evaporator.setThermalDimension(14.0, 200, 5.5e6,
-        //        10000, 1.0e4, 4000);
+        // evaporator.setThermalDimension(14.0, 200, 
+        //        5.5e6, 10000,
+        //        1.0e4, 4000);
         // New calculation with 188 fuel channels per side:
-        evaporator.setThermalDimension(0.0745, 1.064, 5.5e6,
-                53.2, 1.0e4, 21.3);
+        // Each of the 376 channels transfers a certain amount of heat, on full
+        // load that will  be 8525531 Watts.
+        // On full load, there shall be a fuel temperature of
+        // of 570 °C (843 K) and recirc out temp of 284°/557 K
+        // Resistance: R = DeltaT / P_th = 286 / 8525531 - G = 1/R = 29809.5
+        // But, more simple: Just all the values divided by 188
+        evaporator.setThermalDimension(0.0745, 1.064, 
+                29255, 53.191, // Full Conductance
+                54, 21.3); // Empty conductance
 
         // Channel leakage: Represented with a valve to be able to set an amount
         // of leakage with the given characteristic. Worst leakage will be
@@ -455,7 +463,7 @@ public class FuelElement extends ReactorElement {
         // Send per fuel rod values - those are intended to be debugging
         // only as they are not available in such a detail in the real plant.
         outputValues.setParameterValue(
-                propertyTemperature, thermalCapacity.getEffort() - 273.15);
+                propertyTemperature, thermalOutNode.getEffort() - 273.15);
         outputValues.setParameterValue(
                 propertyFlow, toReactorConverter.getFlow());
         outputValues.setParameterValue(
@@ -478,7 +486,7 @@ public class FuelElement extends ReactorElement {
      * @return Temperature of the fuel in Kelvin
      */
     public double getFuelTemperature() {
-        return thermalCapacity.getEffort();
+        return thermalOutNode.getEffort();
     }
 
     /**

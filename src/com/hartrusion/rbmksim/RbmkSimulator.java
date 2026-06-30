@@ -26,7 +26,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
 import javax.swing.plaf.metal.MetalLookAndFeel;
-import com.hartrusion.modeling.solvers.SuperPosition;
 import com.hartrusion.mvc.AwtUpdater;
 import com.hartrusion.mvc.Controller;
 import com.hartrusion.rbmksim.gui.elements.ChornobylMetalTheme;
